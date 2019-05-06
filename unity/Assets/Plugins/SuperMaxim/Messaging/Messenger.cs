@@ -4,14 +4,34 @@ using System.Collections.Generic;
 using SuperMaxim.Core.Extensions;
 using SuperMaxim.Core.WeakRef;
 using SuperMaxim.Core.Objects;
+using System.Threading;
+using SuperMaxim.Core.Threading;
 
 namespace SuperMaxim.Messaging
 {
-    public class Messenger : Singleton<IMessenger, Messenger>, IMessenger
+    public sealed class Messenger : Singleton<IMessenger, Messenger>, IMessenger
     {
-        private readonly ConcurrentDictionary<Type, List<WeakRefDelegate>> _dic = new ConcurrentDictionary<Type, List<WeakRefDelegate>>();
+        private readonly ConcurrentDictionary<Type, List<WeakRefDelegate>> _dic = 
+                                                new ConcurrentDictionary<Type, List<WeakRefDelegate>>();
+
+        private static int ThreadId;
+        static Messenger()
+        {
+            ThreadId = Thread.CurrentThread.ManagedThreadId;
+        }
 
         public void Publish<T>(T payload)
+        {
+            if(Thread.CurrentThread.ManagedThreadId == ThreadId)
+            {
+                PublishInternal(payload);
+                return;
+            }
+
+            MainThreadDispatcher.Default.Dispatch(PublishInternal, payload);
+        }
+
+        private void PublishInternal<T>(T payload)
         {
             var dic = _dic;
             var key = typeof(T);

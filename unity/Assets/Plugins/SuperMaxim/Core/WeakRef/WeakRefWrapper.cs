@@ -2,11 +2,11 @@
 
 namespace SuperMaxim.Core.WeakRef
 {
-    public abstract class WeakRefWrapper : IDisposable
+    public class WeakRefWrapper : IDisposable
     {
         private WeakReference _ref;
 
-        protected object Target
+        public object Target
         {
             get
             {
@@ -24,7 +24,7 @@ namespace SuperMaxim.Core.WeakRef
             }
         }
 
-        protected WeakRefWrapper(object target)
+        public WeakRefWrapper(object target)
         {
             _ref = new WeakReference(target, false);
         }
