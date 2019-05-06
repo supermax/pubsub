@@ -1,5 +1,6 @@
 # This .gitignore file should be placed at the root of your Unity project directory
 
+# Ignore these folders
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -18,6 +19,7 @@
 
 # Visual Studio cache directory
 .vs/
+.vscode/
 
 # Gradle cache directory
 .gradle/
@@ -54,4 +56,3 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
-

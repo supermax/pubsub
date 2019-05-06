@@ -86,6 +86,19 @@ namespace SuperMaxim.Core.WeakRef
             return status;
         }
 
+        public bool Contains(Delegate method)
+        {
+            if(method == null || !IsAlive)
+            {
+                return false;
+            }
+            if(!Equals(Target, method.Target) || !Equals(_method, method.Method))
+            {
+                return false;
+            }
+            return true;
+        }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
