@@ -4,9 +4,16 @@ using SuperMaxim.Core.Extensions;
 
 namespace SuperMaxim.Core.WeakRef
 {
-    public class WeakRefDelegate : WeakRefWrapper
+    public class WeakRefDelegate : WeakRefWrapper, IEquatable<Delegate>, IComparable
     {
         private MethodInfo _method;
+
+        public int Id { get; protected set; }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
 
         public enum WeakRefDelegateInvokeResult
         {
@@ -18,6 +25,7 @@ namespace SuperMaxim.Core.WeakRef
         protected WeakRefDelegate(Delegate method) : base(method.Target)
         {
             _method = method.Method;
+            Id = method.GetHashCode();
         }
 
         public static WeakRefDelegate Create(Delegate method)
@@ -108,5 +116,22 @@ namespace SuperMaxim.Core.WeakRef
                 _method = null;
             }
         }
+
+        public bool Equals(Delegate other)
+        {
+            if(other == null) return false;
+            var otherId = other.GetHashCode();
+            var equals = Id == otherId;
+            return equals;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if(obj == null) return -1;
+            var @delegate = obj as Delegate;
+            if(@delegate == null) return -1;
+            if(Equals(@delegate)) return 0;
+            return -1;
+        }        
     }
 }

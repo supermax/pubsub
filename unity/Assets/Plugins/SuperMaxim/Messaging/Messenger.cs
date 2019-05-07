@@ -11,8 +11,8 @@ namespace SuperMaxim.Messaging
 {
     public sealed class Messenger : Singleton<IMessenger, Messenger>, IMessenger
     {
-        private readonly ConcurrentDictionary<Type, List<WeakRefDelegate>> _dic = 
-                                                new ConcurrentDictionary<Type, List<WeakRefDelegate>>();
+        private readonly Dictionary<Type, Dictionary<int, WeakRefDelegate>> _dic = 
+                                                new Dictionary<Type, Dictionary<int, WeakRefDelegate>>();
 
         private static int ThreadId;
         static Messenger()
@@ -35,21 +35,24 @@ namespace SuperMaxim.Messaging
         {
             var dic = _dic;
             var key = typeof(T);
-            List<WeakRefDelegate> list;
 
             if (!dic.ContainsKey(key))
             {
                 return;
             }
 
-            dic.TryGetValue(key, out list);
-            if (list.IsNullOrEmpty())
-            {
-                dic.TryRemove(key, out list);
+            Dictionary<int, WeakRefDelegate> callbacks;
+            dic.TryGetValue(key, out callbacks);
+            if (callbacks.IsNullOrEmpty())
+            {                
+                dic.Remove(key);
                 return;
             }
 
-            foreach (var callback in list)
+            // FIX do not clone, run over captured values
+            var ary = new WeakRefDelegate[callbacks.Count];
+            callbacks.Values.CopyTo(ary, 0);
+            foreach (var callback in ary)
             {
                 if (callback == null)
                 {
@@ -61,60 +64,77 @@ namespace SuperMaxim.Messaging
 
         public void Subscribe<T>(Action<T> callback)
         {
-            var dic = _dic;
-            var key = typeof(T);
-            List<WeakRefDelegate> list;
+            if(Thread.CurrentThread.ManagedThreadId == ThreadId)
+            {
+                SubscribeInternal(callback);
+                return;
+            }
 
+            MainThreadDispatcher.Default.Dispatch(SubscribeInternal, callback);
+        }
+
+        private void SubscribeInternal<T>(Action<T> callback)
+        {
+            var dic = _dic;
+            var key = typeof(T);            
+
+            Dictionary<int, WeakRefDelegate> callbacks;
             if (dic.ContainsKey(key))
             {
-                dic.TryGetValue(key, out list);
+                dic.TryGetValue(key, out callbacks);
             }
             else
             {
-                list = new List<WeakRefDelegate>();
-                dic.TryAdd(key, list);
+                callbacks = new Dictionary<int, WeakRefDelegate>();
+                dic.Add(key, callbacks);
             }
 
-            foreach (var wr in list)
+            if(callbacks.ContainsKey(callback.GetHashCode()))
             {
-                if(wr.Contains(callback))
-                {
-                    return;
-                }
+                return;
             }
-            var weakRef = WeakRefDelegate.Create(callback);
-            list.Add(weakRef);
 
-            Cleanup();
+            var weakRef = WeakRefDelegate.Create(callback);
+            callbacks.Add(weakRef.Id, weakRef);
         }
 
         public void Unsubscribe<T>(Action<T> callback)
         {
+            if(Thread.CurrentThread.ManagedThreadId == ThreadId)
+            {
+                UnsubscribeInternal(callback);
+                return;
+            }
+
+            MainThreadDispatcher.Default.Dispatch(UnsubscribeInternal, callback);
+        }
+
+        private void UnsubscribeInternal<T>(Action<T> callback)
+        {
+            // TODO check if publish is iterating, capture value and unsubscribe
             var dic = _dic;
-            var key = typeof(T);
-            List<WeakRefDelegate> list;
+            var key = typeof(T);            
 
             if (!dic.ContainsKey(key))
             {
                 return;
             }
 
-            list = dic[key];
-            foreach (var wr in list)
+            Dictionary<int, WeakRefDelegate> callbacks;
+            dic.TryGetValue(key, out callbacks);
+
+            var id = callback.GetHashCode();
+            if(callbacks.ContainsKey(id))
             {
-                if (wr.Contains(callback))
-                {
-                    wr.Dispose();
-                    list.Remove(wr);
-                    break;
-                }
+                var wr = callbacks[id];
+                wr.Dispose();
+                callbacks.Remove(id);                
             }
 
-            if(list.Count == 0)
+            if(callbacks.Count == 0)
             {
-                dic.TryRemove(key, out list);
+                dic.Remove(key);
             }
-            Cleanup();
         }
 
         private void Cleanup()
