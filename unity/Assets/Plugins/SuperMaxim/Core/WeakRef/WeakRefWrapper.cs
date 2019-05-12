@@ -13,6 +13,13 @@ namespace SuperMaxim.Core.WeakRef
                 object target = IsAlive ? _ref.Target : null;
                 return target;
             }
+            set
+            {
+                if(_ref != null)
+                {
+                    _ref.Target = value;
+                }
+            }
         }
 
         public bool IsAlive

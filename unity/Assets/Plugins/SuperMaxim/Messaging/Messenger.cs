@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using SuperMaxim.Core.Extensions;
-using SuperMaxim.Core.WeakRef;
 using SuperMaxim.Core.Objects;
 using System.Threading;
 using SuperMaxim.Core.Threading;
@@ -11,10 +10,11 @@ namespace SuperMaxim.Messaging
 {
     public sealed class Messenger : Singleton<IMessenger, Messenger>, IMessenger
     {
-        private readonly Dictionary<Type, Dictionary<int, WeakRefDelegate>> _dic = 
-                                                new Dictionary<Type, Dictionary<int, WeakRefDelegate>>();
+        private readonly Dictionary<Type, Dictionary<int, Subscriber>> _subscribers = 
+                                                new Dictionary<Type, Dictionary<int, Subscriber>>();
 
         private static int ThreadId;
+
         static Messenger()
         {
             ThreadId = Thread.CurrentThread.ManagedThreadId;
@@ -33,7 +33,7 @@ namespace SuperMaxim.Messaging
 
         private void PublishInternal<T>(T payload)
         {
-            var dic = _dic;
+            var dic = _subscribers;
             var key = typeof(T);
 
             if (!dic.ContainsKey(key))
@@ -41,7 +41,7 @@ namespace SuperMaxim.Messaging
                 return;
             }
 
-            Dictionary<int, WeakRefDelegate> callbacks;
+            Dictionary<int, Subscriber> callbacks;
             dic.TryGetValue(key, out callbacks);
             if (callbacks.IsNullOrEmpty())
             {                
@@ -50,7 +50,7 @@ namespace SuperMaxim.Messaging
             }
 
             // FIX do not clone, run over captured values
-            var ary = new WeakRefDelegate[callbacks.Count];
+            var ary = new Subscriber[callbacks.Count];
             callbacks.Values.CopyTo(ary, 0);
             foreach (var callback in ary)
             {
@@ -62,30 +62,30 @@ namespace SuperMaxim.Messaging
             }
         }
 
-        public void Subscribe<T>(Action<T> callback)
+        public void Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
         {
             if(Thread.CurrentThread.ManagedThreadId == ThreadId)
             {
-                SubscribeInternal(callback);
+                SubscribeInternal(callback, predicate);
                 return;
             }
 
-            MainThreadDispatcher.Default.Dispatch(SubscribeInternal, callback);
+            //MainThreadDispatcher.Default.Dispatch(SubscribeInternal, callback);
         }
 
-        private void SubscribeInternal<T>(Action<T> callback)
+        private void SubscribeInternal<T>(Action<T> callback, Predicate<T> predicate = null)
         {
-            var dic = _dic;
+            var dic = _subscribers;
             var key = typeof(T);            
 
-            Dictionary<int, WeakRefDelegate> callbacks;
+            Dictionary<int, Subscriber> callbacks;
             if (dic.ContainsKey(key))
             {
                 dic.TryGetValue(key, out callbacks);
             }
             else
             {
-                callbacks = new Dictionary<int, WeakRefDelegate>();
+                callbacks = new Dictionary<int, Subscriber>();
                 dic.Add(key, callbacks);
             }
 
@@ -94,7 +94,7 @@ namespace SuperMaxim.Messaging
                 return;
             }
 
-            var weakRef = WeakRefDelegate.Create(callback);
+            var weakRef = new Subscriber(key, callback);
             callbacks.Add(weakRef.Id, weakRef);
         }
 
@@ -112,7 +112,7 @@ namespace SuperMaxim.Messaging
         private void UnsubscribeInternal<T>(Action<T> callback)
         {
             // TODO check if publish is iterating, capture value and unsubscribe
-            var dic = _dic;
+            var dic = _subscribers;
             var key = typeof(T);            
 
             if (!dic.ContainsKey(key))
@@ -120,7 +120,7 @@ namespace SuperMaxim.Messaging
                 return;
             }
 
-            Dictionary<int, WeakRefDelegate> callbacks;
+            Dictionary<int, Subscriber> callbacks;
             dic.TryGetValue(key, out callbacks);
 
             var id = callback.GetHashCode();
@@ -128,7 +128,7 @@ namespace SuperMaxim.Messaging
             {
                 var wr = callbacks[id];
                 wr.Dispose();
-                callbacks.Remove(id);                
+                //callbacks.Remove(id);                
             }
 
             if(callbacks.Count == 0)
@@ -139,7 +139,7 @@ namespace SuperMaxim.Messaging
 
         private void Cleanup()
         {
-            throw new NotImplementedException();
+            // TODO
         }
     }
 }

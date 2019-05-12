@@ -10,6 +10,14 @@ namespace SuperMaxim.Core.WeakRef
 
         public int Id { get; protected set; }
 
+        public MethodInfo Method 
+        {
+            get
+            {
+                return _method;
+            }
+        }
+
         public override int GetHashCode()
         {
             return Id;
@@ -22,16 +30,10 @@ namespace SuperMaxim.Core.WeakRef
             Disposed
         }
 
-        protected WeakRefDelegate(Delegate method) : base(method.Target)
+        public WeakRefDelegate(Delegate method) : base(method.Target)
         {
             _method = method.Method;
             Id = method.GetHashCode();
-        }
-
-        public static WeakRefDelegate Create(Delegate method)
-        {
-            var instance = new WeakRefDelegate(method);
-            return instance;
         }
 
         public WeakRefDelegateInvokeResult Invoke()

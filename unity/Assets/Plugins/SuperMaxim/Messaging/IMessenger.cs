@@ -6,7 +6,7 @@ namespace SuperMaxim.Messaging
     {
         void Publish<T>(T payload);
 
-        void Subscribe<T>(Action<T> callback);
+        void Subscribe<T>(Action<T> callback, Predicate<T> predicate = null);
 
         void Unsubscribe<T>(Action<T> callback);
     }

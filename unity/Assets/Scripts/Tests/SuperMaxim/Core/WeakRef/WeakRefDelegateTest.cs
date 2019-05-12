@@ -20,7 +20,7 @@ namespace Tests
         public IEnumerator TestVoidCallbackWithEnumerator()
         {
             var test = new Test();
-            var wr = WeakRefDelegate.Create(test.TestVoidCallbackDelegate);
+            var wr = new WeakRefDelegate(test.TestVoidCallbackDelegate);
 
             object output;
             var res = wr.Invoke(null, out output);
