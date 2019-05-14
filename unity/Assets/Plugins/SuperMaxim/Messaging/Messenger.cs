@@ -13,6 +13,9 @@ namespace SuperMaxim.Messaging
         private readonly Dictionary<Type, Dictionary<int, Subscriber>> _subscribers = 
                                                 new Dictionary<Type, Dictionary<int, Subscriber>>();
 
+        // TODO
+        private readonly Dictionary<int, Subscriber> _subscribers1 = new Dictionary<int, Subscriber>();
+
         private static int ThreadId;
 
         static Messenger()
@@ -50,9 +53,9 @@ namespace SuperMaxim.Messaging
             }
 
             // FIX do not clone, run over captured values
-            var ary = new Subscriber[callbacks.Count];
-            callbacks.Values.CopyTo(ary, 0);
-            foreach (var callback in ary)
+            //var ary = new Subscriber[callbacks.Count];
+            //callbacks.Values.CopyTo(ary, 0);
+            foreach (var callback in callbacks.Values)
             {
                 if (callback == null)
                 {

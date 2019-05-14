@@ -11,6 +11,28 @@ namespace SuperMaxim.Messaging
         private WeakReference _predicateTarget;
         private MethodInfo _predicateMethod;
 
+        public bool IsAlive
+        {
+            get
+            {
+                if(_callbackMethod == null)
+                {
+                    return false;
+                }
+                if(_callbackMethod.IsStatic)
+                {
+                    return true;
+                }
+                if(_callbackTarget == null ||
+                    !_callbackTarget.IsAlive ||
+                    _callbackTarget.Target == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         public Type PayloadType
         {
             get;
