@@ -10,11 +10,16 @@ namespace SuperMaxim.Messaging
 {
     public sealed class Messenger : Singleton<IMessenger, Messenger>, IMessenger
     {
-        private readonly Dictionary<Type, Dictionary<int, Subscriber>> _subscribers = 
+        private readonly Dictionary<Type, Dictionary<int, Subscriber>> _subscribersSet = 
                                                 new Dictionary<Type, Dictionary<int, Subscriber>>();
 
-        // TODO
-        private readonly Dictionary<int, Subscriber> _subscribers1 = new Dictionary<int, Subscriber>();
+        private readonly Dictionary<int, Subscriber> _subscribers = new Dictionary<int, Subscriber>();
+
+        private readonly Dictionary<int, Subscriber> _add = new Dictionary<int, Subscriber>();
+
+        private readonly Dictionary<int, Subscriber> _remove = new Dictionary<int, Subscriber>();
+
+        private bool _isPublishing;
 
         private static int ThreadId;
 
@@ -36,32 +41,44 @@ namespace SuperMaxim.Messaging
 
         private void PublishInternal<T>(T payload)
         {
-            var dic = _subscribers;
-            var key = typeof(T);
-
-            if (!dic.ContainsKey(key))
+            try
             {
-                return;
-            }
+                _isPublishing = true;
 
-            Dictionary<int, Subscriber> callbacks;
-            dic.TryGetValue(key, out callbacks);
-            if (callbacks.IsNullOrEmpty())
-            {                
-                dic.Remove(key);
-                return;
-            }
+                var dic = _subscribersSet;
+                var key = typeof(T);
 
-            // FIX do not clone, run over captured values
-            //var ary = new Subscriber[callbacks.Count];
-            //callbacks.Values.CopyTo(ary, 0);
-            foreach (var callback in callbacks.Values)
-            {
-                if (callback == null)
+                if (!dic.ContainsKey(key))
                 {
-                    continue;
+                    return;
                 }
-                callback.Invoke(payload);
+
+                Dictionary<int, Subscriber> callbacks;
+                dic.TryGetValue(key, out callbacks);
+                if (callbacks.IsNullOrEmpty())
+                {                
+                    dic.Remove(key);
+                    return;
+                }
+
+                foreach (var callback in callbacks.Values)
+                {
+                    if (callback == null)
+                    {
+                        continue;
+                    }
+                    callback.Invoke(payload);
+                }
+
+                // while (callbacks.Count > 0)
+                // {
+                    
+                // }
+            }
+            finally
+            {
+                _isPublishing = false;
+                Process();
             }
         }
 
@@ -78,9 +95,20 @@ namespace SuperMaxim.Messaging
 
         private void SubscribeInternal<T>(Action<T> callback, Predicate<T> predicate = null)
         {
-            var dic = _subscribers;
-            var key = typeof(T);            
+            var key = typeof(T);
+            if(_isPublishing)
+            {
+                var id = callback.GetHashCode();
+                if(_add.ContainsKey(id))
+                {
+                    return;
+                }
+                var sub = new Subscriber(key, callback, predicate);
+                _add.Add(id, sub);
+                return;
+            }
 
+            var dic = _subscribersSet;                        
             Dictionary<int, Subscriber> callbacks;
             if (dic.ContainsKey(key))
             {
@@ -114,10 +142,8 @@ namespace SuperMaxim.Messaging
 
         private void UnsubscribeInternal<T>(Action<T> callback)
         {
-            // TODO check if publish is iterating, capture value and unsubscribe
-            var dic = _subscribers;
-            var key = typeof(T);            
-
+            var key = typeof(T);          
+            var dic = _subscribersSet;             
             if (!dic.ContainsKey(key))
             {
                 return;
@@ -130,19 +156,46 @@ namespace SuperMaxim.Messaging
             if(callbacks.ContainsKey(id))
             {
                 var wr = callbacks[id];
-                wr.Dispose();
-                //callbacks.Remove(id);                
+                wr.Dispose();   
+
+                if(!_isPublishing)
+                {                    
+                    callbacks.Remove(id);
+                }             
             }
 
-            if(callbacks.Count == 0)
-            {
-                dic.Remove(key);
+            if(!_isPublishing)
+            { 
+                if(callbacks.Count == 0)
+                {
+                    dic.Remove(key);
+                }
             }
         }
 
-        private void Cleanup()
+        private void Process()
         {
-            // TODO
+            if(_isPublishing)
+            {                
+                return;
+            }                     
+
+            foreach (var subscriber in _subscribers.Values)
+            {
+                if(subscriber.IsAlive)
+                {
+                    continue;
+                }
+
+                var callbacks = _subscribersSet[subscriber.PayloadType];
+                callbacks.Remove(subscriber.Id);
+                if(callbacks.Count > 0) 
+                {
+                    continue;
+                }
+
+                _subscribersSet.Remove(subscriber.PayloadType);  
+            }
         }
     }
 }
