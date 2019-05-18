@@ -8,18 +8,15 @@ using SuperMaxim.Core.Threading;
 
 namespace SuperMaxim.Messaging
 {
+    //TODO add error logging
     public sealed class Messenger : Singleton<IMessenger, Messenger>, IMessenger
     {
         private readonly Dictionary<Type, Dictionary<int, Subscriber>> _subscribersSet = 
                                                 new Dictionary<Type, Dictionary<int, Subscriber>>();
 
-        private readonly Dictionary<int, Subscriber> _subscribers = new Dictionary<int, Subscriber>();
+        private readonly List<Subscriber> _subscribers = new List<Subscriber>();
 
-        private readonly Dictionary<int, Subscriber> _add = new Dictionary<int, Subscriber>();
-
-        private readonly Dictionary<int, Subscriber> _remove = new Dictionary<int, Subscriber>();
-
-        private bool _isPublishing;
+        private readonly List<Subscriber> _add = new List<Subscriber>();
 
         private static int ThreadId;
 
@@ -43,8 +40,6 @@ namespace SuperMaxim.Messaging
         {
             try
             {
-                _isPublishing = true;
-
                 var dic = _subscribersSet;
                 var key = typeof(T);
 
@@ -69,15 +64,9 @@ namespace SuperMaxim.Messaging
                     }
                     callback.Invoke(payload);
                 }
-
-                // while (callbacks.Count > 0)
-                // {
-                    
-                // }
             }
             finally
             {
-                _isPublishing = false;
                 Process();
             }
         }
@@ -96,18 +85,19 @@ namespace SuperMaxim.Messaging
         private void SubscribeInternal<T>(Action<T> callback, Predicate<T> predicate = null)
         {
             var key = typeof(T);
-            if(_isPublishing)
+            var id = callback.GetHashCode();            
+            var sub = new Subscriber(key, callback, predicate);
+            _add.Add(sub);
+        }
+
+        private void SubscribeInternal(Subscriber subscriber)
+        {
+            if(subscriber == null || !subscriber.IsAlive)
             {
-                var id = callback.GetHashCode();
-                if(_add.ContainsKey(id))
-                {
-                    return;
-                }
-                var sub = new Subscriber(key, callback, predicate);
-                _add.Add(id, sub);
                 return;
             }
 
+            var key = subscriber.PayloadType;
             var dic = _subscribersSet;                        
             Dictionary<int, Subscriber> callbacks;
             if (dic.ContainsKey(key))
@@ -120,13 +110,11 @@ namespace SuperMaxim.Messaging
                 dic.Add(key, callbacks);
             }
 
-            if(callbacks.ContainsKey(callback.GetHashCode()))
+            if(callbacks.ContainsKey(subscriber.Id))
             {
                 return;
             }
-
-            var weakRef = new Subscriber(key, callback);
-            callbacks.Add(weakRef.Id, weakRef);
+            callbacks.Add(subscriber.Id, subscriber);
         }
 
         public void Unsubscribe<T>(Action<T> callback)
@@ -156,46 +144,43 @@ namespace SuperMaxim.Messaging
             if(callbacks.ContainsKey(id))
             {
                 var wr = callbacks[id];
-                wr.Dispose();   
-
-                if(!_isPublishing)
-                {                    
-                    callbacks.Remove(id);
-                }             
-            }
-
-            if(!_isPublishing)
-            { 
-                if(callbacks.Count == 0)
-                {
-                    dic.Remove(key);
-                }
+                wr.Dispose();         
             }
         }
 
         private void Process()
         {
-            if(_isPublishing)
-            {                
-                return;
-            }                     
-
-            foreach (var subscriber in _subscribers.Values)
+            for(var i = 0; i < _subscribers.Count; i++)
             {
-                if(subscriber.IsAlive)
+                var subscriber = _subscribers[i];
+                if(subscriber == null || subscriber.IsAlive)
+                {
+                    continue;
+                }
+
+                _subscribers.Remove(subscriber);
+                i--;
+
+                if(!_subscribersSet.ContainsKey(subscriber.PayloadType))
                 {
                     continue;
                 }
 
                 var callbacks = _subscribersSet[subscriber.PayloadType];
                 callbacks.Remove(subscriber.Id);
-                if(callbacks.Count > 0) 
+
+                if(callbacks.Count > 0)
                 {
                     continue;
-                }
-
-                _subscribersSet.Remove(subscriber.PayloadType);  
+                }            
+                _subscribersSet.Remove(subscriber.PayloadType);     
             }
+
+            foreach (var subscriber in _add)
+            {
+                SubscribeInternal(subscriber);
+            }
+            _add.Clear();
         }
     }
 }
