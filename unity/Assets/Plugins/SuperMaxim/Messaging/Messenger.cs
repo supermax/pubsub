@@ -18,6 +18,8 @@ namespace SuperMaxim.Messaging
 
         private readonly List<Subscriber> _add = new List<Subscriber>();
 
+        private bool _isPublishing;
+
         private static int ThreadId;
 
         static Messenger()
@@ -40,6 +42,8 @@ namespace SuperMaxim.Messaging
         {
             try
             {
+                _isPublishing = true;
+
                 var dic = _subscribersSet;
                 var key = typeof(T);
 
@@ -67,6 +71,7 @@ namespace SuperMaxim.Messaging
             }
             finally
             {
+                _isPublishing = false;
                 Process();
             }
         }
@@ -87,7 +92,13 @@ namespace SuperMaxim.Messaging
             var key = typeof(T);
             var id = callback.GetHashCode();            
             var sub = new Subscriber(key, callback, predicate);
-            _add.Add(sub);
+
+            if(_isPublishing)
+            {
+                _add.Add(sub);
+                return;
+            }
+            SubscribeInternal(sub);
         }
 
         private void SubscribeInternal(Subscriber subscriber)
@@ -139,13 +150,29 @@ namespace SuperMaxim.Messaging
 
             Dictionary<int, Subscriber> callbacks;
             dic.TryGetValue(key, out callbacks);
+            if(!_isPublishing && callbacks.IsNullOrEmpty())
+            {
+                dic.Remove(key);
+                return;
+            }
 
             var id = callback.GetHashCode();
             if(callbacks.ContainsKey(id))
             {
                 var wr = callbacks[id];
                 wr.Dispose();         
+
+                if(!_isPublishing)
+                {
+                    callbacks.Remove(id);
+                }
             }
+
+            if(_isPublishing || !callbacks.IsNullOrEmpty())
+            {
+                return;
+            }
+            dic.Remove(key);
         }
 
         private void Process()

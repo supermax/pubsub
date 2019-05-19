@@ -14,27 +14,14 @@ namespace Tests
         [Test]
         public void MessengerTestSimplePasses()
         {
-            // var dic = new Dictionary<int, int> {
-            //     {1, 1},
-            //     {2, 1},
-            //     {3, 1},
-            //     {4, 1},                
-            // };
-            
-            // using(var e = dic.GetEnumerator())
-            // {
-            //     while(e.MoveNext())
-            //     {
-            //         dic.Remove(e.Current.Key);
-            //     }
-            // }
-
             Messenger.Default.Subscribe<string>(OnMsg);
         }
 
         private static void OnMsgStatic(string str)
         {
+            Debug.LogFormat("Msg Static: {0}", str);
 
+            Messenger.Default.Unsubscribe<string>(OnMsgStatic);
         }
 
         private void OnMsg(string str)
@@ -42,6 +29,7 @@ namespace Tests
             Debug.LogFormat("Msg: {0}", str);
 
             Messenger.Default.Unsubscribe<string>(OnMsg);
+            Messenger.Default.Subscribe<string>(OnMsgStatic);
         }
 
         [UnityTest]
