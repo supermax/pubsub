@@ -56,3 +56,6 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+pubsub_unity/Library
+pubsub_unity/Temp
+pubsub_unity/Logs

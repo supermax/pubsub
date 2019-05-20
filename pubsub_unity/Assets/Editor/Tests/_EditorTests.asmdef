@@ -1,7 +1,7 @@
 {
     "name": "EditorTests",
     "references": [
-        "GUID:feffa0a89a0324527b2df83253e9afb6"
+        "SuperMaxim"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"
@@ -14,6 +14,5 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": []
+    "defineConstraints": []
 }
