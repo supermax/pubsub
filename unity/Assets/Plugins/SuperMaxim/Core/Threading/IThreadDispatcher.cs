@@ -5,8 +5,8 @@ namespace SuperMaxim.Core.Threading
 {
     public interface IThreadDispatcher
     {
-        void Dispatch<T>(Action<T> action, T payload);
+        int MainThreadId { get; }
 
-        void DispatchRoutine<T>(Action<T> action, T payload, float repeatTime);
+        void Dispatch(Delegate action, object[] payload);        
     }
 }

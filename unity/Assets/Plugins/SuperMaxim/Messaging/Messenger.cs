@@ -5,6 +5,7 @@ using SuperMaxim.Core.Extensions;
 using SuperMaxim.Core.Objects;
 using System.Threading;
 using SuperMaxim.Core.Threading;
+using UnityEngine;
 
 namespace SuperMaxim.Messaging
 {
@@ -20,22 +21,21 @@ namespace SuperMaxim.Messaging
 
         private bool _isPublishing;
 
-        private static int ThreadId;
-
         static Messenger()
         {
-            ThreadId = Thread.CurrentThread.ManagedThreadId;
+            Debug.LogFormat("Main Thread ID: {0}", MainThreadDispatcher.Default.MainThreadId);
         }
 
         public void Publish<T>(T payload)
         {
-            if(Thread.CurrentThread.ManagedThreadId == ThreadId)
+            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.MainThreadId)
             {
                 PublishInternal(payload);
                 return;
             }
 
-            MainThreadDispatcher.Default.Dispatch(PublishInternal, payload);
+            Action<T> act = PublishInternal;
+            MainThreadDispatcher.Default.Dispatch(act, new object[] { payload });
         }
 
         private void PublishInternal<T>(T payload)
@@ -78,13 +78,14 @@ namespace SuperMaxim.Messaging
 
         public void Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
         {
-            if(Thread.CurrentThread.ManagedThreadId == ThreadId)
+            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.MainThreadId)
             {
                 SubscribeInternal(callback, predicate);
                 return;
             }
 
-            //MainThreadDispatcher.Default.Dispatch(SubscribeInternal, callback);
+            Action<Action<T>, Predicate<T>> act = SubscribeInternal;
+            MainThreadDispatcher.Default.Dispatch(act, new object[] { callback, predicate });
         }
 
         private void SubscribeInternal<T>(Action<T> callback, Predicate<T> predicate = null)
@@ -130,13 +131,14 @@ namespace SuperMaxim.Messaging
 
         public void Unsubscribe<T>(Action<T> callback)
         {
-            if(Thread.CurrentThread.ManagedThreadId == ThreadId)
+            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.MainThreadId)
             {
                 UnsubscribeInternal(callback);
                 return;
             }
 
-            MainThreadDispatcher.Default.Dispatch(UnsubscribeInternal, callback);
+            Action<Action<T>> act = UnsubscribeInternal;
+            MainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
         }
 
         private void UnsubscribeInternal<T>(Action<T> callback)

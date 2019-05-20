@@ -1,33 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using SuperMaxim.Core.Objects;
-using SuperMaxim.Core.WeakRef;
 using UnityEngine;
 
 namespace SuperMaxim.Core.Threading
 {
     public class MainThreadDispatcher : MonoBehaviourSingleton<IThreadDispatcher, MainThreadDispatcher>, IThreadDispatcher
     {
-        private readonly Stack<Tuple<WeakRefDelegate, WeakRefWrapper>> _actions = 
-                                        new Stack<Tuple<WeakRefDelegate, WeakRefWrapper>>();
+        private readonly Queue<DispatcherAction> _actions = new Queue<DispatcherAction>();
 
-        public void Dispatch<T>(Action<T> action, T payload)
+        public int MainThreadId
         {
-            //_actions.Push(new Tuple<WeakRefDelegate, WeakRefWrapper>(action, payload));
+            get
+            {
+                var id = Thread.CurrentThread.ManagedThreadId;
+                return id;
+            }
         }
 
-        public void DispatchRoutine<T>(Action<T> action, T payload, float repeatTime)
+        public void Dispatch(Delegate action, object[] payload)
         {
-            
+            _actions.Enqueue(new DispatcherAction(action, payload));
         }
 
         private void Update()
         {
-            var tuple = _actions.Pop();
-            tuple.Item1.Invoke(tuple.Item2.Target);
-            if(!tuple.Item1.IsAlive)
+            while(_actions.Count > 0)
             {
-                tuple.Item1.Dispose();
+                var action = _actions.Dequeue();
+                action.Invoke();
+                action.Dispose();
             }
         }
     }
