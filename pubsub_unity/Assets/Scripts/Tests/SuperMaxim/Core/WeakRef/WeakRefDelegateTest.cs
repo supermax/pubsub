@@ -22,11 +22,10 @@ namespace Tests
             var test = new Test();
             var wr = new WeakRefDelegate(test.TestVoidCallbackDelegate);
 
-            object output;
-            var res = wr.Invoke(null, out output);
+            var res = wr.Invoke(null);
 
-            Debug.LogFormat("[{0}] {1}: result: {2}, output: {3}, isAlive: {4}",
-                wr.GetHashCode(), test.TestVoidCallbackName, res, output, wr.IsAlive);
+            Debug.LogFormat("[{0}] {1}: result: {2}, isAlive: {3}",
+                wr.GetHashCode(), test.TestVoidCallbackName, res, wr.IsAlive);
 
 #pragma warning disable IDE0059 // Value assigned to symbol is never used
             test.TestVoidCallbackDelegate = null;

@@ -28,13 +28,6 @@ namespace SuperMaxim.Core.Threading
             {
                 return;
             }
-
-            if(Payload == null)
-            {
-                Action.Invoke();
-                return;
-            }
-            
             Action.Invoke(Payload);            
         }
 

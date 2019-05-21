@@ -58,4 +58,6 @@ sysinfo.txt
 crashlytics-build.properties
 pubsub_unity/Library
 pubsub_unity/Temp
+pubsub_unity/obj
 pubsub_unity/Logs
+pubsub_unity/obj/Debug/Tests.csproj.CoreCompileInputs.cache

@@ -12,11 +12,13 @@ namespace SuperMaxim.Core.Threading
 
         public int MainThreadId
         {
-            get
-            {
-                var id = Thread.CurrentThread.ManagedThreadId;
-                return id;
-            }
+            get;
+            private set;
+        }
+
+        private void Awake()
+        {
+            MainThreadId = Thread.CurrentThread.ManagedThreadId;                
         }
 
         public void Dispatch(Delegate action, object[] payload)
