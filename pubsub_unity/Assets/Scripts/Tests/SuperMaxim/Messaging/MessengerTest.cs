@@ -12,13 +12,13 @@ namespace Tests
     public class MessengerTest
     {
         [Test]
-        public void MessengerTestSimplePasses()
+        public void SubscribeToSctringPayload()
         {
             Messenger.Default.Subscribe<string>(OnStringCallback);
         }
 
         [UnityTest]
-        public IEnumerator MessengerTestWithEnumeratorPasses()
+        public IEnumerator PublishAsync()
         {
             yield return null;
 
@@ -45,18 +45,18 @@ namespace Tests
         }
 
         [Test]
-        public void MessengerTestPublishFromNewThread()
+        public void PublishFromNewThread()
         {
             Messenger.Default.Subscribe<int>(OnPublishFromNewThreadCallback);
 
             Debug.LogFormat("[MessengerTestPublishFromNewThread] Thread ID: {0}", 
                                 Thread.CurrentThread.ManagedThreadId);
 
-            var th = new Thread(PublishFromNewThread);
+            var th = new Thread(PublishFromNewThreadMethod);
             th.Start();
         }
 
-        private void PublishFromNewThread()
+        private void PublishFromNewThreadMethod()
         {
             Debug.LogFormat("[PublishFromNewThread] Thread ID: {0}", 
                                 Thread.CurrentThread.ManagedThreadId);
