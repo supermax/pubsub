@@ -89,7 +89,7 @@ namespace SuperMaxim.Messaging
                 return;
             }
             if(!_callbackMethod.IsStatic && 
-                (_callbackTarget == null && 
+                (_callbackTarget == null || 
                 !_callbackTarget.IsAlive))
             {
                 // TODO write to log

@@ -20,13 +20,37 @@ namespace Tests
         [UnityTest]
         public IEnumerator PublishAsync()
         {
-            yield return null;
+            for (var i = 1; i <= 4; i++)
+            {
+                Messenger.Default.Publish(string.Format("Hello World! [{0}]", i));
 
-            Messenger.Default.Publish("Hello World! [1]");
+                yield return null;    
+            }
+        }
 
-            yield return null;
+        [Test]
+        public void SubscribeAndPublishToObjectWithPredicate()
+        {
+            Messenger.Default.Subscribe<MessengerTestPayload>(OnSubscribeToObjectWithPredicate, ObjectPredicate);
 
-            Messenger.Default.Publish("Hello World! [2]");
+            Messenger.Default.Publish(new MessengerTestPayload{ Id = UnityEngine.Random.Range(-1, 1)});
+        }
+
+        private bool ObjectPredicate(MessengerTestPayload payload)
+        {
+            var accepted = payload.Id % 2 == 0;
+            Debug.LogFormat("[ObjectPredicate] Object Payload Id: {0}, Accepted: {1}", payload.Id, accepted);
+            return accepted;
+        }
+
+        private void OnSubscribeToObjectWithPredicate(MessengerTestPayload payload)
+        {
+            Debug.LogFormat("[OnSubscribeToObjectWithPredicate] Object Payload Id: {0}", payload.Id);
+        }
+
+        private class MessengerTestPayload
+        {
+            public int Id { get; set; }
         }
 
         private static void OnStringCallbackStatic(string str)
@@ -70,6 +94,35 @@ namespace Tests
                                 number, Thread.CurrentThread.ManagedThreadId);
 
             Assert.AreNotEqual(number, Thread.CurrentThread.ManagedThreadId);
+        }
+
+        private MessengerWekRefTest _weakRefTest;
+
+        [UnityTest]
+        public IEnumerator TestWeakReference()
+        {
+            _weakRefTest = new MessengerWekRefTest();
+            Messenger.Default.Subscribe<MessengerTestPayload>(_weakRefTest.Callback);
+
+            var payload = new MessengerTestPayload{ Id = 12345 };
+            Debug.LogFormat("[TestWeakReference] #1 Publish Payload Id: {0}", payload.Id);
+
+            Messenger.Default.Publish(new MessengerTestPayload{ Id = 12345 });
+
+            _weakRefTest = null;
+
+            yield return new WaitForSeconds(5);
+
+            Debug.LogFormat("[TestWeakReference] #2 Publish Payload Id: {0}", payload.Id);
+            Messenger.Default.Publish(payload);
+        }
+
+        private class MessengerWekRefTest
+        {
+            public void Callback(MessengerTestPayload payload)
+            {
+                Debug.LogFormat("[MessengerWekRefTest.Callback] Object Payload Id: {0}", payload.Id);
+            }
         }
     }
 }
