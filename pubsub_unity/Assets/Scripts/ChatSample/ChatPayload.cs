@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChatPayload
 {
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 
     public string Text { get; set; }
 }

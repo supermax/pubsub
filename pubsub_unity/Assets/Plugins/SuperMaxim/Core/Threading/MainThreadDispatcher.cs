@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using SuperMaxim.Core.Objects;
 using UnityEngine;
+using UnityEditor;
 
 namespace SuperMaxim.Core.Threading
 {
@@ -36,4 +37,6 @@ namespace SuperMaxim.Core.Threading
             }
         }
     }
+
+    //public class MainThreadDispatcherEditor : CustomEditor
 }

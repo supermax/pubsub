@@ -4,30 +4,41 @@ using System.Collections.Generic;
 using SuperMaxim.Core.Extensions;
 using SuperMaxim.Messaging;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ChatController : MonoBehaviour
 {
     [SerializeField]
-    private int _userId;
+    private string _userId;
 
     [SerializeField]
     private string _text;
 
     [SerializeField]
-    private UnityEngine.UI.InputField _inputField;
+    private InputField _inputField;
 
     [SerializeField]
-    private UnityEngine.UI.Text _chatText;
+    private Text _chatText;
+
+    [SerializeField]
+    private Button _sendButton;
+
+    [SerializeField]
+    private Text _userIdText;
+
+    private const int MaxChatTextLength = 3000;
 
     private void Start()
     {
+        _userIdText.text = _userId;
+
         Messenger.Default.Subscribe<ChatPayload>(OnChatMessage, ChatMessagePredicate);
     }
 
     private bool ChatMessagePredicate(ChatPayload payload)
     {
         var isSameId = payload.UserId == _userId;
-        if(!isSameId)
+        if(isSameId)
         {
             return false;
         }
@@ -38,14 +49,20 @@ public class ChatController : MonoBehaviour
 
     private void OnChatMessage(ChatPayload payload)
     {
-        _chatText.text += string.Format("/r/n{0}", payload.Text);
+        if(_chatText.text.Length > MaxChatTextLength)
+        {
+            _chatText.text = string.Empty;
+        }
+
+        _chatText.text += string.Format("\r\n{0:t} {1}: {2}", 
+                                    DateTime.Now, payload.UserId, payload.Text);
     }
 
     public void OnTextChanged(string text)
     {
         _text = text;
 
-        _inputField.enabled = !_text.IsNullOrEmpty();
+        _sendButton.enabled = !_inputField.text.IsNullOrEmpty();
     }
 
     public void OnTextEndEdit(string text)
@@ -61,5 +78,9 @@ public class ChatController : MonoBehaviour
                                 Text = text
                             };
         Messenger.Default.Publish(payload);
+
+        _inputField.enabled = false;
+        _inputField.text = string.Empty;
+        _inputField.enabled = true;
     }
 }
