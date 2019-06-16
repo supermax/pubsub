@@ -36,5 +36,11 @@ namespace SuperMaxim.Core.Extensions
                 action(item);
             }
         }
+
+        public static bool IsNullOrEmpty(this string source)
+        {
+            var isEmpty = string.IsNullOrEmpty(source);
+            return isEmpty;
+        }
     }
 }
