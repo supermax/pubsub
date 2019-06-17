@@ -1,10 +1,9 @@
 using System;
-using SuperMaxim.Core.Extensions;
 using SuperMaxim.Core.WeakRef;
 
 namespace SuperMaxim.Core.Threading
 {
-    public class DispatcherAction : IDisposable
+    public class DispatcherTask : IDisposable
     {
         public WeakRefDelegate Action 
         {
@@ -16,7 +15,7 @@ namespace SuperMaxim.Core.Threading
             get; private set;
         }
 
-        public DispatcherAction(Delegate action, object[] payload)
+        public DispatcherTask(Delegate action, object[] payload)
         {
             Action = new WeakRefDelegate(action);
             Payload = payload;

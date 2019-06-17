@@ -1,5 +1,4 @@
 ﻿using System;
-using SuperMaxim.Core.WeakRef;
 
 namespace SuperMaxim.Core.Threading
 {

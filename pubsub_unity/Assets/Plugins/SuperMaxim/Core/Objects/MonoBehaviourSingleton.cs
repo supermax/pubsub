@@ -8,6 +8,10 @@ namespace SuperMaxim.Core.Objects
     {
         private static TInterface _default;
 
+        private const string SingletonsRootName = "[SINGLETONS]";
+
+        private static GameObject _root;
+
         public static TInterface Default
         {
             get
@@ -45,7 +49,20 @@ namespace SuperMaxim.Core.Objects
             var typeImplementation = typeof(TImplementation);
             if (Equals(_default, default(TImplementation)))
             {
+                // create root game object for "[SINGLETONS]"
+                if(_root == null)
+                {
+                    var root = GameObject.Find(SingletonsRootName);
+                    if(root == null)
+                    {
+                        root = new GameObject(SingletonsRootName);
+                    }
+                    _root = root;
+                }
+
                 var go = new GameObject(string.Format("[{0}]", typeImplementation.Name));
+                go.transform.SetParent(_root.transform);
+
                 _default = go.AddComponent<TImplementation>();
             }
             return _default;

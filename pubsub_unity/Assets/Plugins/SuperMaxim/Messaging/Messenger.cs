@@ -6,6 +6,7 @@ using SuperMaxim.Core.Objects;
 using System.Threading;
 using SuperMaxim.Core.Threading;
 using UnityEngine;
+using SuperMaxim.Messaging.Monitor;
 
 namespace SuperMaxim.Messaging
 {
@@ -24,6 +25,9 @@ namespace SuperMaxim.Messaging
         static Messenger()
         {
             Debug.LogFormat("Main Thread ID: {0}", MainThreadDispatcher.Default.MainThreadId);
+
+            // TODO init in case of debug
+            Debug.LogFormat("Messenger Monitor {0}", MessengerMonitor.Default); // TODO print id
         }
 
         public void Publish<T>(T payload)
@@ -177,8 +181,13 @@ namespace SuperMaxim.Messaging
             dic.Remove(key);
         }
 
+        /// <summary>
+        /// Process collections.
+        /// <para>Cleanup "dead" subscribers and add from waiting list.</para>
+        /// </summary>
         private void Process()
         {
+            // cleanup "dead" subscribers
             for(var i = 0; i < _subscribers.Count; i++)
             {
                 var subscriber = _subscribers[i];
@@ -205,6 +214,7 @@ namespace SuperMaxim.Messaging
                 _subscribersSet.Remove(subscriber.PayloadType);     
             }
 
+            // add waiting subscribers
             foreach (var subscriber in _add)
             {
                 SubscribeInternal(subscriber);
