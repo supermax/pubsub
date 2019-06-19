@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Threading;
 using NUnit.Framework;
 using SuperMaxim.Messaging;

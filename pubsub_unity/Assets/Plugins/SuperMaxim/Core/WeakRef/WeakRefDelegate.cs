@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Reflection;
-using SuperMaxim.Core.Extensions;
 
 namespace SuperMaxim.Core.WeakRef
 {
     public class WeakRefDelegate : WeakRefWrapper, IEquatable<Delegate>, IComparable
     {
-        private MethodInfo _method;
-
         public int Id { get; protected set; }
 
-        public MethodInfo Method 
-        {
-            get
-            {
-                return _method;
-            }
-        }
+        public MethodInfo Method { get; private set; }
 
         public override int GetHashCode()
         {
@@ -25,7 +16,7 @@ namespace SuperMaxim.Core.WeakRef
 
         public WeakRefDelegate(Delegate method) : base(method.Target)
         {
-            _method = method.Method;
+            Method = method.Method;
             Id = method.GetHashCode();
         }
 
@@ -36,7 +27,7 @@ namespace SuperMaxim.Core.WeakRef
                 return null;
             }
             
-            var result = _method.Invoke(Target, args);
+            var result = Method.Invoke(Target, args);
             return result;
         }
 
@@ -46,7 +37,7 @@ namespace SuperMaxim.Core.WeakRef
             {
                 return false;
             }
-            if(!Equals(Target, method.Target) || !Equals(_method, method.Method))
+            if(!Equals(Target, method.Target) || !Equals(Method, method.Method))
             {
                 return false;
             }
@@ -59,7 +50,7 @@ namespace SuperMaxim.Core.WeakRef
 
             if (disposing)
             {
-                _method = null;
+                Method = null;
             }
         }
 
@@ -78,6 +69,12 @@ namespace SuperMaxim.Core.WeakRef
             if(@delegate == null) return -1;
             if(Equals(@delegate)) return 0;
             return -1;
-        }        
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: {1}, {2}, {3}",
+                                    GetType().Name, Id, Method, IsAlive);
+        }
     }
 }

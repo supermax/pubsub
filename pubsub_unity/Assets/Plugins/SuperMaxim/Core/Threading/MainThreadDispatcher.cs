@@ -2,6 +2,8 @@
 using System.Threading;
 using SuperMaxim.Core.Objects;
 using System.Collections.Concurrent;
+using UnityEngine;
+using System.Collections;
 
 namespace SuperMaxim.Core.Threading
 {
@@ -38,9 +40,12 @@ namespace SuperMaxim.Core.Threading
                 DispatcherTask task;
                 if(_tasks.TryDequeue(out task))
                 {
+                    // TODO temove this temp log
+                    Debug.LogFormat("(Queue.Count: {0}) Dispatching task {1}", _tasks.Count, task.Action);
+
                     task.Invoke();
                     task.Dispose();
-                }
+                }                
             }
         }
     }

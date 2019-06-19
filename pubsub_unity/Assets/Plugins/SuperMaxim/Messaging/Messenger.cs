@@ -38,6 +38,7 @@ namespace SuperMaxim.Messaging
                 return;
             }
 
+            // TODO write to log Thread ID
             Action<T> act = PublishInternal;
             MainThreadDispatcher.Default.Dispatch(act, new object[] { payload });
         }
