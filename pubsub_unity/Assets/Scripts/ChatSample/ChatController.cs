@@ -81,4 +81,15 @@ public class ChatController : MonoBehaviour
         _inputField.text = string.Empty;
         _inputField.enabled = true;
     }
+
+    public void KillMe()
+    {
+        GameObject.Destroy(gameObject);
+        Debug.LogFormat("Killing {0}", gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        Debug.LogFormat("{0} destoyed", this);
+    }
 }

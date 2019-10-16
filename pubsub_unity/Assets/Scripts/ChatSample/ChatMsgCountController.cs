@@ -22,13 +22,25 @@ public class ChatMsgCountController : MonoBehaviour
         Messenger.Default.Subscribe<ChatPayload>(OnChatMessageReceived);
     }
 
+    private void OnDestroy()
+    {
+        Debug.LogFormat("{0} destoyed", this);
+    }
+
     private void OnChatMessageReceived(ChatPayload payload)
     {
+        Debug.LogFormat("Received: {0}", payload);
+
         if(_counterText == null)
         {
             return;
         }
 
-        _counterText.text = string.Format("Message Count: {0}", ++_msgCount);
+        _counterText.text = string.Format("Message Count: {0}", ++_msgCount);        
+    }
+
+    public void KillMe()
+    {
+        GameObject.Destroy(gameObject);
     }
 }
