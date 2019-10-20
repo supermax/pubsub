@@ -1,7 +1,7 @@
 {
-    "name": "SuperMaxim.Editor",
+    "name": "SuperMaxim.PubSub.Editor",
     "references": [
-        "SuperMaxim"
+        "SuperMaxim.PubSub"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [

@@ -1,12 +1,8 @@
 {
-    "name": "SuperMaxim.PubSub.Editor.Tests",
+    "name": "SuperMaxim.PubSub",
     "references": [],
-    "optionalUnityReferences": [
-        "TestAssemblies"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
