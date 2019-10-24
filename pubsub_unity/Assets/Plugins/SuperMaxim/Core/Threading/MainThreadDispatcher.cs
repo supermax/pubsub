@@ -7,8 +7,9 @@ using System.Collections;
 
 namespace SuperMaxim.Core.Threading
 {
-    public class MainThreadDispatcher : MonoBehaviourSingleton<IThreadDispatcher, MainThreadDispatcher>
-                                            , IThreadDispatcher
+    public class MainThreadDispatcher : 
+                    MonoBehaviourSingleton<IThreadDispatcher, MainThreadDispatcher>
+                    , IThreadDispatcher
     {
         private readonly ConcurrentQueue<DispatcherTask> _tasks = new ConcurrentQueue<DispatcherTask>();
 
