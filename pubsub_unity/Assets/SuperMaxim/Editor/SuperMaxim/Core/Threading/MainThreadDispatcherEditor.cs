@@ -10,8 +10,8 @@ namespace SuperMaxim.Core.Threading
         public override void OnInspectorGUI()
         {
             var dispatcher = (MainThreadDispatcher)target;
-            GUILayout.Label(string.Format("Main Thread ID: {0}", dispatcher.MainThreadId));
-            GUILayout.Label(string.Format("Tasks Count: {0}", dispatcher.TasksCount));
+            GUILayout.Label($"Main Thread ID: {dispatcher.MainThreadId}");
+            GUILayout.Label($"Tasks Count: {dispatcher.TasksCount}");
 
             base.OnInspectorGUI();
         }

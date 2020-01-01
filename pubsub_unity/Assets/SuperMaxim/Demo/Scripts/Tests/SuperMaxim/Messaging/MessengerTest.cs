@@ -10,7 +10,7 @@ namespace Tests
     public class MessengerTest
     {
         [Test]
-        public void SubscribeToSctringPayload()
+        public void SubscribeToStringPayload()
         {
             Messenger.Default.Subscribe<string>(OnStringCallback);
         }
@@ -20,7 +20,7 @@ namespace Tests
         {
             for (var i = 1; i <= 4; i++)
             {
-                Messenger.Default.Publish(string.Format("Hello World! [{0}]", i));
+                Messenger.Default.Publish($"Hello World! [{i}]");
 
                 yield return null;    
             }
@@ -34,14 +34,14 @@ namespace Tests
             Messenger.Default.Publish(new MessengerTestPayload{ Id = UnityEngine.Random.Range(-1, 1)});
         }
 
-        private bool ObjectPredicate(MessengerTestPayload payload)
+        private static bool ObjectPredicate(MessengerTestPayload payload)
         {
             var accepted = payload.Id % 2 == 0;
             Debug.LogFormat("[ObjectPredicate] Object Payload Id: {0}, Accepted: {1}", payload.Id, accepted);
             return accepted;
         }
 
-        private void OnSubscribeToObjectWithPredicate(MessengerTestPayload payload)
+        private static void OnSubscribeToObjectWithPredicate(MessengerTestPayload payload)
         {
             Debug.LogFormat("[OnSubscribeToObjectWithPredicate] Object Payload Id: {0}", payload.Id);
         }

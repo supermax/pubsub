@@ -49,7 +49,7 @@ namespace Tests
         private void TestLoad()
         {
             _totalTime = 0.0;
-            for (int i = 0; i < SendMessageChanksCount; i++)
+            for (var i = 0; i < SendMessageChanksCount; i++)
             {
                 _totalTime += TestLoadLoop();
             }

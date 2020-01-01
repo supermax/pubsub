@@ -25,8 +25,8 @@ namespace Tests
         {
             Messenger.Default.Subscribe<LoadTestPayload>(OnTestCallback);
 
-            double time = 0.0;
-            for (int i = 0; i < SendMessageChanksCount; i++)
+            var time = 0.0;
+            for (var i = 0; i < SendMessageChanksCount; i++)
             {
                 time += TestLoadLoop();
             }
@@ -39,7 +39,7 @@ namespace Tests
             _receivedCount = 0;
             var time = DateTime.Now.TimeOfDay;
 
-            for (int i = 0; i < SendMessagesCount; i++)
+            for (var i = 0; i < SendMessagesCount; i++)
             {
                 Messenger.Default.Publish(_payload);
             }
