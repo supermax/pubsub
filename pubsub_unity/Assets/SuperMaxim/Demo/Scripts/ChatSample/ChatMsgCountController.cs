@@ -24,7 +24,7 @@ public class ChatMsgCountController : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.LogFormat("{0} destoyed", this);
+        Debug.LogFormat("{0} destroyed", this);
     }
 
     private void OnChatMessageReceived(ChatPayload payload)
@@ -36,11 +36,11 @@ public class ChatMsgCountController : MonoBehaviour
             return;
         }
 
-        _counterText.text = string.Format("Message Count: {0}", ++_msgCount);        
+        _counterText.text = $"Message Count: {++_msgCount}";        
     }
 
     public void KillMe()
     {
-        GameObject.Destroy(gameObject);
+        Destroy(gameObject);
     }
 }

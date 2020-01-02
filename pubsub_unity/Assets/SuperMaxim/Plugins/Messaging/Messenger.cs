@@ -57,8 +57,7 @@ namespace SuperMaxim.Messaging
                     return;
                 }
 
-                Dictionary<int, Subscriber> callbacks;
-                dic.TryGetValue(key, out callbacks);
+                dic.TryGetValue(key, out var callbacks);
                 if (callbacks.IsNullOrEmpty())
                 {                
                     dic.Remove(key);
@@ -67,11 +66,7 @@ namespace SuperMaxim.Messaging
 
                 foreach (var callback in callbacks.Values)
                 {
-                    if (callback == null)
-                    {
-                        continue;
-                    }
-                    callback.Invoke(payload);
+                    callback?.Invoke(payload);
                 }
             }
             finally
@@ -127,11 +122,22 @@ namespace SuperMaxim.Messaging
                 dic.Add(key, callbacks);
             }
 
+            if (callbacks == null)
+            {
+                Debug.LogError("callbacks container is null!");
+                return;
+            }
+
             if(callbacks.ContainsKey(subscriber.Id))
             {
                 return;
             }
             callbacks.Add(subscriber.Id, subscriber);
+
+            if (!_subscribers.Contains(subscriber))
+            {
+                _subscribers.Add(subscriber);
+            }
         }
 
         public void Unsubscribe<T>(Action<T> callback)
@@ -155,8 +161,7 @@ namespace SuperMaxim.Messaging
                 return;
             }
 
-            Dictionary<int, Subscriber> callbacks;
-            dic.TryGetValue(key, out callbacks);
+            dic.TryGetValue(key, out var callbacks);
             if(!_isPublishing && callbacks.IsNullOrEmpty())
             {
                 dic.Remove(key);
@@ -166,12 +171,17 @@ namespace SuperMaxim.Messaging
             var id = callback.GetHashCode();
             if(callbacks.ContainsKey(id))
             {
-                var wr = callbacks[id];
-                wr.Dispose();         
+                var subscriber = callbacks[id];
+                subscriber.Dispose();         
 
                 if(!_isPublishing)
                 {
                     callbacks.Remove(id);
+
+                    if (_subscribers.Contains(subscriber))
+                    {
+                        _subscribers.Remove(subscriber);
+                    }
                 }
             }
 
