@@ -10,23 +10,35 @@ using SuperMaxim.Messaging.Monitor;
 
 namespace SuperMaxim.Messaging
 {
-    //TODO add error logging
+    /// <summary>
+    /// Pub/Sub Messenger Singleton
+    /// <remarks>(Implements <see cref="IMessenger"/>)</remarks> 
+    /// </summary>
     public sealed class Messenger : Singleton<IMessenger, Messenger>, IMessenger
     {
+        // Mapping [PAYLOAD_TYPE]->[MAP(INT, SUBSCRIBER)]
         private readonly Dictionary<Type, Dictionary<int, Subscriber>> _subscribersSet = 
                                                 new Dictionary<Type, Dictionary<int, Subscriber>>();
 
+        // List of subscribers to optimize iteration during subscribers processing  
         private readonly List<Subscriber> _subscribers = new List<Subscriber>();
 
+        // List of subscribers to optimize add (subscribe) operation 
         private readonly List<Subscriber> _add = new List<Subscriber>();
 
+        // flag, if "true" then do not do changes in "_subscribersSet" dic.
         private bool _isPublishing;
 
+        /// <summary>
+        /// Static CTOR to initialize other monitoring tools (singletons)
+        /// </summary>
         static Messenger()
         {
+            // init MainThreadDispatcher and print main thread ID
             Debug.LogFormat("Main Thread ID: {0}", MainThreadDispatcher.Default.MainThreadId);
 
             // TODO init in case of debug
+            // init MessengerMonitor
             Debug.LogFormat("Messenger Monitor {0}", MessengerMonitor.Default); // TODO print id
         }
 
