@@ -52,8 +52,7 @@ public class ChatController : MonoBehaviour
             _chatText.text = string.Empty;
         }
 
-        _chatText.text += string.Format("\r\n{0:t} {1}: {2}", 
-                                    DateTime.Now, payload.UserId, payload.Text);
+        _chatText.text += $"\r\n{DateTime.Now:t} {payload.UserId}: {payload.Text}";
     }
 
     public void OnTextChanged(string text)
@@ -90,6 +89,6 @@ public class ChatController : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.LogFormat("{0} destoyed", this);
+        Debug.LogFormat("{0} destroyed", this);
     }
 }
