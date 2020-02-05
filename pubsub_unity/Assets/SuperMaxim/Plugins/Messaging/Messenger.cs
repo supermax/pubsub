@@ -42,17 +42,18 @@ namespace SuperMaxim.Messaging
             Debug.LogFormat("Messenger Monitor {0}", MessengerMonitor.Default); // TODO print id
         }
 
-        public void Publish<T>(T payload)
+        public IMessenger Publish<T>(T payload)
         {
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.MainThreadId)
             {
                 PublishInternal(payload);
-                return;
+                return this;
             }
 
             // TODO write to log Thread ID
             Action<T> act = PublishInternal;
             MainThreadDispatcher.Default.Dispatch(act, new object[] { payload });
+            return this;
         }
 
         private void PublishInternal<T>(T payload)
@@ -88,16 +89,17 @@ namespace SuperMaxim.Messaging
             }
         }
 
-        public void Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
+        public IMessenger Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
         {
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.MainThreadId)
             {
                 SubscribeInternal(callback, predicate);
-                return;
+                return this;
             }
 
             Action<Action<T>, Predicate<T>> act = SubscribeInternal;
             MainThreadDispatcher.Default.Dispatch(act, new object[] { callback, predicate });
+            return this;
         }
 
         private void SubscribeInternal<T>(Action<T> callback, Predicate<T> predicate = null)
@@ -152,16 +154,17 @@ namespace SuperMaxim.Messaging
             }
         }
 
-        public void Unsubscribe<T>(Action<T> callback)
+        public IMessenger Unsubscribe<T>(Action<T> callback)
         {
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.MainThreadId)
             {
                 UnsubscribeInternal(callback);
-                return;
+                return this;
             }
 
             Action<Action<T>> act = UnsubscribeInternal;
             MainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
+            return this;
         }
 
         private void UnsubscribeInternal<T>(Action<T> callback)

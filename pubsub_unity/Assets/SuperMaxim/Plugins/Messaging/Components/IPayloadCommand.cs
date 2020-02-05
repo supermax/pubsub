@@ -1,11 +1,14 @@
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace SuperMaxim.Messaging.Components
 {
+    /// <summary>
+    /// Interface for Payload Command
+    /// </summary>
     public interface IPayloadCommand
     {
-        string Id { get; }
+        string Id { get; set; }
 
-        IDictionary<string, string> Data { get; }
+        ScriptableObject Data { get; set; }
     }
 }

@@ -12,7 +12,8 @@ namespace SuperMaxim.Messaging
         /// </summary>
         /// <param name="payload">Instance of payload to publish</param>
         /// <typeparam name="T">The type of payload to publish</typeparam>
-        void Publish<T>(T payload);
+        /// <returns>Instance of the Messenger</returns>
+        IMessenger Publish<T>(T payload);
 
         /// <summary>
         /// Subscribe given callback to receive payload
@@ -20,13 +21,15 @@ namespace SuperMaxim.Messaging
         /// <param name="callback">The callback that will receive the payload</param>
         /// <param name="predicate">The predicate to filter irrelevant payloads (optional)</param>
         /// <typeparam name="T">The type of payload to receive</typeparam>
-        void Subscribe<T>(Action<T> callback, Predicate<T> predicate = null);
+        /// <returns>Instance of the Messenger</returns>
+        IMessenger Subscribe<T>(Action<T> callback, Predicate<T> predicate = null);
 
         /// <summary>
         /// Unsubscribe given callback from receiving payload  
         /// </summary>
         /// <param name="callback">The callback that subscribed to receive payload</param>
         /// <typeparam name="T">Type of payload to unsubscribe from</typeparam>
-        void Unsubscribe<T>(Action<T> callback);
+        /// <returns>Instance of the Messenger</returns>
+        IMessenger Unsubscribe<T>(Action<T> callback);
     }
 }

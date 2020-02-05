@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading;
 using SuperMaxim.Core.Extensions;
 using SuperMaxim.Messaging;
+using SuperMaxim.Messaging.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,13 +26,32 @@ public class ChatController : MonoBehaviour
     [SerializeField]
     private Text _userIdText;
 
+    [SerializeField] 
+    private bool _isMultithreadingOn;
+
     private const int MaxChatTextLength = 3000;
 
     private void Start()
     {
         _userIdText.text = _userId;
 
-        Messenger.Default.Subscribe<ChatPayload>(OnChatMessage, ChatMessagePredicate);
+        Messenger.Default.
+            Subscribe<ChatPayload>(OnChatMessage, ChatMessagePredicate).
+            Subscribe<PayloadCommand>(OnPayloadCommand, PayloadCommandPredicate);
+    }
+
+    private bool PayloadCommandPredicate(PayloadCommand payload)
+    {
+        var key = typeof(MultiThreadingToggle).Name;
+        var res = payload.Id == key && payload.Data is MultiThreadingToggle;
+        return res;
+    }
+
+    private void OnPayloadCommand(PayloadCommand payload)
+    {
+        var data = (MultiThreadingToggle)payload.Data;
+        _isMultithreadingOn = data.IsMultiThreadingOn;
+        // create new thread
     }
 
     private bool ChatMessagePredicate(ChatPayload payload)
@@ -69,16 +90,22 @@ public class ChatController : MonoBehaviour
             return;
         }
 
-        var payload = new ChatPayload 
-                            {    
-                                UserId = _userId,
-                                Text = text
-                            };
-        Messenger.Default.Publish(payload);
+        PublishMessage(text);
 
         _inputField.enabled = false;
         _inputField.text = string.Empty;
         _inputField.enabled = true;
+    }
+
+    private void PublishMessage(string text)
+    {
+        var payload = new ChatPayload
+                        {
+                            UserId = _userId,
+                            Text = text
+                        };
+        //ThreadPool.QueueUserWorkItem()
+        Messenger.Default.Publish(payload);
     }
 
     public void KillMe()

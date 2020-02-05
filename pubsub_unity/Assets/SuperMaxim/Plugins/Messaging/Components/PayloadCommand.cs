@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SuperMaxim.Messaging.Components
@@ -10,11 +9,19 @@ namespace SuperMaxim.Messaging.Components
         [SerializeField]
         private string _id;
 
-        public string Id { get; set;}
+        public string Id
+        {
+            get => _id;
+            set => _id = value;
+        }
 
         [SerializeField]
-        private Dictionary<string, string> _data;
+        private ScriptableObject _data;
 
-        public IDictionary<string, string> Data { get; set;}
+        public ScriptableObject Data
+        {
+            get => _data;
+            set => _data = value;
+        }
     }
 }
