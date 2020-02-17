@@ -30,6 +30,8 @@ public class ChatController : MonoBehaviour
     private bool _isMultithreadingOn;
 
     private const int MaxChatTextLength = 3000;
+    
+    private readonly ThreadQueue<string> _threadQueue = new ThreadQueue<string>();
 
     private void Start()
     {
@@ -51,9 +53,16 @@ public class ChatController : MonoBehaviour
     {
         var data = (MultiThreadingToggle)payload.Data;
         _isMultithreadingOn = data.IsMultiThreadingOn;
-        // create new thread
+        if (_isMultithreadingOn)
+        {
+            _threadQueue.Start();
+        }
+        else
+        {
+            _threadQueue.Stop();
+        }
     }
-
+    
     private bool ChatMessagePredicate(ChatPayload payload)
     {
         var isSameId = payload.UserId == _userId;
@@ -90,7 +99,14 @@ public class ChatController : MonoBehaviour
             return;
         }
 
-        PublishMessage(text);
+        if (_isMultithreadingOn)
+        {
+            _threadQueue.Enqueue(PublishMessage, text);
+        }
+        else
+        {
+            PublishMessage(text);
+        }
 
         _inputField.enabled = false;
         _inputField.text = string.Empty;
@@ -104,18 +120,18 @@ public class ChatController : MonoBehaviour
                             UserId = _userId,
                             Text = text
                         };
-        //ThreadPool.QueueUserWorkItem()
         Messenger.Default.Publish(payload);
     }
 
     public void KillMe()
     {
-        GameObject.Destroy(gameObject);
+        Destroy(gameObject);
         Debug.LogFormat("Killing {0}", gameObject);
     }
 
     private void OnDestroy()
     {
+        _threadQueue.Dispose();
         Debug.LogFormat("{0} destroyed", this);
     }
 }

@@ -13,20 +13,17 @@ namespace SuperMaxim.Core.Threading
     {
         private readonly ConcurrentQueue<DispatcherTask> _tasks = new ConcurrentQueue<DispatcherTask>();
 
-        public int MainThreadId
+        public int ThreadId
         {
             get;
             private set;
         }
 
-        public int TasksCount
-        {
-            get { return _tasks.Count; }
-        }
+        public int TasksCount => _tasks.Count;
 
         private void Awake()
         {
-            MainThreadId = Thread.CurrentThread.ManagedThreadId;                
+            ThreadId = Thread.CurrentThread.ManagedThreadId;                
         }
 
         public void Dispatch(Delegate action, object[] payload)
@@ -38,15 +35,14 @@ namespace SuperMaxim.Core.Threading
         {
             while(_tasks.Count > 0)
             {
-                DispatcherTask task;
-                if(_tasks.TryDequeue(out task))
+                if (!_tasks.TryDequeue(out var task))
                 {
-                    // TODO temove this temp log
-                    Debug.LogFormat("(Queue.Count: {0}) Dispatching task {1}", _tasks.Count, task.Action);
+                    continue;
+                }
+                Debug.LogFormat("(Queue.Count: {0}) Dispatching task {1}", _tasks.Count, task.Action);
 
-                    task.Invoke();
-                    task.Dispose();
-                }                
+                task.Invoke();
+                task.Dispose();
             }
         }
     }

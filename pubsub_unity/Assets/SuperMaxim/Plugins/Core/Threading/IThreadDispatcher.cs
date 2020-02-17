@@ -4,7 +4,7 @@ namespace SuperMaxim.Core.Threading
 {
     public interface IThreadDispatcher
     {
-        int MainThreadId { get; }
+        int ThreadId { get; }
 
         void Dispatch(Delegate action, object[] payload);        
     }

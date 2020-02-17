@@ -35,7 +35,7 @@ namespace SuperMaxim.Messaging
         static Messenger()
         {
             // init MainThreadDispatcher and print main thread ID
-            Debug.LogFormat("Main Thread ID: {0}", MainThreadDispatcher.Default.MainThreadId);
+            Debug.LogFormat("Main Thread ID: {0}", MainThreadDispatcher.Default.ThreadId);
 
             // TODO init in case of debug
             // init MessengerMonitor
@@ -44,7 +44,7 @@ namespace SuperMaxim.Messaging
 
         public IMessenger Publish<T>(T payload)
         {
-            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.MainThreadId)
+            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
             {
                 PublishInternal(payload);
                 return this;
@@ -91,7 +91,7 @@ namespace SuperMaxim.Messaging
 
         public IMessenger Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
         {
-            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.MainThreadId)
+            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
             {
                 SubscribeInternal(callback, predicate);
                 return this;
@@ -156,7 +156,7 @@ namespace SuperMaxim.Messaging
 
         public IMessenger Unsubscribe<T>(Action<T> callback)
         {
-            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.MainThreadId)
+            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
             {
                 UnsubscribeInternal(callback);
                 return this;

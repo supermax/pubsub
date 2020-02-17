@@ -467,7 +467,7 @@ PrefabInstance:
     - target: {fileID: 6160982452662376394, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000008156812
+      value: 0.000015258789
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23fdb5f72c76a4764beab75f98fa9a1a, type: 3}
@@ -808,6 +808,11 @@ PrefabInstance:
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4026980724790296686, guid: 990fe7e215e444da38e2a3585d88c68f,
+        type: 3}
+      propertyPath: m_IsOn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4862147515007742542, guid: 990fe7e215e444da38e2a3585d88c68f,
         type: 3}
       propertyPath: _payloadScript
@@ -1079,7 +1084,7 @@ PrefabInstance:
     - target: {fileID: 6160982452662376394, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000008156812
+      value: 0.000015258789
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23fdb5f72c76a4764beab75f98fa9a1a, type: 3}
