@@ -6,6 +6,6 @@
 
     public override string ToString()
     {
-        return string.Format("UserId: {0}, Text: {1}", UserId, Text);
+        return $"UserId: {UserId}, Text: {Text}";
     }
 }

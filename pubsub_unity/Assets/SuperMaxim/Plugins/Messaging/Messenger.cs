@@ -42,6 +42,12 @@ namespace SuperMaxim.Messaging
             Debug.LogFormat("Messenger Monitor {0}", MessengerMonitor.Default); // TODO print id
         }
 
+        /// <summary>
+        /// Publish given payload to relevant subscribers
+        /// </summary>
+        /// <param name="payload">Instance of payload to publish</param>
+        /// <typeparam name="T">The type of payload to publish</typeparam>
+        /// <returns>Instance of the Messenger</returns>
         public IMessenger Publish<T>(T payload)
         {
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p="Assets" t="Include">
+        <e p="SuperMaxim" t="Include">
+          <e p="Demo" t="Include">
+            <e p="Scripts" t="Include">
+              <e p="ChatController.cs" t="Include" />
+              <e p="ChatMsgCountController.cs" t="Include" />
+              <e p="ChatPayload.cs" t="Include" />
+              <e p="MultiThreadingToggle.cs" t="Include" />
+              <e p="ThreadQueue.cs" t="Include" />
+            </e>
+            <e p="SuperMaxim.PubSub.Demo.asmdef" t="Include" />
+          </e>
+          <e p="Editor" t="Include">
+            <e p="Core" t="Include">
+              <e p="Threading" t="Include">
+                <e p="MainThreadDispatcherEditor.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Messaging" t="Include">
+              <e p="Monitor" t="Include">
+                <e p="MessengerMonitorEditor.cs" t="Include" />
+              </e>
+            </e>
+            <e p="SuperMaxim.PubSub.Editor.asmdef" t="Include" />
+          </e>
+          <e p="Plugins" t="Include">
+            <e p="Core" t="Include">
+              <e p="extensions" t="Include">
+                <e p="CollectionExtensions.cs" t="Include" />
+              </e>
+              <e p="Objects" t="Include">
+                <e p="MonoBehaviourSingleton.cs" t="Include" />
+                <e p="Singleton.cs" t="Include" />
+              </e>
+              <e p="Threading" t="Include">
+                <e p="DispatcherTask.cs" t="Include" />
+                <e p="IThreadDispatcher.cs" t="Include" />
+                <e p="MainThreadDispatcher.cs" t="Include" />
+              </e>
+              <e p="WeakRef" t="Include">
+                <e p="WeakRefDelegate.cs" t="Include" />
+                <e p="WeakRefWrapper.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Messaging" t="Include">
+              <e p="Components" t="Include">
+                <e p="IPayloadCommand.cs" t="Include" />
+                <e p="PayloadCommand.cs" t="Include" />
+                <e p="PayloadCommandPublisher.cs" t="Include" />
+              </e>
+              <e p="IMessenger.cs" t="Include" />
+              <e p="Messenger.cs" t="Include" />
+              <e p="Monitor" t="Include">
+                <e p="IMessengerMonitor.cs" t="Include" />
+                <e p="MessengerMonitor.cs" t="Include" />
+              </e>
+              <e p="Subscriber.cs" t="Include" />
+            </e>
+            <e p="SuperMaxim.PubSub.asmdef" t="Include" />
+          </e>
+          <e p="Tests" t="Include">
+            <e p="Core" t="Include">
+              <e p="WeakRef" t="Include">
+                <e p="WeakRefDelegateTest.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Messaging" t="Include">
+              <e p="MessengerLoadMultithreadingTest.cs" t="Include" />
+              <e p="MessengerLoadTest.cs" t="Include" />
+              <e p="MessengerTest.cs" t="Include" />
+            </e>
+            <e p="SuperMaxim.PubSub.Tests.asmdef" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="pubsub_unity.sln" t="IncludeFlat" />
+      <e p="SuperMaxim.PubSub.csproj" t="IncludeRecursive" />
+      <e p="SuperMaxim.PubSub.Demo.csproj" t="IncludeRecursive" />
+      <e p="SuperMaxim.PubSub.Editor.csproj" t="IncludeRecursive" />
+      <e p="SuperMaxim.PubSub.Tests.csproj" t="IncludeRecursive" />
+      <e p="Temp/bin" t="ExcludeRecursive" />
+    </e>
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2019.3/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_pubsub_unity.757736266.00" t="ExcludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/extensions" t="IncludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/javascript/nodejs/6.11.0/core-modules" t="IncludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/javascript/nodejs/6.11.0/node-typings/node_modules/@types" t="IncludeRecursive" />
+  </component>
+</project>
