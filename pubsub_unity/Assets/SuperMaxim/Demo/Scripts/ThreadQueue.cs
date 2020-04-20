@@ -26,8 +26,12 @@ public class ThreadQueue<T> : IDisposable
         Debug.LogWarningFormat("Thread {0}", Thread.CurrentThread.ManagedThreadId);
 
         while (_queue.Count > 0)
+        {
             if (_queue.TryDequeue(out var tuple))
+            {
                 tuple.Item1.Invoke(new object[] {tuple.Item2});
+            }
+        }
     }
 
     public void Start()
@@ -46,8 +50,12 @@ public class ThreadQueue<T> : IDisposable
     public void Clear()
     {
         while (_queue.Count > 0)
+        {
             if (_queue.TryDequeue(out var tuple))
+            {
                 tuple.Item1.Dispose();
+            }
+        }
     }
 
     public void Enqueue(Action<T> method, T parameter)

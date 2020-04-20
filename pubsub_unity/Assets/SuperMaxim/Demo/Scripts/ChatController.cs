@@ -15,31 +15,58 @@ using UnityEngine.UI;
 public class ChatController : MonoBehaviour
 {
     /// <summary>
-    /// 
+    /// max len. of text per single msg
     /// </summary>
-    private const int MaxChatTextLength = 3000;
+    private const int MaxChatTextLength = 250;
 
+    /// <summary>
+    /// multi-threaded queue handler to be used to send messages on new thread that is not main thread 
+    /// </summary>
     private readonly ThreadQueue<string> _threadQueue = new ThreadQueue<string>();
 
+    /// <summary>
+    /// text component to present incoming messages
+    /// </summary>
     [SerializeField] private Text _chatText;
 
+    /// <summary>
+    /// input text field
+    /// </summary>
     [SerializeField] private InputField _inputField;
 
+    /// <summary>
+    /// if true, each msg will be sent on a separate thread (diff from main thread)
+    /// </summary>
     [SerializeField] private bool _isMultiThreadingOn;
 
+    /// <summary>
+    /// capture button instance to lock during msg sending
+    /// </summary>
     [SerializeField] private Button _sendButton;
 
+    /// <summary>
+    /// capture last entered text for debugging in game object
+    /// </summary>
     [SerializeField] private string _text;
 
+    /// <summary>
+    /// capture user ID for msg filtering and debugging
+    /// </summary>
     [SerializeField] private string _userId;
 
+    /// <summary>
+    /// user ID text label
+    /// </summary>
     [SerializeField] private Text _userIdText;
 
     private void Start()
     {
+        // print user ID in UI label
         _userIdText.text = _userId;
 
+        // subscribe to chat msg payload
         Messenger.Default.Subscribe<ChatPayload>(OnChatMessage, ChatMessagePredicate)
+            // subscribe to generic payload
             .Subscribe<PayloadCommand>(OnPayloadCommand, PayloadCommandPredicate);
     }
 
@@ -56,9 +83,13 @@ public class ChatController : MonoBehaviour
         _isMultiThreadingOn = data.IsMultiThreadingOn;
 
         if (_isMultiThreadingOn)
+        {
             _threadQueue.Start();
+        }
         else
+        { 
             _threadQueue.Stop();
+        }
     }
 
     private bool ChatMessagePredicate(ChatPayload payload)
