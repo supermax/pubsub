@@ -64,13 +64,13 @@ public class ChatController : MonoBehaviour
         // print user ID in UI label
         _userIdText.text = _userId;
 
-        // subscribe to chat msg payload
+        // subscribe to chat msg payload with filter
         Messenger.Default.Subscribe<ChatPayload>(OnChatMessage, ChatMessagePredicate)
-            // subscribe to generic payload
+            // subscribe to generic payload with filter
             .Subscribe<PayloadCommand>(OnPayloadCommand, PayloadCommandPredicate);
     }
 
-    private bool PayloadCommandPredicate(PayloadCommand payload)
+    private static bool PayloadCommandPredicate(PayloadCommand payload)
     {
         const string key = nameof(MultiThreadingToggle);
         var res = payload.Id == key && payload.Data is MultiThreadingToggle;

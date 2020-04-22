@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+    <e p="C:\Git\Personal\pubsub\pubsub_unity" t="IncludeRecursive">
       <e p="Assets" t="Include">
         <e p="SuperMaxim" t="Include">
           <e p="Demo" t="Include">
@@ -84,12 +84,9 @@
       <e p="SuperMaxim.PubSub.Demo.csproj" t="IncludeRecursive" />
       <e p="SuperMaxim.PubSub.Editor.csproj" t="IncludeRecursive" />
       <e p="SuperMaxim.PubSub.Tests.csproj" t="IncludeRecursive" />
-      <e p="Temp/bin" t="ExcludeRecursive" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
     </e>
-    <e p="$USER_HOME$/Library/Caches/Rider2019.3/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/Library/Caches/Rider2019.3/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_pubsub_unity.757736266.00" t="ExcludeRecursive" />
-    <e p="$APPLICATION_CONFIG_DIR$/extensions" t="IncludeRecursive" />
-    <e p="$APPLICATION_CONFIG_DIR$/javascript/nodejs/6.11.0/core-modules" t="IncludeRecursive" />
-    <e p="$APPLICATION_CONFIG_DIR$/javascript/nodejs/6.11.0/node-typings/node_modules/@types" t="IncludeRecursive" />
+    <e p="C:\Users\alexamax\AppData\local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\alexamax\AppData\local\JetBrains\Rider2020.1\resharper-host\local\Transient\ReSharperHost\v201\SolutionCaches\_pubsub_unity.1897626890.00" t="ExcludeRecursive" />
   </component>
 </project>
