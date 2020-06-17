@@ -36,7 +36,7 @@ public class ThreadQueue<T> : IDisposable
 
     public void Start()
     {
-        _timer = new Timer(OnTick, 0, 0, 1000);
+        _timer = new Timer(OnTick, null, 0, 1000);
     }
 
     public void Stop()

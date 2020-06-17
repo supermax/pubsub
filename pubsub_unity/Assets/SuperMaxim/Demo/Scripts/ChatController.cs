@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections;
 using SuperMaxim.Core.Extensions;
 using SuperMaxim.Messaging;
 using SuperMaxim.Messaging.Components;
@@ -59,6 +60,9 @@ public class ChatController : MonoBehaviour
     /// </summary>
     [SerializeField] private Text _userIdText;
 
+    /// <summary>
+    /// Invoked before 1st call Update()
+    /// </summary>
     private void Start()
     {
         // print user ID in UI label
@@ -70,72 +74,137 @@ public class ChatController : MonoBehaviour
             .Subscribe<PayloadCommand>(OnPayloadCommand, PayloadCommandPredicate);
     }
 
+    /// <summary>
+    /// Returns 'true' if payload can be accepted (filter function)/>
+    /// </summary>
+    /// <param name="payload">Given filter</param>
+    /// <returns>Returns 'true' if payload can be accepted</returns>
     private static bool PayloadCommandPredicate(PayloadCommand payload)
     {
         const string key = nameof(MultiThreadingToggle);
+        // check if payload ID == MultiThreadingToggle and data is of type MultiThreadingToggle
         var res = payload.Id == key && payload.Data is MultiThreadingToggle;
         return res;
     }
 
+    /// <summary>
+    /// Callback for <see cref="PayloadCommand"/> (receiver function)
+    /// </summary>
+    /// <param name="payload"><see cref="PayloadCommand"/></param>
     private void OnPayloadCommand(PayloadCommand payload)
     {
+        // cast payload data to MultiThreadingToggle
         var data = (MultiThreadingToggle) payload.Data;
         _isMultiThreadingOn = data.IsMultiThreadingOn;
 
+        // check if multithreading flag is on
         if (_isMultiThreadingOn)
         {
+            // start thread queue
             _threadQueue.Start();
         }
         else
         { 
+            // stop thread queue
             _threadQueue.Stop();
         }
     }
-
+    
+    /// <summary>
+    /// Returns 'true' if payload can be accepted (filter function)/>
+    /// </summary>
+    /// <param name="payload">Given filter</param>
+    /// <returns>Returns 'true' if payload can be accepted</returns>
     private bool ChatMessagePredicate(ChatPayload payload)
     {
+        // check if message is from the same user ID bound to this instance
         var isSameId = payload.UserId == _userId;
+        // if same user ID, ignore message
         if (isSameId) return false;
 
+        // check if message text is null or empty
         var isEmpty = payload.Text.IsNullOrEmpty();
         return !isEmpty;
     }
 
+    /// <summary>
+    /// Callback for <see cref="ChatPayload"/> (receiver function)
+    /// </summary>
+    /// <param name="payload"><see cref="ChatPayload"/></param>
     private void OnChatMessage(ChatPayload payload)
     {
-        if (_chatText.text.Length > MaxChatTextLength) _chatText.text = string.Empty;
+        // reset chat text stack if it has reached its maximum
+        if (_chatText.text.Length + payload.Text.Length > MaxChatTextLength)
+        {
+            _chatText.text = string.Empty;
+        }
 
-        _chatText.text += $"\r\n{DateTime.Now:t} {payload.UserId}: {payload.Text}";
+        // copy text and ensure that within max allowed range
+        var txt = payload.Text.Length > MaxChatTextLength ? 
+                            payload.Text.Substring(0, MaxChatTextLength) : 
+                            payload.Text;
+        _chatText.text += $"\r\n{DateTime.Now:t} {payload.UserId}: {txt.Trim()}";
     }
 
+    /// <summary>
+    /// Called on chat message text change
+    /// </summary>
+    /// <param name="text">message text</param>
     public void OnTextChanged(string text)
     {
-        _text = text;
+        _text = text; // capture for the debug
 
         _sendButton.enabled = !_inputField.text.IsNullOrEmpty();
     }
 
+    /// <summary>
+    /// Called on text end edit
+    /// </summary>
+    /// <remarks>When pressed enter or text field lost focus</remarks>
+    /// <param name="text">recent text</param>
     public void OnTextEndEdit(string text)
     {
         if (text.IsNullOrEmpty()) return;
 
         if (_isMultiThreadingOn)
+        {
             _threadQueue.Enqueue(PublishMessage, text);
+        }
         else
+        {
             PublishMessage(text);
+        }
 
+        // disable text field to avoid input lock
         _inputField.enabled = false;
-        _inputField.text = string.Empty;
+        // reset text and reenable async
+        StartCoroutine(EnableInputFieldCoroutine());
+    }
+    
+    /// <summary>
+    /// Enable Input Field after one frame
+    /// </summary>
+    /// <returns><see cref="IEnumerator"/></returns>
+    private IEnumerator EnableInputFieldCoroutine()
+    {
+        // wait one frame
+        yield return null;
+        
+        // clear text field
+        _inputField.SetTextWithoutNotify(string.Empty);
+        // reenable text field
         _inputField.enabled = true;
+
+        _inputField.ActivateInputField();
     }
 
     private void PublishMessage(string text)
     {
         var payload = new ChatPayload
-        {
-            UserId = _userId,
-            Text = text
-        };
+                            {
+                                UserId = _userId,
+                                Text = text
+                            };
         Messenger.Default.Publish(payload);
     }
 

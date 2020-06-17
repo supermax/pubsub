@@ -20,6 +20,7 @@
 # Visual Studio cache directory
 .vs/
 .vscode/
+.idea
 
 # Gradle cache directory
 .gradle/
@@ -61,3 +62,4 @@ pubsub_unity/Temp
 pubsub_unity/obj
 pubsub_unity/Logs
 pubsub_unity/obj/Debug/Tests.csproj.CoreCompileInputs.cache
+pubsub_unity/.idea

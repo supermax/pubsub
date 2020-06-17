@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 0
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
-    serializedVersion: 10
+    serializedVersion: 12
     m_Resolution: 2
     m_BakeResolution: 40
     m_AtlasSize: 1024
@@ -62,6 +62,7 @@ LightmapSettings:
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
     m_CompAOExponentDirect: 0
+    m_ExtractAmbientOcclusion: 0
     m_Padding: 2
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
@@ -76,10 +77,16 @@ LightmapSettings:
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
     m_PVRBounces: 2
+    m_PVREnvironmentSampleCount: 500
+    m_PVREnvironmentReferencePointCount: 2048
+    m_PVRFilteringMode: 2
+    m_PVRDenoiserTypeDirect: 0
+    m_PVRDenoiserTypeIndirect: 0
+    m_PVRDenoiserTypeAO: 0
     m_PVRFilterTypeDirect: 0
     m_PVRFilterTypeIndirect: 0
     m_PVRFilterTypeAO: 0
-    m_PVRFilteringMode: 2
+    m_PVREnvironmentMIS: 0
     m_PVRCulling: 1
     m_PVRFilteringGaussRadiusDirect: 1
     m_PVRFilteringGaussRadiusIndirect: 5
@@ -87,7 +94,9 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
+    m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -112,15 +121,15 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &14448220 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6160982451253897845, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
-    type: 3}
-  m_PrefabInstance: {fileID: 6160982451390346763}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &418258047 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6160982451253897844, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6160982451390346763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &434974535 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6160982452015434792, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
     type: 3}
   m_PrefabInstance: {fileID: 6160982451390346763}
   m_PrefabAsset: {fileID: 0}
@@ -162,9 +171,10 @@ Camera:
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_GateFitMode: 2
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -233,7 +243,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 803810408}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalAxis: Horizontal
@@ -252,10 +262,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 803810408}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 14448220}
+  m_FirstSelected: {fileID: 434974535}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &803810411
@@ -439,6 +449,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: RightChatPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 6160982451253897867, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.38273704
+      objectReference: {fileID: 0}
+    - target: {fileID: 6160982451253897867, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.745283
+      objectReference: {fileID: 0}
+    - target: {fileID: 6160982451253897867, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.19335175
+      objectReference: {fileID: 0}
     - target: {fileID: 6160982451913855529, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -467,7 +492,7 @@ PrefabInstance:
     - target: {fileID: 6160982452662376394, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000015258789
+      value: 0.00004777564
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23fdb5f72c76a4764beab75f98fa9a1a, type: 3}
@@ -505,7 +530,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1902412874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
@@ -522,7 +547,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1902412874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 0
@@ -1046,6 +1071,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeftChatPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 6160982451253897867, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.19691172
+      objectReference: {fileID: 0}
+    - target: {fileID: 6160982451253897867, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.38542384
+      objectReference: {fileID: 0}
+    - target: {fileID: 6160982451253897867, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.7075472
+      objectReference: {fileID: 0}
     - target: {fileID: 6160982451913855529, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1084,7 +1124,7 @@ PrefabInstance:
     - target: {fileID: 6160982452662376394, guid: 23fdb5f72c76a4764beab75f98fa9a1a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000015258789
+      value: 0.00004777564
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23fdb5f72c76a4764beab75f98fa9a1a, type: 3}
