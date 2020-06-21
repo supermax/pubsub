@@ -143,6 +143,7 @@ public class ChatController : MonoBehaviour
         var txt = payload.Text.Length > MaxChatTextLength ? 
                             payload.Text.Substring(0, MaxChatTextLength) : 
                             payload.Text;
+        // append text to current chat texts
         _chatText.text += $"\r\n{DateTime.Now:t} {payload.UserId}: {txt.Trim()}";
     }
 
@@ -152,13 +153,14 @@ public class ChatController : MonoBehaviour
     /// <param name="text">message text</param>
     public void OnTextChanged(string text)
     {
-        _text = text; // capture for the debug
-
+        // capture for the debug in inspector
+        _text = text;
+        // if text field is empty, disable "send" button
         _sendButton.enabled = !_inputField.text.IsNullOrEmpty();
     }
 
     /// <summary>
-    /// Called on text end edit
+    /// Called when text was edited by user
     /// </summary>
     /// <remarks>When pressed enter or text field lost focus</remarks>
     /// <param name="text">recent text</param>
@@ -197,25 +199,37 @@ public class ChatController : MonoBehaviour
 
         _inputField.ActivateInputField();
     }
-
+    
+    /// <summary>
+    /// Publish text message
+    /// </summary>
+    /// <param name="text">The text from input text box</param>
     private void PublishMessage(string text)
     {
         var payload = new ChatPayload
                             {
-                                UserId = _userId,
+                                UserId = _userId, // pass current user ID
                                 Text = text
                             };
+        // publish payload
         Messenger.Default.Publish(payload);
     }
 
+    /// <summary>
+    /// Destroys chat panel prefab
+    /// </summary>
     public void KillMe()
     {
         Debug.LogFormat("Killing {0}", gameObject);
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// Called when script is destroyed
+    /// </summary>
     private void OnDestroy()
     {
+        // dispose thread queue
         _threadQueue.Dispose();
         Debug.LogFormat("{0} - \"{1}\" destroyed", name, _userId);
     }
