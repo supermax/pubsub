@@ -1,0 +1,16 @@
+{
+    "name": "SuperMaxim.PubSub.Editor",
+    "references": [
+        "SuperMaxim.PubSub"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
