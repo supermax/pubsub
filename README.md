@@ -15,4 +15,9 @@ This library provides a pub-sub mechanism that is a part of SOLID principles in 
 * [Unit Tests](https://github.com/supermax/pubsub/wiki/Unit-Tests)
 * [DEMO Project](https://github.com/supermax/pubsub/wiki/DEMO-Project)
 
+### Youtube Video with Instructions:
+[![Video-Instructions](http://img.youtube.com/vi/vI0XYKGAZLg/0.jpg)](http://www.youtube.com/watch?v=vI0XYKGAZLg)
+
+***Messenger Chart***
+
 ![Messenger](https://raw.githubusercontent.com/wiki/supermax/pubsub/Images/messenger.gif)
