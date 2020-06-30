@@ -50,39 +50,56 @@ namespace SuperMaxim.Messaging
         /// <returns>Instance of the Messenger</returns>
         public IMessenger Publish<T>(T payload)
         {
+            // if calling thread is same as main thread, call "PublishInternal" directly
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
             {
                 PublishInternal(payload);
                 return this;
             }
 
-            // TODO write to log Thread ID
+            // capture "PublishInternal" in local action var.
             Action<T> act = PublishInternal;
+            // add "act" into "MainThreadDispatcher" queue
             MainThreadDispatcher.Default.Dispatch(act, new object[] { payload });
             return this;
         }
 
+        /// <summary>
+        /// Publish payload
+        /// </summary>
+        /// <remarks>
+        /// Internal function that is used with "MainThreadDispatcher"
+        /// </remarks>
+        /// <param name="payload">The payload</param>
+        /// <typeparam name="T">The type of the payload</typeparam>
         private void PublishInternal<T>(T payload)
         {
             try
             {
+                // turn on the flag
                 _isPublishing = true;
 
+                // capture subscribers dic. in local var.
                 var dic = _subscribersSet;
-                var key = typeof(T);
+                var key = typeof(T); // capture the type of the payload in local var.
 
+                // exit method, if subscribers' dic. does not contain the given payload type
                 if (!dic.ContainsKey(key))
                 {
                     return;
                 }
 
+                // get subscriber's dic. for the payload type
                 dic.TryGetValue(key, out var callbacks);
+                // check if "callbacks" dic. is null or empty 
                 if (callbacks.IsNullOrEmpty())
                 {                
+                    // remove payload type key is "callbacks" dic is empty
                     dic.Remove(key);
                     return;
                 }
 
+                // iterate thru dic and invoke callbacks
                 foreach (var callback in callbacks.Values)
                 {
                     callback?.Invoke(payload);
@@ -90,7 +107,9 @@ namespace SuperMaxim.Messaging
             }
             finally
             {
+                // turn off the flag
                 _isPublishing = false;
+                // process pending tasks
                 Process();
             }
         }
