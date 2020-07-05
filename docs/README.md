@@ -17,6 +17,7 @@ This library will provide a pub-sub mechanism that is a part of SOLID principles
 
 ### Youtube Video with Instructions:
 [![Video-Instructions](http://img.youtube.com/vi/vI0XYKGAZLg/0.jpg)](http://www.youtube.com/watch?v=vI0XYKGAZLg)
+
 ***
 
 ## The Problem
@@ -67,6 +68,7 @@ public class Playground
 
 ![human -> rex](Images/human_rex.png)
 > Max.OnFetchBall is attached to Human.FetchBall and Max instance is referenced by static pointer Human.FetchBall. Max instance will not be removed from the memory until it's handler OnFetchBall will be detached from static event FetchBall. Static references are worse case of memory leaks.
+
 ***
 
 ## The Solution
@@ -130,6 +132,7 @@ public class Playground
 }
 ```
 ![billi -> mika](Images/billi_mika.png)
+
 ***
 
 ## Message Routing
@@ -233,6 +236,7 @@ private static void Callback(Payload payload)
   // Callback logic
 }
 ```
+
 ***
 
 ## Use Cases
@@ -242,6 +246,7 @@ private static void Callback(Payload payload)
 * **Asynchronous** invocation of callbacks between disconnected parts of code.
 * **Filtered** invocation of callbacks between disconnected parts of code.
 * **Obfuscated** invocation of callbacks between disconnected parts of code.
+
 ***
 
 ## Correct Usage
@@ -250,6 +255,7 @@ private static void Callback(Payload payload)
 * **ALWAYS** ensure that you unsubscribe when you’re done with the consuming of payloads.
 * **DON’T** publish payloads in endless or in a long running loops.
 * **PREFER** using Filtered subscriptions.
+
 ***
 
 ## MainThreadDispatcher API
@@ -276,6 +282,7 @@ public interface IThreadDispatcher
 ```csharp
 MainThreadDispatcher.Default.Dispatch(Callback, new object[] { payload, state });
 ```
+
 ***
 
 ## Package Structure
@@ -294,6 +301,7 @@ MainThreadDispatcher.Default.Dispatch(Callback, new object[] { payload, state })
 ![messaging](Images/pack_struct3.png)
 > Components – useful unity components
 > Monitor – debugging and monitoring tools
+
 ***
 
 ## Unit Tests
@@ -315,6 +323,7 @@ MainThreadDispatcher.Default.Dispatch(Callback, new object[] { payload, state })
 **Playmode Tests**
 
 ![playmode_tests](Images/playmode_tests.png)
+
 ***
 
 ## DEMO Project
