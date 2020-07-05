@@ -21,3 +21,7 @@ This library provides a pub-sub mechanism that is a part of SOLID principles in 
 ***Messenger Chart***
 
 ![Messenger](https://raw.githubusercontent.com/wiki/supermax/pubsub/Images/messenger.gif)
+
+***
+
+[Project License](https://github.com/supermax/pubsub/wiki/LICENSE.md)

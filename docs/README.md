@@ -335,7 +335,7 @@ MainThreadDispatcher.Default.Dispatch(Callback, new object[] { payload, state })
 * Include examples of message filtering and multithreading
 * Show “Best Practices” approach in implementation
 
-#### [[WebGL Demo]](PubSub/index.html)
+### [[WebGL Demo]](PubSub/index.html)
 
 ### Demo Structure
 **Folders / Files**
@@ -343,3 +343,7 @@ MainThreadDispatcher.Default.Dispatch(Callback, new object[] { payload, state })
 
 **Sample Scene**
 ![demo_UI](Images/demo_UI.png)
+
+***
+
+[Project License](https://github.com/supermax/pubsub/wiki/LICENSE.md)
