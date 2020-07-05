@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using SuperMaxim.Core.Extensions;
 using SuperMaxim.Core.Objects;
@@ -114,37 +113,67 @@ namespace SuperMaxim.Messaging
             }
         }
 
+        /// <summary>
+        /// Subscribe the callback to specified payload type <see cref="T"/>
+        /// </summary>
+        /// <param name="callback">Callback delegate</param>
+        /// <param name="predicate">Predicate delegate (optional)</param>
+        /// <typeparam name="T">The type of the payload</typeparam>
+        /// <returns>Messenger instance</returns>
         public IMessenger Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
         {
+            // check if current thread ID == main thread ID
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
             {
+                // execute subscribe method on main thread
                 SubscribeInternal(callback, predicate);
                 return this;
             }
 
+            // capture delegate reference
             Action<Action<T>, Predicate<T>> act = SubscribeInternal;
+            // add delegate and payload into main thread dispatcher queue
             MainThreadDispatcher.Default.Dispatch(act, new object[] { callback, predicate });
             return this;
         }
 
+        /// <summary>
+        /// Subscribe the callback to specified payload type <see cref="T"/>
+        /// </summary>
+        /// <remarks>
+        /// Used internally by messenger to sync threads
+        /// </remarks>
+        /// <param name="callback">Callback delegate</param>
+        /// <param name="predicate">Predicate delegate (optional)</param>
+        /// <typeparam name="T">The type of the payload</typeparam>
         private void SubscribeInternal<T>(Action<T> callback, Predicate<T> predicate = null)
         {
+            // capture the type of the payload
             var key = typeof(T);
-            var id = callback.GetHashCode();            
+            // init new subscriber instance
             var sub = new Subscriber(key, callback, predicate);
 
+            // check if messenger is busy with publishing payloads
             if(_isPublishing)
             {
+                // add subscriber into "Add" queue if messenger is busy with publishing
                 _add.Add(sub);
                 return;
             }
+            // if messenger is not busy with publishing, add into subscribers list
             SubscribeInternal(sub);
         }
 
+        /// <summary>
+        /// Adds subscriber into subscribers list 
+        /// </summary>
+        /// <param name="subscriber"></param>
         private void SubscribeInternal(Subscriber subscriber)
         {
+            // 
             if(subscriber == null || !subscriber.IsAlive)
             {
+                Debug.LogErrorFormat("The {0} is null or not alive.", nameof(subscriber));
                 return;
             }
 

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace SuperMaxim.Messaging
 {
-    public class Subscriber : IDisposable
+    internal class Subscriber : IDisposable
     {
         private WeakReference _callbackTarget;
         private MethodInfo _callbackMethod;
@@ -42,7 +42,6 @@ namespace SuperMaxim.Messaging
         public int Id 
         {
             get;
-            private set;
         }
 
         public override int GetHashCode()
@@ -54,8 +53,7 @@ namespace SuperMaxim.Messaging
         {
             if(callback == null)
             {
-                // TODO log error
-                return;
+                throw new ArgumentNullException(nameof(callback));
             }
             
             PayloadType = payloadType;
@@ -145,8 +143,6 @@ namespace SuperMaxim.Messaging
                 _predicateTarget.Target = null;
                 _predicateTarget = null;
             }
-
-            Id = 0;
             PayloadType = null;
         }
     }
