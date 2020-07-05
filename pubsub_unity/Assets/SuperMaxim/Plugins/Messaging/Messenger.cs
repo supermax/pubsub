@@ -170,7 +170,7 @@ namespace SuperMaxim.Messaging
         /// <param name="subscriber"></param>
         private void SubscribeInternal(Subscriber subscriber)
         {
-            // 
+            // check is subscriber is valid
             if(subscriber == null || !subscriber.IsAlive)
             {
                 Debug.LogErrorFormat("The {0} is null or not alive.", nameof(subscriber));
