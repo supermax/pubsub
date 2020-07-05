@@ -138,6 +138,7 @@ public class Playground
 ## Message Routing
 
 ![Messenger](Images/messenger.gif)
+
 ***
 
 ## Messenger API
