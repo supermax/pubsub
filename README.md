@@ -24,4 +24,4 @@ This library provides a pub-sub mechanism that is a part of SOLID principles in 
 
 ***
 
-[Project License](https://github.com/supermax/pubsub/wiki/LICENSE.md)
+[Project License](https://github.com/supermax/pubsub/wiki/LICENSE)
