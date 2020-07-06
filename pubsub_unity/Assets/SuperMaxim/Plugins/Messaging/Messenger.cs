@@ -177,15 +177,19 @@ namespace SuperMaxim.Messaging
                 return;
             }
 
+            // capture payload type into local var 'key' 
             var key = subscriber.PayloadType;
+            // capture subscribers dic into local var 'dic'
             var dic = _subscribersSet;                        
             Dictionary<int, Subscriber> callbacks;
             if (dic.ContainsKey(key))
             {
+                // fetch list of callbacks for this payload type
                 dic.TryGetValue(key, out callbacks);
             }
             else
             {
+                // init list of callbacks/subscribers
                 callbacks = new Dictionary<int, Subscriber>();
                 dic.Add(key, callbacks);
             }
@@ -196,47 +200,73 @@ namespace SuperMaxim.Messaging
                 return;
             }
 
+            // check if subscriber is already registered
             if(callbacks.ContainsKey(subscriber.Id))
             {
                 return;
             }
+            // register new subscriber 
             callbacks.Add(subscriber.Id, subscriber);
 
+            // add new list of callbacks/subscribers into flat list for fast access
             if (!_subscribers.Contains(subscriber))
             {
                 _subscribers.Add(subscriber);
             }
         }
 
+        /// <summary>
+        /// Unsubscribe given callback by payload type <see cref="T"/>
+        /// </summary>
+        /// <param name="callback">The callback to unsubscribe</param>
+        /// <typeparam name="T">The type of the payload</typeparam>
+        /// <returns>Instance of <see cref="Messenger"/></returns>
         public IMessenger Unsubscribe<T>(Action<T> callback)
         {
+            // check if method called on main thread
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
             {
+                // call internal method
                 UnsubscribeInternal(callback);
                 return this;
             }
 
+            // capture delegate in 'act' var
             Action<Action<T>> act = UnsubscribeInternal;
+            // add 'act' delegate into main thread dispatcher queue
             MainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
             return this;
         }
 
+        /// <summary>
+        /// Unsubscribe given callback by payload type <see cref="T"/>
+        /// </summary>
+        /// <remarks>Internal method</remarks>
+        /// <param name="callback">The callback delegate</param>
+        /// <typeparam name="T">The type of the payload</typeparam>
         private void UnsubscribeInternal<T>(Action<T> callback)
         {
+            // capture payload type into 'key' var
             var key = typeof(T);          
-            var dic = _subscribersSet;             
+            // capture subscribers dic into 'dic' var
+            var dic = _subscribersSet;
+            // check if payload is registered 
             if (!dic.ContainsKey(key))
             {
                 return;
             }
 
+            // get list of callbacks for the payload
             dic.TryGetValue(key, out var callbacks);
+            // check if callbacks list is null or empty and if messenger is publishing payloads
             if(!_isPublishing && callbacks.IsNullOrEmpty())
             {
+                // remove payload from subscribers dic
                 dic.Remove(key);
                 return;
             }
 
+            // get callback ID
             var id = callback.GetHashCode();
             if(callbacks.ContainsKey(id))
             {

@@ -1,16 +1,31 @@
 ﻿using System;
 using System.Reflection;
+using UnityEngine;
 
 namespace SuperMaxim.Messaging
 {
+    /// <summary>
+    /// Pub-Sub Messenger Subscriber
+    /// </summary>
+    /// <remarks>
+    /// A holder of weak delegate reference.
+    /// Used in <see cref="Messenger"/> class.
+    /// </remarks>
     internal class Subscriber : IDisposable
     {
+        // reference to the owner of callback method
         private WeakReference _callbackTarget;
+        // callback method info
         private MethodInfo _callbackMethod;
 
+        // reference to the owner of predicate method
         private WeakReference _predicateTarget;
+        // predicate method info
         private MethodInfo _predicateMethod;
 
+        /// <summary>
+        /// Indicates if callback owner is alive 
+        /// </summary>
         public bool IsAlive
         {
             get
@@ -33,12 +48,18 @@ namespace SuperMaxim.Messaging
             }
         }
 
+        /// <summary>
+        /// The type of the payload
+        /// </summary>
         public Type PayloadType
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// The ID if this instance
+        /// </summary>
         public int Id 
         {
             get;
@@ -49,23 +70,41 @@ namespace SuperMaxim.Messaging
             return Id;
         }
 
+        /// <summary>
+        /// Subscriber's Constructor
+        /// </summary>
+        /// <param name="payloadType">The type of the payload</param>
+        /// <param name="callback">The callback delegate</param>
+        /// <param name="predicate">The predicate delegate</param>
+        /// <exception cref="ArgumentNullException">
+        /// The exception is thrown in case 'payloadType' or 'callback' null
+        /// </exception>
         public Subscriber(Type payloadType, Delegate callback, Delegate predicate = null)
         {
+            // validate params
+            if(payloadType == null)
+            {
+                throw new ArgumentNullException(nameof(payloadType));
+            }
             if(callback == null)
             {
                 throw new ArgumentNullException(nameof(callback));
             }
             
+            // assign values to vars
             PayloadType = payloadType;
             Id = callback.GetHashCode();
             _callbackMethod = callback.Method;
 
+            // check if callback method is not a static method
             if(!_callbackMethod.IsStatic && 
                 callback.Target != null)
             {
+                // init weak reference to callback owner
                 _callbackTarget = new WeakReference(callback.Target);
             }
-
+            
+            // --- init predicate ---
             if(predicate == null)
             {
                 return;
@@ -78,22 +117,29 @@ namespace SuperMaxim.Messaging
                 _predicateTarget = new WeakReference(predicate.Target);
             }                     
         }        
-
+        
+        /// <summary>
+        /// Invokes callback method with given payload instance
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <typeparam name="T"></typeparam>
         public void Invoke<T>(T payload)
         {
+            // validate callback method info
             if(_callbackMethod == null)
             {
-                // TODO write to log
+                Debug.LogError($"{nameof(_callbackMethod)} is null.");
                 return;
             }
             if(!_callbackMethod.IsStatic && 
                 (_callbackTarget == null || 
                 !_callbackTarget.IsAlive))
             {
-                // TODO write to log
+                Debug.LogWarning($"{nameof(_callbackMethod)} is not alive.");
                 return;
             }
 
+            // get reference to the predicate function owner
             if(_predicateMethod != null)
             {
                 object predicateTarget = null;
@@ -111,14 +157,16 @@ namespace SuperMaxim.Messaging
                     }
                 }
 
+                // check if predicate returned 'true'
                 var isAccepted = (bool)_predicateMethod.Invoke(predicateTarget, new object[] {payload});
                 if(!isAccepted)
                 {
-                    // TODO log
+                    // TODO log ?
                     return;
                 }
             }
 
+            // invoke callback method
             object callbackTarget = null;
             if(!_callbackMethod.IsStatic && 
                 _callbackTarget != null && _callbackTarget.IsAlive)
@@ -128,6 +176,9 @@ namespace SuperMaxim.Messaging
             _callbackMethod.Invoke(callbackTarget, new object[] {payload});
         }
 
+        /// <summary>
+        /// Dispose this instance
+        /// </summary>
         public void Dispose()
         {
             _callbackMethod = null;
