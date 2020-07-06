@@ -3,18 +3,6 @@
 **Pu-Sub Messenger** is a Lightweight, Open Source Library for Unity.
 This library will provide a pub-sub mechanism that is a part of SOLID principles in programming.
 
-## Contents
-* [The Problem](#The-Problem)
-* [The Solution](#The-Solution)
-* [Message Routing](#Message-Routing)
-* [Messenger API](#Messenger-API)
-* [Use Cases](#Use-Cases)
-* [Correct Usage](#Correct-Usage)
-* [MainThreadDispatcher API](#MainThreadDispatcher-API)
-* [Package Structure](#Package-Structure)
-* [Unit Tests](#Unit-Tests)
-* [DEMO Project](#DEMO-Project)
-
 ### Youtube Video with Instructions:
 [![Video-Instructions](http://img.youtube.com/vi/vI0XYKGAZLg/0.jpg)](http://www.youtube.com/watch?v=vI0XYKGAZLg)
 
@@ -346,4 +334,4 @@ MainThreadDispatcher.Default.Dispatch(Callback, new object[] { payload, state })
 
 ***
 
-[Project License](https://github.com/supermax/pubsub/wiki/LICENSE.md)
+[Project License](https://github.com/supermax/pubsub/wiki/LICENSE)
