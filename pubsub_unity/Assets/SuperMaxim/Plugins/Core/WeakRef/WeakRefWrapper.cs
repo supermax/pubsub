@@ -2,23 +2,16 @@
 
 namespace SuperMaxim.Core.WeakRef
 {
-    public class WeakRefWrapper : IDisposable
+    public abstract class WeakRefWrapper : IDisposable
     {
         private WeakReference _ref;
 
-        public object Target
+        protected object Target
         {
             get
             {
-                object target = IsAlive ? _ref.Target : null;
+                var target = IsAlive ? _ref.Target : null;
                 return target;
-            }
-            set
-            {
-                if(_ref != null)
-                {
-                    _ref.Target = value;
-                }
             }
         }
 
@@ -31,28 +24,26 @@ namespace SuperMaxim.Core.WeakRef
             }
         }
 
-        public WeakRefWrapper(object target)
+        protected WeakRefWrapper(object target)
         {
             _ref = new WeakReference(target, false);
         }
 
         #region IDisposable Support
-        protected bool _isDisposed;
+        protected bool IsDisposed;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_isDisposed)
+            if (IsDisposed) return;
+            if (disposing)
             {
-                if (disposing)
+                if(_ref != null)
                 {
-                    if(_ref != null)
-                    {
-                        _ref.Target = null;
-                        _ref = null;
-                    }
+                    _ref.Target = null;
+                    _ref = null;
                 }
-                _isDisposed = true;
             }
+            IsDisposed = true;
         }
 
         public void Dispose()

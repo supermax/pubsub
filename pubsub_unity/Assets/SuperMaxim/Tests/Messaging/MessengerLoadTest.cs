@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SuperMaxim.Messaging;
 using UnityEngine;
 
-namespace Tests
+namespace SuperMaxim.Tests.Messaging
 {
     public class MessengerLoadTest
     {
@@ -17,7 +17,7 @@ namespace Tests
 
         private class LoadTestPayload
         {
-
+            
         }
 
         [Test]

@@ -5,7 +5,7 @@ using SuperMaxim.Messaging;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace SuperMaxim.Tests.Messaging
 {
     public class MessengerTest
     {

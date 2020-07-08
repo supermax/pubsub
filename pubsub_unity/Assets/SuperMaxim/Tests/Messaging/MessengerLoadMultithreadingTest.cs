@@ -6,11 +6,11 @@ using SuperMaxim.Messaging;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace SuperMaxim.Tests.Messaging
 {
     public class MessengerLoadMultithreadingTest
     {
-        private const int SendMessageChanksCount = 10;
+        private const int SendMessageChunksCount = 10;
 
         private const int SendMessagesCount = 10;
 
@@ -49,7 +49,7 @@ namespace Tests
         private void TestLoad()
         {
             _totalTime = 0.0;
-            for (var i = 0; i < SendMessageChanksCount; i++)
+            for (var i = 0; i < SendMessageChunksCount; i++)
             {
                 _totalTime += TestLoadLoop();
             }
@@ -60,7 +60,7 @@ namespace Tests
             _receivedCount = 0;
             _loopTime = DateTime.Now.TimeOfDay;
 
-            for (int i = 0; i < SendMessagesCount; i++)
+            for (var i = 0; i < SendMessagesCount; i++)
             {
                 Messenger.Default.Publish(_payload);
             }
@@ -83,12 +83,12 @@ namespace Tests
 
             Assert.AreEqual(SendMessagesCount, _receivedCount);
 
-            if (_receivedCount != SendMessageChanksCount * SendMessageChanksCount)
+            if (_receivedCount != SendMessageChunksCount * SendMessageChunksCount)
             {
                 return;
             }
             Debug.LogFormat("Multithreading Load Test: average time {0}",
-                                Math.Round(_totalTime / SendMessageChanksCount, 3));
+                                Math.Round(_totalTime / SendMessageChunksCount, 3));
         }
     }
 }

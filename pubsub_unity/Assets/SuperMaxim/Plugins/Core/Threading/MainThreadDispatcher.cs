@@ -3,7 +3,6 @@ using System.Threading;
 using SuperMaxim.Core.Objects;
 using System.Collections.Concurrent;
 using UnityEngine;
-using System.Collections;
 
 namespace SuperMaxim.Core.Threading
 {

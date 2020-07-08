@@ -10,9 +10,10 @@ namespace SuperMaxim.Core.Threading
             get; private set;
         }
 
-        public object[] Payload
+        private object[] Payload
         {
-            get; private set;
+            get;
+            set;
         }
 
         public DispatcherTask(Delegate action, object[] payload)

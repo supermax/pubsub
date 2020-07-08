@@ -5,9 +5,9 @@ namespace SuperMaxim.Core.WeakRef
 {
     public class WeakRefDelegate : WeakRefWrapper, IEquatable<Delegate>, IComparable
     {
-        public int Id { get; protected set; }
+        private int Id { get; }
 
-        public MethodInfo Method { get; private set; }
+        private MethodInfo Method { get; set; }
 
         public override int GetHashCode()
         {
@@ -22,7 +22,7 @@ namespace SuperMaxim.Core.WeakRef
 
         public object Invoke(object[] args)
         {
-            if (_isDisposed || !IsAlive)
+            if (IsDisposed || !IsAlive)
             {
                 return null;
             }
@@ -37,11 +37,9 @@ namespace SuperMaxim.Core.WeakRef
             {
                 return false;
             }
-            if(!Equals(Target, method.Target) || !Equals(Method, method.Method))
-            {
-                return false;
-            }
-            return true;
+            
+            var contains = Equals(Target, method.Target) && Equals(Method, method.Method);
+            return contains;
         }
 
         protected override void Dispose(bool disposing)
@@ -64,17 +62,21 @@ namespace SuperMaxim.Core.WeakRef
 
         public int CompareTo(object obj)
         {
-            if(obj == null) return -1;
-            var @delegate = obj as Delegate;
-            if(@delegate == null) return -1;
-            if(Equals(@delegate)) return 0;
+            if (!(obj is Delegate @delegate))
+            {
+                return -1;
+            }
+
+            if (Equals(@delegate))
+            {
+                return 0;
+            }
             return -1;
         }
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}, {2}, {3}",
-                                    GetType().Name, Id, Method, IsAlive);
+            return $"{GetType().Name}: {Id}, {Method}, {IsAlive}";
         }
     }
 }

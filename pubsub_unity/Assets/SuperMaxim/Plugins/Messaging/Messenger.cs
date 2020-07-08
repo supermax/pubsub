@@ -268,26 +268,32 @@ namespace SuperMaxim.Messaging
 
             // get callback ID
             var id = callback.GetHashCode();
+            // check if callback is registered
             if(callbacks.ContainsKey(id))
             {
+                // get subscriber instance and dispose it
                 var subscriber = callbacks[id];
                 subscriber.Dispose();         
-
+                
+                // check if messenger is busy with publishing
                 if(!_isPublishing)
                 {
+                    // remove the subscriber from the callbacks dic
                     callbacks.Remove(id);
-
+                    // remove the subscriber from the subscribers dic
                     if (_subscribers.Contains(subscriber))
                     {
                         _subscribers.Remove(subscriber);
                     }
                 }
             }
-
+            
+            // check is messenger is busy with publishing or if callbacks are NOT empty
             if(_isPublishing || !callbacks.IsNullOrEmpty())
             {
                 return;
             }
+            // remove callbacks from the _subscribersSet
             dic.Remove(key);
         }
 
