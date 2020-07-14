@@ -1,6 +1,6 @@
 # Pub/Sub Messaging in Unity
 
-**Pu-Sub Messenger** is a Lightweight, Open Source Library for Unity.
+**Pub-Sub Messenger** is a Lightweight, Open Source Library for Unity.
 This library will provide a pub-sub mechanism that is a part of SOLID principles in programming.
 
 ## Contents
@@ -166,7 +166,7 @@ Access to default Messenger instance via:
 SuperMaxim.Messaging.Messenger.Default.[function]
 ```
 
-### Publish 
+### Publish
 
 ```csharp
 // Generic Parameter <T> - here is a <Payload> that will be published to subscribers of this type
@@ -184,7 +184,7 @@ class Payload : IPayload
 }
 ```
 
-### Subscribe 
+### Subscribe
 
 ```csharp
 // Payload – the type of Callback parameter
@@ -197,7 +197,7 @@ private static void Callback(Payload payload)
 }
 ```
 
-### Subscribe with Predicate 
+### Subscribe with Predicate
 
 ```csharp
 // Predicate – delegate (Predicate<T>) that will receive payload to filter
@@ -211,7 +211,7 @@ private static bool Predicate(Payload payload)
 }
 ```
 
-### Unsubscribe - Variant #1 
+### Unsubscribe - Variant #1
 
 ```csharp
 // Payload – the type of Callback parameter that was subscribed
@@ -224,7 +224,7 @@ private static void Callback(Payload payload)
 }
 ```
 
-### Unsubscribe - Variant #2 
+### Unsubscribe - Variant #2
 
 ```csharp
 // IPayload – the type of Callback parameter that was subscribed
@@ -263,7 +263,7 @@ private static void Callback(Payload payload)
 
 Main Thread dispatcher is responsible for the synchronisation of callbacks between Main and other threads.
 
-### MainThreadDispatcher implements this interface :
+### MainThreadDispatcher implements this interface:
 
 ```csharp
 public interface IThreadDispatcher
@@ -278,7 +278,7 @@ public interface IThreadDispatcher
 }
 ```
 
-### Dispatch Method - example 
+### Dispatch Method - example
 
 ```csharp
 MainThreadDispatcher.Default.Dispatch(Callback, new object[] { payload, state });
