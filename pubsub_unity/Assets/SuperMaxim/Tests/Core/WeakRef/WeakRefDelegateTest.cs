@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
 using SuperMaxim.Core.WeakRef;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace SuperMaxim.Tests.Core.WeakRef
 {
     public class WeakRefDelegateTest
     {
@@ -64,7 +63,7 @@ namespace Tests
                 TestVoidCallbackName = TestVoidCallbackDelegate.Method.Name;
             }
 
-            public void TestVoidCallback()
+            private void TestVoidCallback()
             {
                 Debug.LogFormat("{0} invoked", TestVoidCallbackName);
             }
