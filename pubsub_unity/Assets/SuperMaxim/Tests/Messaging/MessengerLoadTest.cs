@@ -3,11 +3,11 @@ using NUnit.Framework;
 using SuperMaxim.Messaging;
 using UnityEngine;
 
-namespace Tests
+namespace SuperMaxim.Tests.Messaging
 {
     public class MessengerLoadTest
     {
-        private const int SendMessageChanksCount = 100;
+        private const int SendMessageChunksCount = 100;
 
         private const int SendMessagesCount = 100000;
 
@@ -17,7 +17,7 @@ namespace Tests
 
         private class LoadTestPayload
         {
-
+            
         }
 
         [Test]
@@ -26,12 +26,12 @@ namespace Tests
             Messenger.Default.Subscribe<LoadTestPayload>(OnTestCallback);
 
             var time = 0.0;
-            for (var i = 0; i < SendMessageChanksCount; i++)
+            for (var i = 0; i < SendMessageChunksCount; i++)
             {
                 time += TestLoadLoop();
             }
 
-            Debug.LogFormat("Load Test: average time {0}", Math.Round(time / SendMessageChanksCount, 3));
+            Debug.LogFormat("Load Test: average time {0}", Math.Round(time / SendMessageChunksCount, 3));
         }
 
         private double TestLoadLoop()
