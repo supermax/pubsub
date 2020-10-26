@@ -307,7 +307,13 @@ namespace SuperMaxim.Messaging
             for(var i = 0; i < _subscribers.Count; i++)
             {
                 var subscriber = _subscribers[i];
-                if(subscriber == null || subscriber.IsAlive)
+                if(subscriber == null)
+                {
+                    _subscribers.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+                if(subscriber.IsAlive)
                 {
                     continue;
                 }
