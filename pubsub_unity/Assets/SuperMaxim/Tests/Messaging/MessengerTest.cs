@@ -29,9 +29,11 @@ namespace SuperMaxim.Tests.Messaging
         [Test]
         public void SubscribeAndPublishToObjectWithPredicate()
         {
-            Messenger.Default.Subscribe<MessengerTestPayload>(OnSubscribeToObjectWithPredicate, ObjectPredicate);
+            Messenger.Default
+                .Subscribe<MessengerTestPayload>(OnSubscribeToObjectWithPredicate)
+                .Predicate<MessengerTestPayload>(ObjectPredicate);
 
-            Messenger.Default.Publish(new MessengerTestPayload{ Id = UnityEngine.Random.Range(-1, 1)});
+            Messenger.Default.Publish(new MessengerTestPayload{ Id = Random.Range(-1, 1)});
         }
 
         private static bool ObjectPredicate(MessengerTestPayload payload)

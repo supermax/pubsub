@@ -47,7 +47,7 @@ namespace SuperMaxim.Messaging
         /// <param name="payload">Instance of payload to publish</param>
         /// <typeparam name="T">The type of payload to publish</typeparam>
         /// <returns>Instance of the Messenger</returns>
-        public IMessenger Publish<T>(T payload)
+        public IMessengerPublish Publish<T>(T payload)
         {
             // if calling thread is same as main thread, call "PublishInternal" directly
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
@@ -113,30 +113,43 @@ namespace SuperMaxim.Messaging
             }
         }
 
+        // TODO remove predicate
         /// <summary>
         /// Subscribe the callback to specified payload type <see cref="T"/>
         /// </summary>
         /// <param name="callback">Callback delegate</param>
-        /// <param name="predicate">Predicate delegate (optional)</param>
         /// <typeparam name="T">The type of the payload</typeparam>
         /// <returns>Messenger instance</returns>
-        public IMessenger Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
+        public IMessengerSubscribe Subscribe<T>(Action<T> callback)
         {
             // check if current thread ID == main thread ID
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
             {
                 // execute subscribe method on main thread
-                SubscribeInternal(callback, predicate);
+                SubscribeInternal(callback);
                 return this;
             }
 
             // capture delegate reference
             Action<Action<T>, Predicate<T>> act = SubscribeInternal;
             // add delegate and payload into main thread dispatcher queue
-            MainThreadDispatcher.Default.Dispatch(act, new object[] { callback, predicate });
+            MainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
             return this;
         }
 
+        // TODO implement
+        /// <summary>
+        /// The predicate to filter irrelevant payloads (optional)
+        /// </summary>
+        /// <param name="predicate">The predicate to filter irrelevant payloads (optional)</param>
+        /// <typeparam name="T">The type of payload to receive</typeparam>
+        /// <returns>Instance of the Messenger</returns>
+        public IMessengerSubscribe Predicate<T>(Predicate<T> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        // TODO remove predicate param
         /// <summary>
         /// Subscribe the callback to specified payload type <see cref="T"/>
         /// </summary>
@@ -221,7 +234,7 @@ namespace SuperMaxim.Messaging
         /// <param name="callback">The callback to unsubscribe</param>
         /// <typeparam name="T">The type of the payload</typeparam>
         /// <returns>Instance of <see cref="Messenger"/></returns>
-        public IMessenger Unsubscribe<T>(Action<T> callback)
+        public IMessengerUnsubscribe Unsubscribe<T>(Action<T> callback)
         {
             // check if method called on main thread
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
