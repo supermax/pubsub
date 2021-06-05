@@ -69,9 +69,9 @@ public class ChatController : MonoBehaviour
         _userIdText.text = _userId;
 
         // subscribe to chat msg payload with filter
-        Messenger.Default.Subscribe<ChatPayload>(OnChatMessage).Predicate<ChatPayload>(ChatMessagePredicate)
+        Messenger.Default.Subscribe<ChatPayload>(OnChatMessage, ChatMessagePredicate)
             // subscribe to generic payload with filter
-            .Subscribe<PayloadCommand>(OnPayloadCommand).Predicate<PayloadCommand>(PayloadCommandPredicate);
+            .Subscribe<PayloadCommand>(OnPayloadCommand, PayloadCommandPredicate);
     }
 
     /// <summary>

@@ -78,23 +78,20 @@ namespace SuperMaxim.Messaging
                 // turn on the flag
                 _isPublishing = true;
 
-                // capture subscribers dic. in local var.
-                var dic = _subscribersSet;
                 var key = typeof(T); // capture the type of the payload in local var.
-
                 // exit method, if subscribers' dic. does not contain the given payload type
-                if (!dic.ContainsKey(key))
+                if (!_subscribersSet.ContainsKey(key))
                 {
                     return;
                 }
 
                 // get subscriber's dic. for the payload type
-                dic.TryGetValue(key, out var callbacks);
+                _subscribersSet.TryGetValue(key, out var callbacks);
                 // check if "callbacks" dic. is null or empty 
                 if (callbacks.IsNullOrEmpty())
                 {                
                     // remove payload type key is "callbacks" dic is empty
-                    dic.Remove(key);
+                    _subscribersSet.Remove(key);
                     return;
                 }
 
@@ -118,36 +115,37 @@ namespace SuperMaxim.Messaging
         /// Subscribe the callback to specified payload type <see cref="T"/>
         /// </summary>
         /// <param name="callback">Callback delegate</param>
+        /// <param name="predicate">Callback's predicate</param>
         /// <typeparam name="T">The type of the payload</typeparam>
         /// <returns>Messenger instance</returns>
-        public IMessengerSubscribe Subscribe<T>(Action<T> callback)
+        public IMessengerSubscribe Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
         {
             // check if current thread ID == main thread ID
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
             {
                 // execute subscribe method on main thread
-                SubscribeInternal(callback);
+                SubscribeInternal(callback, predicate);
                 return this;
             }
 
             // capture delegate reference
             Action<Action<T>, Predicate<T>> act = SubscribeInternal;
             // add delegate and payload into main thread dispatcher queue
-            MainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
+            MainThreadDispatcher.Default.Dispatch(act, new object[] { callback, predicate });
             return this;
         }
 
-        // TODO implement
-        /// <summary>
-        /// The predicate to filter irrelevant payloads (optional)
-        /// </summary>
-        /// <param name="predicate">The predicate to filter irrelevant payloads (optional)</param>
-        /// <typeparam name="T">The type of payload to receive</typeparam>
-        /// <returns>Instance of the Messenger</returns>
-        public IMessengerSubscribe Predicate<T>(Predicate<T> predicate)
-        {
-            throw new NotImplementedException();
-        }
+        // // TODO implement
+        // /// <summary>
+        // /// The predicate to filter irrelevant payloads (optional)
+        // /// </summary>
+        // /// <param name="predicate">The predicate to filter irrelevant payloads (optional)</param>
+        // /// <typeparam name="T">The type of payload to receive</typeparam>
+        // /// <returns>Instance of the Messenger</returns>
+        // public IMessengerSubscribe Predicate<T>(Predicate<T> predicate)
+        // {
+        //     throw new NotImplementedException();
+        // }
 
         // TODO remove predicate param
         /// <summary>
@@ -184,7 +182,7 @@ namespace SuperMaxim.Messaging
         private void SubscribeInternal(Subscriber subscriber)
         {
             // check is subscriber is valid
-            if(subscriber == null || !subscriber.IsAlive)
+            if(!(subscriber is {IsAlive: true}))
             {
                 Debug.LogErrorFormat("The {0} is null or not alive.", nameof(subscriber));
                 return;
@@ -193,18 +191,17 @@ namespace SuperMaxim.Messaging
             // capture payload type into local var 'key' 
             var key = subscriber.PayloadType;
             // capture subscribers dic into local var 'dic'
-            var dic = _subscribersSet;                        
             Dictionary<int, Subscriber> callbacks;
-            if (dic.ContainsKey(key))
+            if (_subscribersSet.ContainsKey(key))
             {
                 // fetch list of callbacks for this payload type
-                dic.TryGetValue(key, out callbacks);
+                _subscribersSet.TryGetValue(key, out callbacks);
             }
             else
             {
                 // init list of callbacks/subscribers
                 callbacks = new Dictionary<int, Subscriber>();
-                dic.Add(key, callbacks);
+                _subscribersSet.Add(key, callbacks);
             }
 
             if (callbacks == null)

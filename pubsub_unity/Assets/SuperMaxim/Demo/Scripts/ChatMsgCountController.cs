@@ -20,8 +20,7 @@ public class ChatMsgCountController : MonoBehaviour
     private void Start()
     {
         Messenger.Default
-            .Subscribe<ChatPayload>(OnChatMessageReceived)
-            .Predicate<ChatPayload>(ChatMessageFilter);
+            .Subscribe<ChatPayload>(OnChatMessageReceived, ChatMessageFilter);
     }
 
     private bool ChatMessageFilter(ChatPayload payload)

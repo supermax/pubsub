@@ -30,8 +30,7 @@ namespace SuperMaxim.Tests.Messaging
         public void SubscribeAndPublishToObjectWithPredicate()
         {
             Messenger.Default
-                .Subscribe<MessengerTestPayload>(OnSubscribeToObjectWithPredicate)
-                .Predicate<MessengerTestPayload>(ObjectPredicate);
+                .Subscribe<MessengerTestPayload>(OnSubscribeToObjectWithPredicate, ObjectPredicate);
 
             Messenger.Default.Publish(new MessengerTestPayload{ Id = Random.Range(-1, 1)});
         }
