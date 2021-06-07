@@ -3,10 +3,12 @@
 using System;
 using System.Collections;
 using SuperMaxim.Core.Extensions;
+using SuperMaxim.Logging;
 using SuperMaxim.Messaging;
 using SuperMaxim.Messaging.Components;
 using UnityEngine;
 using UnityEngine.UI;
+using LogType = SuperMaxim.Logging.LogType;
 
 #endregion
 
@@ -220,7 +222,12 @@ public class ChatController : MonoBehaviour
     /// </summary>
     public void KillMe()
     {
-        Debug.LogFormat("Killing {0}", gameObject);
+        if (!gameObject)
+        {
+            Loggers.Console.LogError($"cannot destroy {nameof(gameObject)}");
+            return;
+        }
+        Loggers.Console.LogInfo("Killing {0}", gameObject.ToString());
         Destroy(gameObject);
     }
 
