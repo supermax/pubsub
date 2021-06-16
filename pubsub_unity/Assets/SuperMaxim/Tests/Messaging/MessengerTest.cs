@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Threading;
 using NUnit.Framework;
+using SuperMaxim.Logging;
 using SuperMaxim.Messaging;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -38,13 +39,13 @@ namespace SuperMaxim.Tests.Messaging
         private static bool ObjectPredicate(MessengerTestPayload payload)
         {
             var accepted = payload.Id % 2 == 0;
-            Debug.LogFormat("[ObjectPredicate] Object Payload Id: {0}, Accepted: {1}", payload.Id, accepted);
+            Loggers.Console.LogInfo("[ObjectPredicate] Object Payload Id: {0}, Accepted: {1}", payload.Id, accepted);
             return accepted;
         }
 
         private static void OnSubscribeToObjectWithPredicate(MessengerTestPayload payload)
         {
-            Debug.LogFormat("[OnSubscribeToObjectWithPredicate] Object Payload Id: {0}", payload.Id);
+            Loggers.Console.LogInfo("[OnSubscribeToObjectWithPredicate] Object Payload Id: {0}", payload.Id);
         }
 
         private class MessengerTestPayload
@@ -54,14 +55,14 @@ namespace SuperMaxim.Tests.Messaging
 
         private static void OnStringCallbackStatic(string str)
         {
-            Debug.LogFormat("[OnStringCallbackStatic] String Payload: {0}", str);
+            Loggers.Console.LogInfo("[OnStringCallbackStatic] String Payload: {0}", str);
 
             Messenger.Default.Unsubscribe<string>(OnStringCallbackStatic);
         }
 
         private void OnStringCallback(string str)
         {
-            Debug.LogFormat("[OnStringCallback] String Payload: {0}", str);
+            Loggers.Console.LogInfo("[OnStringCallback] String Payload: {0}", str);
 
             Messenger.Default.Unsubscribe<string>(OnStringCallback);
             Messenger.Default.Subscribe<string>(OnStringCallbackStatic);
@@ -72,7 +73,7 @@ namespace SuperMaxim.Tests.Messaging
         {
             Messenger.Default.Subscribe<int>(OnPublishFromNewThreadCallback);
 
-            Debug.LogFormat("[MessengerTestPublishFromNewThread] Thread ID: {0}", 
+            Loggers.Console.LogInfo("[MessengerTestPublishFromNewThread] Thread ID: {0}", 
                                 Thread.CurrentThread.ManagedThreadId);
 
             var th = new Thread(PublishFromNewThreadMethod);
@@ -81,7 +82,7 @@ namespace SuperMaxim.Tests.Messaging
 
         private void PublishFromNewThreadMethod()
         {
-            Debug.LogFormat("[PublishFromNewThread] Thread ID: {0}", 
+            Loggers.Console.LogInfo("[PublishFromNewThread] Thread ID: {0}", 
                                 Thread.CurrentThread.ManagedThreadId);
 
             Messenger.Default.Publish(Thread.CurrentThread.ManagedThreadId);
@@ -89,7 +90,7 @@ namespace SuperMaxim.Tests.Messaging
 
         private void OnPublishFromNewThreadCallback(int number)
         {
-            Debug.LogFormat("[OnPublishFromNewThreadCallback] Int Payload: {0} (Thread ID: {1})", 
+            Loggers.Console.LogInfo("[OnPublishFromNewThreadCallback] Int Payload: {0} (Thread ID: {1})", 
                                 number, Thread.CurrentThread.ManagedThreadId);
 
             Assert.AreNotEqual(number, Thread.CurrentThread.ManagedThreadId);
@@ -104,7 +105,7 @@ namespace SuperMaxim.Tests.Messaging
             Messenger.Default.Subscribe<MessengerTestPayload>(_weakRefTest.Callback);
 
             var payload = new MessengerTestPayload{ Id = 12345 };
-            Debug.LogFormat("[TestWeakReference] #1 Publish Payload Id: {0}", payload.Id);
+            Loggers.Console.LogInfo("[TestWeakReference] #1 Publish Payload Id: {0}", payload.Id);
 
             Messenger.Default.Publish(new MessengerTestPayload{ Id = 12345 });
 
@@ -112,7 +113,7 @@ namespace SuperMaxim.Tests.Messaging
 
             yield return new WaitForSeconds(5);
 
-            Debug.LogFormat("[TestWeakReference] #2 Publish Payload Id: {0}", payload.Id);
+            Loggers.Console.LogInfo("[TestWeakReference] #2 Publish Payload Id: {0}", payload.Id);
             Messenger.Default.Publish(payload);
         }
 
@@ -120,7 +121,7 @@ namespace SuperMaxim.Tests.Messaging
         {
             public void Callback(MessengerTestPayload payload)
             {
-                Debug.LogFormat("[MessengerWekRefTest.Callback] Object Payload Id: {0}", payload.Id);
+                Loggers.Console.LogInfo("[MessengerWekRefTest.Callback] Object Payload Id: {0}", payload.Id);
             }
         }
     }

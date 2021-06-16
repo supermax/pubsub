@@ -238,6 +238,6 @@ public class ChatController : MonoBehaviour
     {
         // dispose thread queue
         _threadQueue.Dispose();
-        Debug.LogFormat("{0} - \"{1}\" destroyed", name, _userId);
+        Loggers.Console.LogInfo("{0} - \"{1}\" destroyed", name, _userId);
     }
 }

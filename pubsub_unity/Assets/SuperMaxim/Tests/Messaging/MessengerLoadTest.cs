@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SuperMaxim.Logging;
 using SuperMaxim.Messaging;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace SuperMaxim.Tests.Messaging
                 time += TestLoadLoop();
             }
 
-            Debug.LogFormat("Load Test: average time {0}", Math.Round(time / SendMessageChunksCount, 3));
+            Loggers.Console.LogInfo("Load Test: average time {0}", Math.Round(time / SendMessageChunksCount, 3));
         }
 
         private double TestLoadLoop()
@@ -45,7 +46,7 @@ namespace SuperMaxim.Tests.Messaging
             }
 
             time = DateTime.Now.TimeOfDay - time;
-            Debug.LogFormat("Load Test: sent {0} messages, received {1} messages, took {2} seconds",
+            Loggers.Console.LogInfo("Load Test: sent {0} messages, received {1} messages, took {2} seconds",
                                 SendMessagesCount, _receivedCount, Math.Round(time.TotalSeconds, 3));
 
             Assert.AreEqual(SendMessagesCount, _receivedCount);

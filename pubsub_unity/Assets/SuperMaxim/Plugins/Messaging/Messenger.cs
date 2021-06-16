@@ -4,6 +4,7 @@ using SuperMaxim.Core.Extensions;
 using SuperMaxim.Core.Objects;
 using System.Threading;
 using SuperMaxim.Core.Threading;
+using SuperMaxim.Logging;
 using UnityEngine;
 using SuperMaxim.Messaging.Monitor;
 
@@ -34,11 +35,11 @@ namespace SuperMaxim.Messaging
         static Messenger()
         {
             // init MainThreadDispatcher and print main thread ID
-            Debug.LogFormat("Main Thread ID: {0}", MainThreadDispatcher.Default.ThreadId);
+            Loggers.Console.LogInfo("Main Thread ID: {0}", MainThreadDispatcher.Default.ThreadId);
 
             // TODO init in case of debug
             // init MessengerMonitor
-            Debug.LogFormat("Messenger Monitor {0}", MessengerMonitor.Default); // TODO print id
+            Loggers.Console.LogInfo("Messenger Monitor {0}", MessengerMonitor.Default); // TODO print id
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace SuperMaxim.Messaging
             // check is subscriber is valid
             if(!(subscriber is {IsAlive: true}))
             {
-                Debug.LogErrorFormat("The {0} is null or not alive.", nameof(subscriber));
+                Loggers.Console.LogError("The {0} is null or not alive.", nameof(subscriber));
                 return;
             }
 
@@ -206,7 +207,7 @@ namespace SuperMaxim.Messaging
 
             if (callbacks == null)
             {
-                Debug.LogError("callbacks container is null!");
+                Loggers.Console.LogError("callbacks container is null!");
                 return;
             }
 

@@ -1,5 +1,6 @@
 ﻿#region
 
+using SuperMaxim.Logging;
 using SuperMaxim.Messaging;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,18 +32,18 @@ public class ChatMsgCountController : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.LogFormat("{0} destroyed", nameof(ChatMsgCountController));
+        Loggers.Console.LogInfo("{0} destroyed", nameof(ChatMsgCountController));
     }
 
     private void OnChatMessageReceived(ChatPayload payload)
     {
-        Debug.LogFormat("Received: {0}", payload);
+        Loggers.Console.LogInfo("Received: {0}", payload);
         _counterText.text = $"Message Count: {++_msgCount}";
     }
 
     public void KillMe()
     {
-        Debug.LogFormat("Killing {0}", gameObject);
+        Loggers.Console.LogInfo("Killing {0}", gameObject);
         Destroy(gameObject);
     }
 }

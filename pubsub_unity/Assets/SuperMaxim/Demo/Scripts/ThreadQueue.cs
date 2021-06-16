@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using SuperMaxim.Core.WeakRef;
+using SuperMaxim.Logging;
 using UnityEngine;
 
 #endregion
@@ -23,7 +24,7 @@ public class ThreadQueue<T> : IDisposable
 
     private void OnTick(object state)
     {
-        Debug.LogWarningFormat("Thread {0}", Thread.CurrentThread.ManagedThreadId);
+        Loggers.Console.LogWarning("Thread {0}", Thread.CurrentThread.ManagedThreadId);
 
         while (_queue.Count > 0)
         {

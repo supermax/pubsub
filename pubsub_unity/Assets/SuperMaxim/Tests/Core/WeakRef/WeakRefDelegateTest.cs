@@ -2,6 +2,7 @@
 using System.Collections;
 using NUnit.Framework;
 using SuperMaxim.Core.WeakRef;
+using SuperMaxim.Logging;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -23,7 +24,7 @@ namespace SuperMaxim.Tests.Core.WeakRef
 
             var res = wr.Invoke(null);
 
-            Debug.LogFormat("[{0}] {1}: result: {2}, isAlive: {3}",
+            Loggers.Console.LogInfo("[{0}] {1}: result: {2}, isAlive: {3}",
                 wr.GetHashCode(), test.TestVoidCallbackName, res, wr.IsAlive);
 
 #pragma warning disable IDE0059 // Value assigned to symbol is never used
@@ -42,12 +43,12 @@ namespace SuperMaxim.Tests.Core.WeakRef
 
             if(wr.IsAlive)
             {
-                Debug.LogErrorFormat("[{0}] isAlive: {1}, time (s): {2:N}", 
+                Loggers.Console.LogError("[{0}] isAlive: {1}, time (s): {2:N}", 
                     wr.GetHashCode(), wr.IsAlive, Time.fixedTime - time);
             }
             else
             {
-                Debug.LogFormat("[{0}] isAlive: {1}, time (s): {2:N}", 
+                Loggers.Console.LogInfo("[{0}] isAlive: {1}, time (s): {2:N}", 
                     wr.GetHashCode(), wr.IsAlive, Time.fixedTime - time);
             }
         }
@@ -65,7 +66,7 @@ namespace SuperMaxim.Tests.Core.WeakRef
 
             private void TestVoidCallback()
             {
-                Debug.LogFormat("{0} invoked", TestVoidCallbackName);
+                Loggers.Console.LogInfo("{0} invoked", TestVoidCallbackName);
             }
         }
     }
