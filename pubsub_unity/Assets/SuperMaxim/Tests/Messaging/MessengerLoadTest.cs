@@ -7,7 +7,7 @@ namespace SuperMaxim.Tests.Messaging
 {
     public class MessengerLoadTest
     {
-        private const int SendMessageChunksCount = 100;
+        private const int SendMessageChunksCount = 10;
 
         private const int SendMessagesCount = 100000;
 

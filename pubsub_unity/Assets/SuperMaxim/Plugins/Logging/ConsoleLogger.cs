@@ -8,6 +8,8 @@ namespace SuperMaxim.Logging
     {
         public ILoggerConfig Config { get; set; } = new ConsoleLoggerConfig();
 
+        private const string LineSplitter = "/r/n";
+
         private bool IsEnabled => Config.IsEnabled;
 
         public ILogger LogInfo(string message)
@@ -27,16 +29,23 @@ namespace SuperMaxim.Logging
         public ILogger LogInfo(string[] messages)
         {
             if (!IsEnabled) return this;
-            var msg = string.Join("/r/n", messages);
+            var msg = string.Join(LineSplitter, messages);
             return LogInfo(msg);
         }
 
         public ILogger LogInfo(string format, string[] messages)
         {
             if (!IsEnabled) return this;
-            var msg = string.Join("/r/n", messages);
+            var msg = string.Join(LineSplitter, messages);
             msg = string.Format(format, msg);
             return LogInfo(msg);
+        }
+        
+        public ILogger LogInfo(string format, params object[] messages)
+        {
+            if (!IsEnabled) return this;
+            Debug.LogFormat(format, messages);
+            return this;
         }
 
         public ILogger LogWarning(string message)
@@ -49,7 +58,7 @@ namespace SuperMaxim.Logging
         public ILogger LogWarning(string[] messages)
         {
             if (!IsEnabled) return this;
-            var msg = string.Join("/r/n", messages);
+            var msg = string.Join(LineSplitter, messages);
             return LogWarning(msg);
         }
 
@@ -63,9 +72,16 @@ namespace SuperMaxim.Logging
         public ILogger LogWarning(string format, string[] messages)
         {
             if (!IsEnabled) return this;
-            var msg = string.Join("/r/n", messages);
+            var msg = string.Join(LineSplitter, messages);
             msg = string.Format(format, msg);
             return LogWarning(msg);
+        }
+
+        public ILogger LogWarning(string format, params object[] messages)
+        {
+            if (!IsEnabled) return this;
+            Debug.LogWarningFormat(format, messages);
+            return this;
         }
 
         public ILogger LogError(string error)
@@ -82,11 +98,18 @@ namespace SuperMaxim.Logging
             return LogInfo(msg);
         }
 
+        public ILogger LogError(string[] errors)
+        {
+            if (!IsEnabled) return this;
+            var error = string.Join(LineSplitter, errors);
+            return LogError(error);
+        }
+
         public ILogger LogError(string format, Exception error)
         {
             if (!IsEnabled) return this;
             var msg = string.Format(format, error);
-            return LogInfo(msg);
+            return LogError(msg);
         }
 
         public ILogger LogError(IEnumerable<Exception> errors)
@@ -102,10 +125,15 @@ namespace SuperMaxim.Logging
         public ILogger LogError(string format, IEnumerable<Exception> errors)
         {
             if (!IsEnabled) return this;
-            foreach (var error in errors)
-            {
-                LogError(format, error);
-            }
+            var msg = string.Join(LineSplitter, errors);
+            LogError(string.Format(format, msg));
+            return this;
+        }
+
+        public ILogger LogError(string format, params object[] errors)
+        {
+            if (!IsEnabled) return this;
+            Debug.LogErrorFormat(format, errors);
             return this;
         }
     }

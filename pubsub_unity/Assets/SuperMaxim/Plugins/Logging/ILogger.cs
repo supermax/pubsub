@@ -15,6 +15,8 @@ namespace SuperMaxim.Logging
 
         ILogger LogInfo(string format, string[] messages);
         
+        ILogger LogInfo(string format, params object[] messages);
+        
         ILogger LogWarning(string message);
         
         ILogger LogWarning(string[] messages);
@@ -23,14 +25,20 @@ namespace SuperMaxim.Logging
 
         ILogger LogWarning(string format, string[] messages);
         
+        ILogger LogWarning(string format, params object[] messages);
+        
         ILogger LogError(string error);
         
         ILogger LogError(Exception error);
+        
+        ILogger LogError(string[] errors);
         
         ILogger LogError(string format, Exception error);
         
         ILogger LogError(IEnumerable<Exception> errors);
         
         ILogger LogError(string format, IEnumerable<Exception> errors);
+        
+        ILogger LogError(string format, params object[] errors);
     }
 }
