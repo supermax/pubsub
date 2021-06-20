@@ -25,18 +25,21 @@ namespace SuperMaxim.Tests.Messaging
         public void TestLoad()
         {
             Messenger.Default.Subscribe<LoadTestPayload>(OnTestCallback);
-
+            
             var time = 0.0;
             for (var i = 0; i < SendMessageChunksCount; i++)
             {
                 time += TestLoadLoop();
             }
-
+            
             Loggers.Console.LogInfo("Load Test: average time {0}", Math.Round(time / SendMessageChunksCount, 3));
         }
 
         private double TestLoadLoop()
         {
+            // TODO instead of disabling, collect in memory
+            Loggers.Console.Config.IsEnabled = false;
+            
             _receivedCount = 0;
             var time = DateTime.Now.TimeOfDay;
 
@@ -44,8 +47,10 @@ namespace SuperMaxim.Tests.Messaging
             {
                 Messenger.Default.Publish(_payload);
             }
-
+            
             time = DateTime.Now.TimeOfDay - time;
+            
+            Loggers.Console.Config.IsEnabled = true;
             Loggers.Console.LogInfo("Load Test: sent {0} messages, received {1} messages, took {2} seconds",
                                 SendMessagesCount, _receivedCount, Math.Round(time.TotalSeconds, 3));
 
