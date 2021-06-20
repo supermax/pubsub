@@ -37,7 +37,6 @@ namespace SuperMaxim.Tests.Messaging
 
         private double TestLoadLoop()
         {
-            // TODO instead of disabling, collect in memory
             Loggers.Console.Config.IsEnabled = false;
             
             _receivedCount = 0;

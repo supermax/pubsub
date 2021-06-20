@@ -37,9 +37,10 @@ namespace SuperMaxim.Messaging
             // init MainThreadDispatcher and print main thread ID
             Loggers.Console.LogInfo("Main Thread ID: {0}", MainThreadDispatcher.Default.ThreadId);
 
-            // TODO init in case of debug
+#if DEBUG
             // init MessengerMonitor
-            Loggers.Console.LogInfo("Messenger Monitor {0}", MessengerMonitor.Default); // TODO print id
+            Loggers.Console.LogInfo("Messenger Monitor {0}", MessengerMonitor.Default);
+#endif
         }
 
         /// <summary>
@@ -111,7 +112,6 @@ namespace SuperMaxim.Messaging
             }
         }
 
-        // TODO remove predicate
         /// <summary>
         /// Subscribe the callback to specified payload type <see cref="T"/>
         /// </summary>
@@ -136,19 +136,6 @@ namespace SuperMaxim.Messaging
             return this;
         }
 
-        // // TODO implement
-        // /// <summary>
-        // /// The predicate to filter irrelevant payloads (optional)
-        // /// </summary>
-        // /// <param name="predicate">The predicate to filter irrelevant payloads (optional)</param>
-        // /// <typeparam name="T">The type of payload to receive</typeparam>
-        // /// <returns>Instance of the Messenger</returns>
-        // public IMessengerSubscribe Predicate<T>(Predicate<T> predicate)
-        // {
-        //     throw new NotImplementedException();
-        // }
-
-        // TODO remove predicate param
         /// <summary>
         /// Subscribe the callback to specified payload type <see cref="T"/>
         /// </summary>
