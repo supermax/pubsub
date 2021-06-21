@@ -56,7 +56,7 @@ namespace SuperMaxim.Tests.Core.WeakRef
         private class Test
         {
             public Action TestVoidCallbackDelegate { get; set; }
-            public string TestVoidCallbackName { get; set; }
+            public string TestVoidCallbackName { get; }
 
             public Test()
             {
