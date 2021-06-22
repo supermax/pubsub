@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Threading;
 using NUnit.Framework;
+using SuperMaxim.Logging;
 using SuperMaxim.Messaging;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -78,7 +79,7 @@ namespace SuperMaxim.Tests.Messaging
                 return;
             }
 
-            Debug.LogFormat("Multithreading Load Test: sent {0} messages, received {1} messages, took {2} seconds",
+            Loggers.Console.LogInfo("Multithreading Load Test: sent {0} messages, received {1} messages, took {2} seconds",
                                 SendMessagesCount, _receivedCount, Math.Round(_loopTime.TotalSeconds, 3));
 
             Assert.AreEqual(SendMessagesCount, _receivedCount);
@@ -87,7 +88,7 @@ namespace SuperMaxim.Tests.Messaging
             {
                 return;
             }
-            Debug.LogFormat("Multithreading Load Test: average time {0}",
+            Loggers.Console.LogInfo("Multithreading Load Test: average time {0}",
                                 Math.Round(_totalTime / SendMessageChunksCount, 3));
         }
     }

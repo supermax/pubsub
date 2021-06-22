@@ -4,6 +4,7 @@ using SuperMaxim.Core.Extensions;
 using SuperMaxim.Core.Objects;
 using System.Threading;
 using SuperMaxim.Core.Threading;
+using SuperMaxim.Logging;
 using UnityEngine;
 using SuperMaxim.Messaging.Monitor;
 
@@ -34,11 +35,12 @@ namespace SuperMaxim.Messaging
         static Messenger()
         {
             // init MainThreadDispatcher and print main thread ID
-            Debug.LogFormat("Main Thread ID: {0}", MainThreadDispatcher.Default.ThreadId);
+            Loggers.Console.LogInfo("Main Thread ID: {0}", MainThreadDispatcher.Default.ThreadId);
 
-            // TODO init in case of debug
+#if DEBUG
             // init MessengerMonitor
-            Debug.LogFormat("Messenger Monitor {0}", MessengerMonitor.Default); // TODO print id
+            Loggers.Console.LogInfo("Messenger Monitor {0}", MessengerMonitor.Default);
+#endif
         }
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace SuperMaxim.Messaging
         /// <param name="payload">Instance of payload to publish</param>
         /// <typeparam name="T">The type of payload to publish</typeparam>
         /// <returns>Instance of the Messenger</returns>
-        public IMessenger Publish<T>(T payload)
+        public IMessengerPublish Publish<T>(T payload)
         {
             // if calling thread is same as main thread, call "PublishInternal" directly
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
@@ -78,23 +80,20 @@ namespace SuperMaxim.Messaging
                 // turn on the flag
                 _isPublishing = true;
 
-                // capture subscribers dic. in local var.
-                var dic = _subscribersSet;
                 var key = typeof(T); // capture the type of the payload in local var.
-
                 // exit method, if subscribers' dic. does not contain the given payload type
-                if (!dic.ContainsKey(key))
+                if (!_subscribersSet.ContainsKey(key))
                 {
                     return;
                 }
 
                 // get subscriber's dic. for the payload type
-                dic.TryGetValue(key, out var callbacks);
+                _subscribersSet.TryGetValue(key, out var callbacks);
                 // check if "callbacks" dic. is null or empty 
                 if (callbacks.IsNullOrEmpty())
                 {                
                     // remove payload type key is "callbacks" dic is empty
-                    dic.Remove(key);
+                    _subscribersSet.Remove(key);
                     return;
                 }
 
@@ -117,10 +116,10 @@ namespace SuperMaxim.Messaging
         /// Subscribe the callback to specified payload type <see cref="T"/>
         /// </summary>
         /// <param name="callback">Callback delegate</param>
-        /// <param name="predicate">Predicate delegate (optional)</param>
+        /// <param name="predicate">Callback's predicate</param>
         /// <typeparam name="T">The type of the payload</typeparam>
         /// <returns>Messenger instance</returns>
-        public IMessenger Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
+        public IMessengerSubscribe Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
         {
             // check if current thread ID == main thread ID
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
@@ -171,32 +170,31 @@ namespace SuperMaxim.Messaging
         private void SubscribeInternal(Subscriber subscriber)
         {
             // check is subscriber is valid
-            if(subscriber == null || !subscriber.IsAlive)
+            if(!(subscriber is {IsAlive: true}))
             {
-                Debug.LogErrorFormat("The {0} is null or not alive.", nameof(subscriber));
+                Loggers.Console.LogError("The {0} is null or not alive.", nameof(subscriber));
                 return;
             }
 
             // capture payload type into local var 'key' 
             var key = subscriber.PayloadType;
             // capture subscribers dic into local var 'dic'
-            var dic = _subscribersSet;                        
             Dictionary<int, Subscriber> callbacks;
-            if (dic.ContainsKey(key))
+            if (_subscribersSet.ContainsKey(key))
             {
                 // fetch list of callbacks for this payload type
-                dic.TryGetValue(key, out callbacks);
+                _subscribersSet.TryGetValue(key, out callbacks);
             }
             else
             {
                 // init list of callbacks/subscribers
                 callbacks = new Dictionary<int, Subscriber>();
-                dic.Add(key, callbacks);
+                _subscribersSet.Add(key, callbacks);
             }
 
             if (callbacks == null)
             {
-                Debug.LogError("callbacks container is null!");
+                Loggers.Console.LogError("callbacks container is null!");
                 return;
             }
 
@@ -221,7 +219,7 @@ namespace SuperMaxim.Messaging
         /// <param name="callback">The callback to unsubscribe</param>
         /// <typeparam name="T">The type of the payload</typeparam>
         /// <returns>Instance of <see cref="Messenger"/></returns>
-        public IMessenger Unsubscribe<T>(Action<T> callback)
+        public IMessengerUnsubscribe Unsubscribe<T>(Action<T> callback)
         {
             // check if method called on main thread
             if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
@@ -307,7 +305,13 @@ namespace SuperMaxim.Messaging
             for(var i = 0; i < _subscribers.Count; i++)
             {
                 var subscriber = _subscribers[i];
-                if(subscriber == null || subscriber.IsAlive)
+                if(subscriber == null)
+                {
+                    _subscribers.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+                if(subscriber.IsAlive)
                 {
                     continue;
                 }

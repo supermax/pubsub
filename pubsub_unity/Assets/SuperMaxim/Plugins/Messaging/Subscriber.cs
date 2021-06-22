@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using SuperMaxim.Logging;
 using UnityEngine;
 
 namespace SuperMaxim.Messaging
@@ -128,14 +129,14 @@ namespace SuperMaxim.Messaging
             // validate callback method info
             if(_callbackMethod == null)
             {
-                Debug.LogError($"{nameof(_callbackMethod)} is null.");
+                Loggers.Console.LogError($"{nameof(_callbackMethod)} is null.");
                 return;
             }
             if(!_callbackMethod.IsStatic && 
                 (_callbackTarget == null || 
                 !_callbackTarget.IsAlive))
             {
-                Debug.LogWarning($"{nameof(_callbackMethod)} is not alive.");
+                Loggers.Console.LogWarning($"{nameof(_callbackMethod)} is not alive.");
                 return;
             }
 

@@ -2,7 +2,7 @@
 using System.Threading;
 using SuperMaxim.Core.Objects;
 using System.Collections.Concurrent;
-using UnityEngine;
+using SuperMaxim.Logging;
 
 namespace SuperMaxim.Core.Threading
 {
@@ -38,7 +38,7 @@ namespace SuperMaxim.Core.Threading
                 {
                     continue;
                 }
-                Debug.LogFormat("(Queue.Count: {0}) Dispatching task {1}", _tasks.Count, task.Action);
+                Loggers.Console.LogInfo("(Queue.Count: {0}) Dispatching task {1}", _tasks.Count, task.Action);
 
                 task.Invoke();
                 task.Dispose();
