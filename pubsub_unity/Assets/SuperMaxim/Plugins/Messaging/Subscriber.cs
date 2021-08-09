@@ -55,7 +55,6 @@ namespace SuperMaxim.Messaging
         public Type PayloadType
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -195,7 +194,7 @@ namespace SuperMaxim.Messaging
                 _predicateTarget.Target = null;
                 _predicateTarget = null;
             }
-            PayloadType = null;
+            //PayloadType = null;
         }
     }
 }

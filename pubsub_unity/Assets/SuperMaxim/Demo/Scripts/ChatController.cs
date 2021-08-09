@@ -228,7 +228,7 @@ public class ChatController : MonoBehaviour
             return;
         }
         Loggers.Console.LogInfo("Killing {0}", gameObject.ToString());
-        Destroy(gameObject);
+        DestroyImmediate(gameObject);
     }
 
     /// <summary>

@@ -8,4 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/SuperMaxim/Demo/Scenes/ChatExampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: e68f4cbf9a41d465b8d7136a535c2769,
+      type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
+      guid: 739542dc73a3a40449755f23f367098c, type: 2}

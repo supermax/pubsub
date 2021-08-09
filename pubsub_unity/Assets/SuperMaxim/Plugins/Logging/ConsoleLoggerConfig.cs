@@ -11,5 +11,12 @@ namespace SuperMaxim.Logging
         public bool IsEnabled { get; set; }
         
         public TimeSpan MessageTimeSpan { get; set; }
+
+        public ConsoleLoggerConfig()
+        {
+            Name = "Console Logger";
+            Target = LogTarget.Console;
+            IsEnabled = true;
+        }
     }
 }
