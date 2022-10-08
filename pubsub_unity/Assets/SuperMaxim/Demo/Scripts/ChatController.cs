@@ -162,6 +162,14 @@ public class ChatController : MonoBehaviour
     }
 
     /// <summary>
+    /// Sends message typed in text field
+    /// </summary>
+    public void SendMessage()
+    {
+        OnTextEndEdit(_text);
+    }
+
+    /// <summary>
     /// Called when text was edited by user
     /// </summary>
     /// <remarks>When pressed enter or text field lost focus</remarks>
