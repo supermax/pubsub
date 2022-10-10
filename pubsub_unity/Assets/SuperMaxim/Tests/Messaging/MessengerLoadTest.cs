@@ -1,8 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
-using SuperMaxim.Logging;
+using SuperMaxim.Core.Logging;
 using SuperMaxim.Messaging;
-using UnityEngine;
 
 namespace SuperMaxim.Tests.Messaging
 {

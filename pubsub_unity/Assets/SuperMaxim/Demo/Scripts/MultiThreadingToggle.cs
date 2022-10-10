@@ -4,14 +4,17 @@ using UnityEngine;
 
 #endregion
 
-[CreateAssetMenu(fileName = "MultiThreadingToggle", menuName = "Demo/Scriptable Objects/Multi-Threading Toggle")]
-public class MultiThreadingToggle : ScriptableObject
+namespace SuperMaxim.Demo
 {
-    [SerializeField] private bool _isMultiThreadingOn = true;
-
-    public bool IsMultiThreadingOn
+    [CreateAssetMenu(fileName = "MultiThreadingToggle", menuName = "Demo/Scriptable Objects/Multi-Threading Toggle")]
+    public class MultiThreadingToggle : ScriptableObject
     {
-        get => _isMultiThreadingOn;
-        set => _isMultiThreadingOn = value;
+        [SerializeField] private bool _isMultiThreadingOn = true;
+
+        public bool IsMultiThreadingOn
+        {
+            get => _isMultiThreadingOn;
+            set => _isMultiThreadingOn = value;
+        }
     }
 }

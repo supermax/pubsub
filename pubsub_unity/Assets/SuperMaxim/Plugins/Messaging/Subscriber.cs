@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using SuperMaxim.Logging;
-using UnityEngine;
+using SuperMaxim.Core.Logging;
 
 namespace SuperMaxim.Messaging
 {

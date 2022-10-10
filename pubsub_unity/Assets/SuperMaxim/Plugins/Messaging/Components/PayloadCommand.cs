@@ -11,8 +11,14 @@ namespace SuperMaxim.Messaging.Components
 
         public string Id
         {
-            get => _id;
-            set => _id = value;
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
         }
 
         [SerializeField]
@@ -20,8 +26,14 @@ namespace SuperMaxim.Messaging.Components
 
         public ScriptableObject Data
         {
-            get => _data;
-            set => _data = value;
+            get
+            {
+                return _data;
+            }
+            set
+            {
+                _data = value;
+            }
         }
     }
 }

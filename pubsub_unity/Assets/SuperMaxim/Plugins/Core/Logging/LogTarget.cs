@@ -1,6 +1,6 @@
 using System;
 
-namespace SuperMaxim.Logging
+namespace SuperMaxim.Core.Logging
 {
     [Flags]
     public enum LogTarget

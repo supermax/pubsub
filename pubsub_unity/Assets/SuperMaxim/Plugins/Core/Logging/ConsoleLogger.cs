@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SuperMaxim.Logging
+namespace SuperMaxim.Core.Logging
 {
     internal class ConsoleLogger : ILogger
     {

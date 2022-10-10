@@ -1,10 +1,8 @@
 {
-    "name": "SuperMaxim.PubSub.Tests",
+    "name": "SuperMaxim.PubSub",
+    "rootNamespace": "",
     "references": [
-        "SuperMaxim.PubSub"
-    ],
-    "optionalUnityReferences": [
-        "TestAssemblies"
+        "GUID:189092fc0a61b4360931e9f8819b9ac2"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -12,5 +10,7 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

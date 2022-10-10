@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using SuperMaxim.Core.Extensions;
 using SuperMaxim.Core.Objects;
 using System.Threading;
+using SuperMaxim.Core.Logging;
 using SuperMaxim.Core.Threading;
-using SuperMaxim.Logging;
-using UnityEngine;
 using SuperMaxim.Messaging.Monitor;
 
 namespace SuperMaxim.Messaging

@@ -2,7 +2,7 @@
 using System.Threading;
 using SuperMaxim.Core.Objects;
 using System.Collections.Concurrent;
-using SuperMaxim.Logging;
+using SuperMaxim.Core.Logging;
 
 namespace SuperMaxim.Core.Threading
 {

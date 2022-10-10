@@ -1,4 +1,4 @@
-namespace SuperMaxim.Logging
+namespace SuperMaxim.Core.Logging
 {
     public static class LogTargetExtensions
     {

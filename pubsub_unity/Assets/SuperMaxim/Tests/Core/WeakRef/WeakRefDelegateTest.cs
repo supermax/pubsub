@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using NUnit.Framework;
+using SuperMaxim.Core.Logging;
 using SuperMaxim.Core.WeakRef;
-using SuperMaxim.Logging;
 using UnityEngine;
 using UnityEngine.TestTools;
 

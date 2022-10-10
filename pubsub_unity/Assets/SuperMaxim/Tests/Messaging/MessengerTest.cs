@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Threading;
 using NUnit.Framework;
-using SuperMaxim.Logging;
+using SuperMaxim.Core.Logging;
 using SuperMaxim.Messaging;
 using UnityEngine;
 using UnityEngine.TestTools;

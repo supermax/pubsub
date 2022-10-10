@@ -1,0 +1,26 @@
+{
+    "name": "SuperMaxim.PubSub.Editor.Tests",
+    "rootNamespace": "",
+    "references": [
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:feffa0a89a0324527b2df83253e9afb6",
+        "GUID:189092fc0a61b4360931e9f8819b9ac2",
+        "GUID:1e60ca7dfd34f44f3990f7793940d275"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

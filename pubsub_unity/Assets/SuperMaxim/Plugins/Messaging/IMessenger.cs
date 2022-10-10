@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SuperMaxim.Messaging
+﻿namespace SuperMaxim.Messaging
 {
     /// <summary>
     /// Interface for Pub/Sub Messenger

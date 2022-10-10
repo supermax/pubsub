@@ -1,11 +1,14 @@
-﻿public class ChatPayload
+﻿namespace SuperMaxim.Demo
 {
-    public string UserId { get; set; }
-
-    public string Text { get; set; }
-
-    public override string ToString()
+    public class ChatPayload
     {
-        return $"UserId: {UserId}, Text: {Text}";
+        public string UserId { get; set; }
+
+        public string Text { get; set; }
+
+        public override string ToString()
+        {
+            return $"UserId: {UserId}, Text: {Text}";
+        }
     }
 }
