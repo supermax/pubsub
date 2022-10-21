@@ -34,7 +34,11 @@ namespace SuperMaxim.Messaging
         static Messenger()
         {
             // init MainThreadDispatcher and print main thread ID
+#if UNITY
+            Loggers.Console.LogInfo("Main Thread ID: {0}", UnityMainThreadDispatcher.Default.ThreadId);
+#else
             Loggers.Console.LogInfo("Main Thread ID: {0}", MainThreadDispatcher.Default.ThreadId);
+#endif
 
 #if DEBUG
             // init MessengerMonitor
@@ -51,7 +55,7 @@ namespace SuperMaxim.Messaging
         public IMessengerPublish Publish<T>(T payload)
         {
             // if calling thread is same as main thread, call "PublishInternal" directly
-            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
+            if(Thread.CurrentThread.ManagedThreadId == UnityMainThreadDispatcher.Default.ThreadId)
             {
                 PublishInternal(payload);
                 return this;
@@ -60,7 +64,7 @@ namespace SuperMaxim.Messaging
             // capture "PublishInternal" in local action var.
             Action<T> act = PublishInternal;
             // add "act" into "MainThreadDispatcher" queue
-            MainThreadDispatcher.Default.Dispatch(act, new object[] { payload });
+            UnityMainThreadDispatcher.Default.Dispatch(act, new object[] { payload });
             return this;
         }
 
@@ -121,7 +125,7 @@ namespace SuperMaxim.Messaging
         public IMessengerSubscribe Subscribe<T>(Action<T> callback, Predicate<T> predicate = null)
         {
             // check if current thread ID == main thread ID
-            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
+            if(Thread.CurrentThread.ManagedThreadId == UnityMainThreadDispatcher.Default.ThreadId)
             {
                 // execute subscribe method on main thread
                 SubscribeInternal(callback, predicate);
@@ -131,8 +135,13 @@ namespace SuperMaxim.Messaging
             // capture delegate reference
             Action<Action<T>, Predicate<T>> act = SubscribeInternal;
             // add delegate and payload into main thread dispatcher queue
-            MainThreadDispatcher.Default.Dispatch(act, new object[] { callback, predicate });
+            UnityMainThreadDispatcher.Default.Dispatch(act, new object[] { callback, predicate });
             return this;
+        }
+
+        public IMessengerSubscribe Predicate<T>(Predicate<T> predicate)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -221,7 +230,7 @@ namespace SuperMaxim.Messaging
         public IMessengerUnsubscribe Unsubscribe<T>(Action<T> callback)
         {
             // check if method called on main thread
-            if(Thread.CurrentThread.ManagedThreadId == MainThreadDispatcher.Default.ThreadId)
+            if(Thread.CurrentThread.ManagedThreadId == UnityMainThreadDispatcher.Default.ThreadId)
             {
                 // call internal method
                 UnsubscribeInternal(callback);
@@ -231,7 +240,7 @@ namespace SuperMaxim.Messaging
             // capture delegate in 'act' var
             Action<Action<T>> act = UnsubscribeInternal;
             // add 'act' delegate into main thread dispatcher queue
-            MainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
+            UnityMainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
             return this;
         }
 

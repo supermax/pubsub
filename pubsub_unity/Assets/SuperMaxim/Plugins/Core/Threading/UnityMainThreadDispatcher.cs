@@ -1,14 +1,15 @@
-﻿using System;
-using System.Threading;
-using SuperMaxim.Core.Objects;
+#if UNITY
+using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using SuperMaxim.Core.Logging;
+using SuperMaxim.Core.Objects;
 
 namespace SuperMaxim.Core.Threading
 {
-    public class MainThreadDispatcher 
-        : Singleton<IThreadDispatcher, MainThreadDispatcher>
-        , IThreadDispatcher
+    public class UnityMainThreadDispatcher 
+        : MonoBehaviourSingleton<IThreadDispatcher, UnityMainThreadDispatcher>
+            , IThreadDispatcher
     {
         private readonly ConcurrentQueue<DispatcherTask> _tasks = new ConcurrentQueue<DispatcherTask>();
 
@@ -28,7 +29,7 @@ namespace SuperMaxim.Core.Threading
 
         private void Awake()
         {
-            ThreadId = Thread.CurrentThread.ManagedThreadId;
+            ThreadId = Thread.CurrentThread.ManagedThreadId;                
         }
 
         public void Dispatch(Delegate action, object[] payload)
@@ -52,3 +53,4 @@ namespace SuperMaxim.Core.Threading
         }
     }
 }
+#endif

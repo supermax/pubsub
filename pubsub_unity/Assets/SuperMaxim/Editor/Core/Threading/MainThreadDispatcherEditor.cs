@@ -4,12 +4,12 @@ using UnityEditor;
 
 namespace SuperMaxim.Core.Threading
 {
-    [CustomEditor(typeof(MainThreadDispatcher))]
+    [CustomEditor(typeof(UnityMainThreadDispatcher))]
     public class MainThreadDispatcherEditor : Editor
     {
         public override void OnInspectorGUI()
         {
-            var dispatcher = (MainThreadDispatcher)target;
+            var dispatcher = (UnityMainThreadDispatcher)target;
             GUILayout.Label($"Main Thread ID: {dispatcher.ThreadId}");
             GUILayout.Label($"Tasks Count: {dispatcher.TasksCount}");
 

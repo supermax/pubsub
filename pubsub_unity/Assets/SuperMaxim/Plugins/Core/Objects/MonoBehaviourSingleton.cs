@@ -35,7 +35,7 @@ namespace SuperMaxim.Core.Objects
             {
                 foreach (var obj in objects)
                 {
-                    if(typeInterface.IsAssignableFrom(obj.GetType()))
+                    if(typeInterface.IsInstanceOfType(obj))
                     {
                         _default = obj;
                     }

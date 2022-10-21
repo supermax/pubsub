@@ -1,16 +1,23 @@
+#if UNITY
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SuperMaxim.Core.Logging
 {
-    internal class ConsoleLogger : ILogger
+    internal class UnityConsoleLogger : ILogger
     {
         public ILoggerConfig Config { get; set; } = new ConsoleLoggerConfig();
 
         private const string LineSplitter = "/r/n";
 
-        private bool IsEnabled => Config.IsEnabled;
+        private bool IsEnabled
+        {
+            get
+            {
+                return Config.IsEnabled;
+            }
+        }
 
         public ILogger LogInfo(string message)
         {
@@ -138,3 +145,4 @@ namespace SuperMaxim.Core.Logging
         }
     }
 }
+#endif
