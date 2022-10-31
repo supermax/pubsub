@@ -34,6 +34,7 @@ namespace SuperMaxim.Tests.Messaging
         public IEnumerator TestLoadAsync()
         {
             Messenger.Default.Subscribe<LoadTestPayload>(OnTestCallback);
+            Assert.NotNull(Messenger.Default);
 
             _testThread = new Thread(TestLoad);
             _testThread.Start();
@@ -72,6 +73,7 @@ namespace SuperMaxim.Tests.Messaging
 
         private void OnTestCallback(LoadTestPayload payload)
         {
+            Assert.NotNull(payload);
             _receivedCount++;
 
             if(SendMessagesCount != _receivedCount)

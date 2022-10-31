@@ -139,6 +139,12 @@ namespace SuperMaxim.Messaging
             return this;
         }
 
+        /// <summary>
+        /// Register predicate to filter irrelevant payloads (optional)
+        /// </summary>
+        /// <param name="predicate">The predicate to filter irrelevant payloads (optional)</param>
+        /// <typeparam name="T">The type of payload to receive</typeparam>
+        /// <returns>Instance of the Messenger</returns>
         public IMessengerSubscribe Predicate<T>(Predicate<T> predicate)
         {
             throw new NotImplementedException();
@@ -178,7 +184,7 @@ namespace SuperMaxim.Messaging
         private void SubscribeInternal(Subscriber subscriber)
         {
             // check is subscriber is valid
-            if(!(subscriber is {IsAlive: true}))
+            if(subscriber is not {IsAlive: true})
             {
                 Loggers.Console.LogError("The {0} is null or not alive.", nameof(subscriber));
                 return;
@@ -242,6 +248,17 @@ namespace SuperMaxim.Messaging
             // add 'act' delegate into main thread dispatcher queue
             UnityMainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
             return this;
+        }
+
+        /// <summary>
+        /// Unsubscribe given predicate from receiving payload  
+        /// </summary>
+        /// <param name="predicate">The predicate that subscribed to receive payload</param>
+        /// <typeparam name="T">Type of predicate to unsubscribe from</typeparam>
+        /// <returns>Instance of the Messenger</returns>
+        public IMessengerUnsubscribe Unsubscribe<T>(Predicate<T> predicate)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

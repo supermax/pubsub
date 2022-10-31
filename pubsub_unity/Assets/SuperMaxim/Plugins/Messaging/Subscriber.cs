@@ -38,13 +38,8 @@ namespace SuperMaxim.Messaging
                 {
                     return true;
                 }
-                if(_callbackTarget == null ||
-                    !_callbackTarget.IsAlive ||
-                    _callbackTarget.Target == null)
-                {
-                    return false;
-                }
-                return true;
+                var isAlive = _callbackTarget is {IsAlive: true, Target: { }};
+                return isAlive;
             }
         }
 
@@ -78,7 +73,7 @@ namespace SuperMaxim.Messaging
         /// <exception cref="ArgumentNullException">
         /// The exception is thrown in case 'payloadType' or 'callback' null
         /// </exception>
-        public Subscriber(Type payloadType, Delegate callback, Delegate predicate = null)
+        internal Subscriber(Type payloadType, Delegate callback, Delegate predicate = null)
         {
             // validate params
             if(payloadType == null)
@@ -131,8 +126,7 @@ namespace SuperMaxim.Messaging
                 return;
             }
             if(!_callbackMethod.IsStatic && 
-                (_callbackTarget == null || 
-                !_callbackTarget.IsAlive))
+                _callbackTarget is not {IsAlive: true})
             {
                 Loggers.Console.LogWarning($"{nameof(_callbackMethod)} is not alive.");
                 return;

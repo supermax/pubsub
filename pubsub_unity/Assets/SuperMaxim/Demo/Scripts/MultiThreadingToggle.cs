@@ -13,8 +13,14 @@ namespace SuperMaxim.Demo
 
         public bool IsMultiThreadingOn
         {
-            get => _isMultiThreadingOn;
-            set => _isMultiThreadingOn = value;
+            get
+            {
+                return _isMultiThreadingOn;
+            }
+            set
+            {
+                _isMultiThreadingOn = value;
+            }
         }
     }
 }

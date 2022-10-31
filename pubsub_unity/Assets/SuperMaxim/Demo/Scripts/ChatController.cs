@@ -249,5 +249,13 @@ namespace SuperMaxim.Demo
             _threadQueue.Dispose();
             Loggers.Console.LogInfo("{0} - \"{1}\" destroyed", name, _userId);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void OnStart()
+        {
+            //Messenger.Default.Publish()
+        }
     }
 }
