@@ -25,6 +25,8 @@ namespace SuperMaxim.Messaging
         // List of subscribers to optimize add (subscribe) operation 
         private readonly List<Subscriber> _add = new List<Subscriber>();
 
+        private readonly ILogger _logger = Loggers.Console;
+
         // flag, if "true" then do not do changes in "_subscribersSet" dic.
         private bool _isPublishing;
 
@@ -147,7 +149,21 @@ namespace SuperMaxim.Messaging
         /// <returns>Instance of the Messenger</returns>
         public IMessengerSubscribe Predicate<T>(Predicate<T> predicate)
         {
-            throw new NotImplementedException();
+            // capture the type of the payload
+            var key = typeof(T);
+            // init new subscriber instance
+            var sub = new Subscriber(key, predicate, _logger);
+
+            // check if messenger is busy with publishing payloads
+            if(_isPublishing)
+            {
+                // add subscriber into "Add" queue if messenger is busy with publishing
+                _add.Add(sub);
+                return this;
+            }
+            // if messenger is not busy with publishing, add into subscribers list
+            SubscribeInternal(sub);
+            return this;
         }
 
         /// <summary>
@@ -164,7 +180,7 @@ namespace SuperMaxim.Messaging
             // capture the type of the payload
             var key = typeof(T);
             // init new subscriber instance
-            var sub = new Subscriber(key, callback, predicate);
+            var sub = new Subscriber(key, callback, predicate, _logger);
 
             // check if messenger is busy with publishing payloads
             if(_isPublishing)
@@ -186,7 +202,7 @@ namespace SuperMaxim.Messaging
             // check is subscriber is valid
             if(subscriber is not {IsAlive: true})
             {
-                Loggers.Console.LogError("The {0} is null or not alive.", nameof(subscriber));
+                _logger.LogError("The {0} is null or not alive.", nameof(subscriber));
                 return;
             }
 
@@ -208,7 +224,7 @@ namespace SuperMaxim.Messaging
 
             if (callbacks == null)
             {
-                Loggers.Console.LogError("callbacks container is null!");
+                _logger.LogError("callbacks container is null!");
                 return;
             }
 
