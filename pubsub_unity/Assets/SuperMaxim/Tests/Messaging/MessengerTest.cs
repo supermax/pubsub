@@ -19,20 +19,18 @@ namespace SuperMaxim.Tests.Messaging
         [OneTimeSetUp]
         public void Setup()
         {
-            var instance = Messenger.Default.Subscribe<FilteredPayload>(FilterPayloadCondition);
-            Assert.NotNull(instance);
+            var instance1 = Messenger.Default.Subscribe<FilteredPayload>(FilterPayloadCondition);
+            Assert.NotNull(instance1);
+            
+            var instance2 = Messenger.Default.Subscribe<FilteredPayload>(OnFilteredPayloadCallback);
+            Assert.NotNull(instance2);
+            Assert.AreSame(instance1, instance2);
         }
 
         private static bool FilterPayloadCondition(FilteredPayload payload)
         {
+            Loggers.Console.LogInfo($"{nameof(payload.IsFilterOn)}: {{0}}", payload.IsFilterOn);
             return !payload.IsFilterOn;
-        }
-
-        [Test]
-        public void Test_SubscribeToFilteredPayload()
-        {
-            var instance = Messenger.Default.Subscribe<FilteredPayload>(OnFilteredPayloadCallback);
-            Assert.NotNull(instance);
         }
 
         [Test]
