@@ -8,7 +8,7 @@ public class MainThreadDispatcherEditorTest
 {
     // A Test behaves as an ordinary method
     [Test]
-    public void MainThreadDispatcherEditorTestSimplePasses()
+    public void Test_MainThreadDispatcherEditorTestSimplePasses()
     {
         // Use the Assert class to test conditions
     }
@@ -16,7 +16,7 @@ public class MainThreadDispatcherEditorTest
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
-    public IEnumerator MainThreadDispatcherEditorTestWithEnumeratorPasses()
+    public IEnumerator Test_MainThreadDispatcherEditorTestWithEnumeratorPasses()
     {
         // Use the Assert class to test conditions.
         // Use yield to skip a frame.

@@ -31,12 +31,12 @@ namespace SuperMaxim.Tests.Messaging
         }
 
         [UnityTest]
-        public IEnumerator TestLoadAsync()
+        public IEnumerator Test_LoadAsync()
         {
             Messenger.Default.Subscribe<LoadTestPayload>(OnTestCallback);
             Assert.NotNull(Messenger.Default);
 
-            _testThread = new Thread(TestLoad);
+            _testThread = new Thread(LoadLoop);
             _testThread.Start();
 
             var wait = new WaitForSeconds(1f);
@@ -48,16 +48,16 @@ namespace SuperMaxim.Tests.Messaging
             yield return null;
         }
 
-        private void TestLoad()
+        private void LoadLoop()
         {
             _totalTime = 0.0;
             for (var i = 0; i < SendMessageChunksCount; i++)
             {
-                _totalTime += TestLoadLoop();
+                _totalTime += LoadLoops();
             }
         }
 
-        private double TestLoadLoop()
+        private double LoadLoops()
         {
             _receivedCount = 0;
             _loopTime = DateTime.Now.TimeOfDay;

@@ -8,7 +8,7 @@ public class MessengerMonitorEditorTest
 {
     // A Test behaves as an ordinary method
     [Test]
-    public void MessengerMonitorEditorTestSimplePasses()
+    public void Test_MessengerMonitorEditorTestSimplePasses()
     {
         // Use the Assert class to test conditions
     }
@@ -16,7 +16,7 @@ public class MessengerMonitorEditorTest
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
-    public IEnumerator MessengerMonitorEditorTestWithEnumeratorPasses()
+    public IEnumerator Test_MessengerMonitorEditorTestWithEnumeratorPasses()
     {
         // Use the Assert class to test conditions.
         // Use yield to skip a frame.

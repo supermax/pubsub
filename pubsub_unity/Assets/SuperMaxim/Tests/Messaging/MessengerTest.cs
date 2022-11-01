@@ -16,7 +16,7 @@ namespace SuperMaxim.Tests.Messaging
             public bool IsFilterOn { get; set; }
         }
         
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             var instance = Messenger.Default.Subscribe<FilteredPayload>(FilterPayloadCondition);
@@ -122,11 +122,11 @@ namespace SuperMaxim.Tests.Messaging
             var instance = Messenger.Default.Subscribe<int>(OnPublishFromNewThreadCallback);
             Assert.NotNull(instance);
 
-            Loggers.Console.LogInfo($"{nameof(MainThreadDispatcher.Default.ThreadId)}: {{0}}\r\n" +
-                                    $"{Thread.CurrentThread.ManagedThreadId}: {{1}}"
-                , MainThreadDispatcher.Default.ThreadId
+            Loggers.Console.LogInfo($"{nameof(UnityMainThreadDispatcher.Default.ThreadId)}: {{0}}, " +
+                                    $"{nameof(Thread.CurrentThread.ManagedThreadId)}: {{1}}"
+                , UnityMainThreadDispatcher.Default.ThreadId
                 , Thread.CurrentThread.ManagedThreadId);
-            Assert.AreEqual(MainThreadDispatcher.Default.ThreadId, Thread.CurrentThread.ManagedThreadId);
+            Assert.AreEqual(UnityMainThreadDispatcher.Default.ThreadId, Thread.CurrentThread.ManagedThreadId);
 
             var th = new Thread(PublishFromNewThreadMethod);
             th.Start();
@@ -134,11 +134,11 @@ namespace SuperMaxim.Tests.Messaging
 
         private void PublishFromNewThreadMethod()
         {
-            Loggers.Console.LogInfo($"{nameof(MainThreadDispatcher.Default.ThreadId)}: {{0}}\r\n" +
-                                    $"{Thread.CurrentThread.ManagedThreadId}: {{1}}"
-                , MainThreadDispatcher.Default.ThreadId
+            Loggers.Console.LogInfo($"{nameof(UnityMainThreadDispatcher.Default.ThreadId)}: {{0}}, " +
+                                    $"{nameof(Thread.CurrentThread.ManagedThreadId)}: {{1}}"
+                , UnityMainThreadDispatcher.Default.ThreadId
                 , Thread.CurrentThread.ManagedThreadId);
-            Assert.AreNotEqual(MainThreadDispatcher.Default.ThreadId, Thread.CurrentThread.ManagedThreadId);
+            Assert.AreNotEqual(UnityMainThreadDispatcher.Default.ThreadId, Thread.CurrentThread.ManagedThreadId);
             
             Messenger.Default.Publish(Thread.CurrentThread.ManagedThreadId);
         }

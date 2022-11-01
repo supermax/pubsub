@@ -21,20 +21,20 @@ namespace SuperMaxim.Tests.Messaging
         }
 
         [Test]
-        public void TestLoad()
+        public void Test_Load()
         {
             Messenger.Default.Subscribe<LoadTestPayload>(OnTestCallback);
             
             var time = 0.0;
             for (var i = 0; i < SendMessageChunksCount; i++)
             {
-                time += TestLoadLoop();
+                time += LoadLoop();
             }
             
             Loggers.Console.LogInfo("Load Test: average time {0}", Math.Round(time / SendMessageChunksCount, 3));
         }
 
-        private double TestLoadLoop()
+        private double LoadLoop()
         {
             Loggers.Console.Config.IsEnabled = false;
             

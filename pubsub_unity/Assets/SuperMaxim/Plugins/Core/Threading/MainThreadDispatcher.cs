@@ -26,7 +26,7 @@ namespace SuperMaxim.Core.Threading
             }
         }
 
-        private void Awake()
+        public MainThreadDispatcher()
         {
             ThreadId = Thread.CurrentThread.ManagedThreadId;
         }
@@ -36,6 +36,7 @@ namespace SuperMaxim.Core.Threading
             _tasks.Enqueue(new DispatcherTask(action, payload));
         }
 
+        // TODO adjust for classic .NET async queue dispatching
         private void Update()
         {
             while(_tasks.Count > 0)

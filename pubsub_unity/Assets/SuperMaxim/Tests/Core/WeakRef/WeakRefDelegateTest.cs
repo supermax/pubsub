@@ -17,7 +17,7 @@ namespace SuperMaxim.Tests.Core.WeakRef
         }
 
         [UnityTest]
-        public IEnumerator TestVoidCallbackWithEnumerator()
+        public IEnumerator Test_VoidCallbackWithEnumerator()
         {
             var test = new Test();
             var wr = new WeakRefDelegate(test.TestVoidCallbackDelegate);
