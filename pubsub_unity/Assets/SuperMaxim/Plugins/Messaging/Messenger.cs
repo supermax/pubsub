@@ -101,10 +101,29 @@ namespace SuperMaxim.Messaging
                     _subscribersSet.Remove(key);
                     return;
                 }
-
-                // iterate thru dic and invoke callbacks
+                
+                // iterate thru list of subscribers and invoke type's predicate
                 foreach (var callback in callbacks.Values)
                 {
+                    if (callback is not {IsPredicate: true})
+                    {
+                        continue;
+                    }
+                    // if type's predicate returns 'false' abort publish method
+                    var res = (bool)callback.Invoke(payload);
+                    if (!res)
+                    {
+                        return;
+                    }
+                }
+
+                // iterate thru list of subscribers and invoke callbacks
+                foreach (var callback in callbacks.Values)
+                {
+                    if (callback.IsPredicate)
+                    {
+                        continue;
+                    }
                     callback?.Invoke(payload);
                 }
             }
@@ -142,12 +161,12 @@ namespace SuperMaxim.Messaging
         }
 
         /// <summary>
-        /// Register predicate to filter irrelevant payloads (optional)
+        /// Subscribe predicate to filter irrelevant payloads per given type <typeparam name="T"/>
         /// </summary>
-        /// <param name="predicate">The predicate to filter irrelevant payloads (optional)</param>
+        /// <param name="predicate">The predicate to filter irrelevant payloads per given type</param>
         /// <typeparam name="T">The type of payload to receive</typeparam>
         /// <returns>Instance of the Messenger</returns>
-        public IMessengerSubscribe Predicate<T>(Predicate<T> predicate)
+        public IMessengerSubscribe Subscribe<T>(Predicate<T> predicate)
         {
             // capture the type of the payload
             var key = typeof(T);
@@ -251,18 +270,7 @@ namespace SuperMaxim.Messaging
         /// <returns>Instance of <see cref="Messenger"/></returns>
         public IMessengerUnsubscribe Unsubscribe<T>(Action<T> callback)
         {
-            // check if method called on main thread
-            if(Thread.CurrentThread.ManagedThreadId == UnityMainThreadDispatcher.Default.ThreadId)
-            {
-                // call internal method
-                UnsubscribeInternal(callback);
-                return this;
-            }
-
-            // capture delegate in 'act' var
-            Action<Action<T>> act = UnsubscribeInternal;
-            // add 'act' delegate into main thread dispatcher queue
-            UnityMainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
+            UnsubscribeSafely(typeof(T), callback);
             return this;
         }
 
@@ -274,34 +282,49 @@ namespace SuperMaxim.Messaging
         /// <returns>Instance of the Messenger</returns>
         public IMessengerUnsubscribe Unsubscribe<T>(Predicate<T> predicate)
         {
-            throw new NotImplementedException();
+            UnsubscribeSafely(typeof(T), predicate);
+            return this;
+        }
+        
+        private void UnsubscribeSafely(Type payloadType, Delegate callback)
+        {
+            // check if method called on main thread
+            if(Thread.CurrentThread.ManagedThreadId == UnityMainThreadDispatcher.Default.ThreadId)
+            {
+                // call internal method
+                UnsubscribeInternal(payloadType, callback);
+                return;
+            }
+
+            // capture delegate in 'act' var
+            Action<Type, Delegate> act = UnsubscribeInternal;
+            // add 'act' delegate into main thread dispatcher queue
+            UnityMainThreadDispatcher.Default.Dispatch(act, new object[] { callback });
         }
 
         /// <summary>
-        /// Unsubscribe given callback by payload type <see cref="T"/>
+        /// Unsubscribe given callback by payload type
         /// </summary>
         /// <remarks>Internal method</remarks>
+        /// <param name="payloadType">The type of the payload</param>
         /// <param name="callback">The callback delegate</param>
-        /// <typeparam name="T">The type of the payload</typeparam>
-        private void UnsubscribeInternal<T>(Action<T> callback)
+        private void UnsubscribeInternal(Type payloadType, Delegate callback)
         {
-            // capture payload type into 'key' var
-            var key = typeof(T);          
             // capture subscribers dic into 'dic' var
             var dic = _subscribersSet;
             // check if payload is registered 
-            if (!dic.ContainsKey(key))
+            if (!dic.ContainsKey(payloadType))
             {
                 return;
             }
 
             // get list of callbacks for the payload
-            dic.TryGetValue(key, out var callbacks);
+            dic.TryGetValue(payloadType, out var callbacks);
             // check if callbacks list is null or empty and if messenger is publishing payloads
             if(!_isPublishing && callbacks.IsNullOrEmpty())
             {
                 // remove payload from subscribers dic
-                dic.Remove(key);
+                dic.Remove(payloadType);
                 return;
             }
 
@@ -333,7 +356,7 @@ namespace SuperMaxim.Messaging
                 return;
             }
             // remove callbacks from the _subscribersSet
-            dic.Remove(key);
+            dic.Remove(payloadType);
         }
 
         /// <summary>

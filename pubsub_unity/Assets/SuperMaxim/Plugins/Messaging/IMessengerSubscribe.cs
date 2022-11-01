@@ -17,11 +17,11 @@ namespace SuperMaxim.Messaging
         IMessengerSubscribe Subscribe<T>(Action<T> callback, Predicate<T> predicate = null);
         
         /// <summary>
-        /// Register predicate to filter irrelevant payloads (optional)
+        /// Subscribe predicate to filter irrelevant payloads per given type <typeparam name="T"/>
         /// </summary>
         /// <param name="predicate">The predicate to filter irrelevant payloads (optional)</param>
         /// <typeparam name="T">The type of payload to receive</typeparam>
         /// <returns>Instance of the Messenger</returns>
-        IMessengerSubscribe Predicate<T>(Predicate<T> predicate);
+        IMessengerSubscribe Subscribe<T>(Predicate<T> predicate);
     }
 }

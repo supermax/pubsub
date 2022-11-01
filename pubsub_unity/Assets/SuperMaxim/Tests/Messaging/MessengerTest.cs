@@ -2,6 +2,7 @@
 using System.Threading;
 using NUnit.Framework;
 using SuperMaxim.Core.Logging;
+using SuperMaxim.Core.Threading;
 using SuperMaxim.Messaging;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -10,30 +11,77 @@ namespace SuperMaxim.Tests.Messaging
 {
     public class MessengerTest
     {
-        [Test]
-        public void SubscribeToStringPayload()
+        private class FilteredPayload
         {
-            Messenger.Default.Subscribe<string>(OnStringCallback);
+            public bool IsFilterOn { get; set; }
+        }
+        
+        [SetUp]
+        public void Setup()
+        {
+            var instance = Messenger.Default.Subscribe<FilteredPayload>(FilterPayloadCondition);
+            Assert.NotNull(instance);
+        }
+
+        private static bool FilterPayloadCondition(FilteredPayload payload)
+        {
+            return !payload.IsFilterOn;
+        }
+
+        [Test]
+        public void Test_SubscribeToFilteredPayload()
+        {
+            var instance = Messenger.Default.Subscribe<FilteredPayload>(OnFilteredPayloadCallback);
+            Assert.NotNull(instance);
+        }
+
+        [Test]
+        public void Test_PublishFilteredPayload()
+        {
+            var instance1 = Messenger.Default.Publish(new FilteredPayload {IsFilterOn = true});
+            Assert.NotNull(instance1);
+            
+            var instance2 = Messenger.Default.Publish(new FilteredPayload {IsFilterOn = false});
+            Assert.NotNull(instance2);
+            Assert.AreSame(instance1, instance2);
+        }
+
+        private void OnFilteredPayloadCallback(FilteredPayload payload)
+        {
+            Loggers.Console.LogInfo($"{nameof(payload)}.{nameof(payload.IsFilterOn)}:{{0}}", payload?.IsFilterOn);
+            
+            Assert.NotNull(payload);
+            Assert.True(!payload.IsFilterOn);
+        }
+
+        [Test]
+        public void Test_SubscribeToStringPayload()
+        {
+            var instance = Messenger.Default.Subscribe<string>(OnStringCallback);
+            Assert.NotNull(instance);
         }
 
         [UnityTest]
-        public IEnumerator PublishAsync()
+        public IEnumerator Test_PublishAsync()
         {
             for (var i = 1; i <= 4; i++)
             {
-                Messenger.Default.Publish($"Hello World! [{i}]");
+                var instance = Messenger.Default.Publish($"Hello World! [{i}]");
+                Assert.NotNull(instance);
 
                 yield return null;    
             }
         }
 
         [Test]
-        public void SubscribeAndPublishToObjectWithPredicate()
+        public void Test_SubscribeAndPublishToObjectWithPredicate()
         {
-            Messenger.Default
-                .Subscribe<MessengerTestPayload>(OnSubscribeToObjectWithPredicate, ObjectPredicate);
+            var instance1 = Messenger.Default.Subscribe<MessengerTestPayload>(OnSubscribeToObjectWithPredicate, ObjectPredicate);
+            Assert.NotNull(instance1);
 
-            Messenger.Default.Publish(new MessengerTestPayload{ Id = Random.Range(-1, 1)});
+            var instance2 = Messenger.Default.Publish(new MessengerTestPayload{ Id = Random.Range(-1, 1)});
+            Assert.NotNull(instance2);
+            Assert.AreSame(instance1, instance2);
         }
 
         private static bool ObjectPredicate(MessengerTestPayload payload)
@@ -69,12 +117,16 @@ namespace SuperMaxim.Tests.Messaging
         }
 
         [Test]
-        public void PublishFromNewThread()
+        public void Test_PublishFromNewThread()
         {
-            Messenger.Default.Subscribe<int>(OnPublishFromNewThreadCallback);
+            var instance = Messenger.Default.Subscribe<int>(OnPublishFromNewThreadCallback);
+            Assert.NotNull(instance);
 
-            Loggers.Console.LogInfo("[MessengerTestPublishFromNewThread] Thread ID: {0}", 
-                                Thread.CurrentThread.ManagedThreadId);
+            Loggers.Console.LogInfo($"{nameof(MainThreadDispatcher.Default.ThreadId)}: {{0}}\r\n" +
+                                    $"{Thread.CurrentThread.ManagedThreadId}: {{1}}"
+                , MainThreadDispatcher.Default.ThreadId
+                , Thread.CurrentThread.ManagedThreadId);
+            Assert.AreEqual(MainThreadDispatcher.Default.ThreadId, Thread.CurrentThread.ManagedThreadId);
 
             var th = new Thread(PublishFromNewThreadMethod);
             th.Start();
@@ -82,9 +134,12 @@ namespace SuperMaxim.Tests.Messaging
 
         private void PublishFromNewThreadMethod()
         {
-            Loggers.Console.LogInfo("[PublishFromNewThread] Thread ID: {0}", 
-                                Thread.CurrentThread.ManagedThreadId);
-
+            Loggers.Console.LogInfo($"{nameof(MainThreadDispatcher.Default.ThreadId)}: {{0}}\r\n" +
+                                    $"{Thread.CurrentThread.ManagedThreadId}: {{1}}"
+                , MainThreadDispatcher.Default.ThreadId
+                , Thread.CurrentThread.ManagedThreadId);
+            Assert.AreNotEqual(MainThreadDispatcher.Default.ThreadId, Thread.CurrentThread.ManagedThreadId);
+            
             Messenger.Default.Publish(Thread.CurrentThread.ManagedThreadId);
         }
 
@@ -99,22 +154,27 @@ namespace SuperMaxim.Tests.Messaging
         private MessengerWekRefTest _weakRefTest;
 
         [UnityTest]
-        public IEnumerator TestWeakReference()
+        public IEnumerator Test_TestWeakReference()
         {
             _weakRefTest = new MessengerWekRefTest();
-            Messenger.Default.Subscribe<MessengerTestPayload>(_weakRefTest.Callback);
+            var instance1 = Messenger.Default.Subscribe<MessengerTestPayload>(_weakRefTest.Callback);
+            Assert.NotNull(instance1);
 
             var payload = new MessengerTestPayload{ Id = 12345 };
             Loggers.Console.LogInfo("[TestWeakReference] #1 Publish Payload Id: {0}", payload.Id);
 
-            Messenger.Default.Publish(new MessengerTestPayload{ Id = 12345 });
+            var instance2 = Messenger.Default.Publish(new MessengerTestPayload{ Id = 12345 });
+            Assert.NotNull(instance2);
+            Assert.AreSame(instance1, instance2);
 
             _weakRefTest = null;
 
             yield return new WaitForSeconds(5);
 
             Loggers.Console.LogInfo("[TestWeakReference] #2 Publish Payload Id: {0}", payload.Id);
-            Messenger.Default.Publish(payload);
+            var instance3 = Messenger.Default.Publish(payload);
+            Assert.NotNull(instance3);
+            Assert.AreSame(instance3, instance2);
         }
 
         private class MessengerWekRefTest
