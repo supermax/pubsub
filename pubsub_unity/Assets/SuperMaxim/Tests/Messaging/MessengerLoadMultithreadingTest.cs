@@ -9,6 +9,7 @@ using UnityEngine.TestTools;
 
 namespace SuperMaxim.Tests.Messaging
 {
+    [TestFixture]
     public class MessengerLoadMultithreadingTest
     {
         private const int SendMessageChunksCount = 10;

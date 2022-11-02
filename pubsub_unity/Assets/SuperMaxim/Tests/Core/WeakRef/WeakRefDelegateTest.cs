@@ -8,6 +8,7 @@ using UnityEngine.TestTools;
 
 namespace SuperMaxim.Tests.Core.WeakRef
 {
+    [TestFixture]
     public class WeakRefDelegateTest
     {
         [OneTimeSetUp]

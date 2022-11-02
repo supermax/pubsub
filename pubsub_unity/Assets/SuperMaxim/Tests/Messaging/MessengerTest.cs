@@ -9,6 +9,7 @@ using UnityEngine.TestTools;
 
 namespace SuperMaxim.Tests.Messaging
 {
+    [TestFixture]
     public class MessengerTest
     {
         private class FilteredPayload

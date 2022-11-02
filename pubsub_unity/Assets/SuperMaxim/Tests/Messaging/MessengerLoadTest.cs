@@ -5,6 +5,7 @@ using SuperMaxim.Messaging;
 
 namespace SuperMaxim.Tests.Messaging
 {
+    [TestFixture]
     public class MessengerLoadTest
     {
         private const int SendMessageChunksCount = 10;
