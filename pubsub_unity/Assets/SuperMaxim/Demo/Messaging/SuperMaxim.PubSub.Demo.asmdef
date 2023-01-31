@@ -1,0 +1,18 @@
+{
+    "name": "SuperMaxim.PubSub.Demo",
+    "rootNamespace": "",
+    "references": [
+        "GUID:189092fc0a61b4360931e9f8819b9ac2",
+        "GUID:feffa0a89a0324527b2df83253e9afb6",
+        "GUID:5845246a973934255b26491e5bff45e7"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

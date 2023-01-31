@@ -1,4 +1,3 @@
-#if UNITY
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,7 +46,7 @@ namespace SuperMaxim.Core.Logging
             msg = string.Format(format, msg);
             return LogInfo(msg);
         }
-        
+
         public ILogger LogInfo(string format, params object[] messages)
         {
             if (!IsEnabled) return this;
@@ -145,4 +144,3 @@ namespace SuperMaxim.Core.Logging
         }
     }
 }
-#endif

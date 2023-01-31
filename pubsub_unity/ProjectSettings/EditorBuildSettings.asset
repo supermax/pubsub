@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/SuperMaxim/Demo/Scenes/ChatExampleScene.unity
+    path: Assets/SuperMaxim/Demo/Messaging/Scenes/ChatExampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: e68f4cbf9a41d465b8d7136a535c2769,

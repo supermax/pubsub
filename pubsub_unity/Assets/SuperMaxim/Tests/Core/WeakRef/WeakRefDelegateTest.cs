@@ -22,11 +22,13 @@ namespace SuperMaxim.Tests.Core.WeakRef
         {
             var test = new Test();
             var wr = new WeakRefDelegate(test.TestVoidCallbackDelegate);
+            Assert.NotNull(wr);
 
             var res = wr.Invoke(null);
 
             Loggers.Console.LogInfo("[{0}] {1}: result: {2}, isAlive: {3}",
                 wr.GetHashCode(), test.TestVoidCallbackName, res, wr.IsAlive);
+
 
 #pragma warning disable IDE0059 // Value assigned to symbol is never used
             test.TestVoidCallbackDelegate = null;
@@ -42,14 +44,15 @@ namespace SuperMaxim.Tests.Core.WeakRef
                 yield return wait;
             }
 
+            Assert.False(wr.IsAlive);
             if(wr.IsAlive)
             {
-                Loggers.Console.LogError("[{0}] isAlive: {1}, time (s): {2:N}", 
+                Loggers.Console.LogError("[{0}] isAlive: {1}, time (s): {2:N}",
                     wr.GetHashCode(), wr.IsAlive, Time.fixedTime - time);
             }
             else
             {
-                Loggers.Console.LogInfo("[{0}] isAlive: {1}, time (s): {2:N}", 
+                Loggers.Console.LogInfo("[{0}] isAlive: {1}, time (s): {2:N}",
                     wr.GetHashCode(), wr.IsAlive, Time.fixedTime - time);
             }
         }

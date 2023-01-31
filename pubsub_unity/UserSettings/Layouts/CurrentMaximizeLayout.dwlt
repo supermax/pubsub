@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Children:
   - {fileID: 3}
-  - {fileID: 9}
-  - {fileID: 14}
+  - {fileID: 8}
+  - {fileID: 13}
   m_Position:
     serializedVersion: 2
     x: 0
     y: 30
-    width: 1742
+    width: 1792
     height: 1017
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 641
+  controlID: 344
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -47,10 +47,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 50
+    x: 0
     y: 83
-    width: 1140.5
-    height: 656.5
+    width: 1173
+    height: 657
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -252,9 +252,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 721.0698, y: 142.29527, z: 0.99902344}
+    m_Target: {x: 690.06006, y: 140.40869, z: 1.2529455}
     speed: 2
-    m_Value: {x: 721.0698, y: 142.29527, z: 0.99902344}
+    m_Value: {x: 0, y: 0, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -285,7 +285,7 @@ MonoBehaviour:
       m_Fade:
         m_Target: 0
         speed: 2
-        m_Value: 0
+        m_Value: 1
       m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
       m_Pivot: {x: 0, y: 0, z: 0}
       m_Size: {x: 1, y: 1}
@@ -305,9 +305,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 963.37054
+    m_Target: 937.97815
     speed: 2
-    m_Value: 963.37054
+    m_Value: 10
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -346,17 +346,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Children:
   - {fileID: 4}
-  - {fileID: 7}
+  - {fileID: 6}
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1141.5
+    width: 1174
     height: 1017
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 642
+  controlID: 345
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -367,24 +367,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneView
+  m_Name: 
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1141.5
-    height: 677.5
+    width: 1174
+    height: 678
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 2}
   m_Panes:
   - {fileID: 2}
   - {fileID: 5}
-  - {fileID: 6}
   m_Selected: 0
-  m_LastSelected: 2
+  m_LastSelected: 1
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -406,10 +405,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 50
-    y: 83
-    width: 1140.5
-    height: 656.5
+    x: 0
+    y: 94
+    width: 1423
+    height: 1320
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -420,10 +419,10 @@ MonoBehaviour:
   m_ShowGizmos: 0
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 1140.5, y: 635.5}
+  m_TargetSize: {x: 2846, y: 2598}
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
-  m_RenderIMGUI: 1
+  m_RenderIMGUI: 0
   m_EnterPlayModeBehavior: 0
   m_UseMipMap: 0
   m_VSyncEnabled: 0
@@ -435,10 +434,10 @@ MonoBehaviour:
     m_VRangeLocked: 0
     hZoomLockedByDefault: 0
     vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -285.125
-    m_HBaseRangeMax: 285.125
-    m_VBaseRangeMin: -158.875
-    m_VBaseRangeMax: 158.875
+    m_HBaseRangeMin: -711.5
+    m_HBaseRangeMax: 711.5
+    m_VBaseRangeMin: -660
+    m_VBaseRangeMax: 660
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -455,1075 +454,30 @@ MonoBehaviour:
     m_DrawArea:
       serializedVersion: 2
       x: 0
-      y: 21
-      width: 1140.5
-      height: 635.5
-    m_Scale: {x: 2, y: 2}
-    m_Translation: {x: 570.25, y: 317.75}
+      y: 0
+      width: 1423
+      height: 1320
+    m_Scale: {x: 1, y: 1}
+    m_Translation: {x: 711.5, y: 660}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -285.125
-      y: -158.875
-      width: 570.25
-      height: 317.75
+      x: -711.5
+      y: -660
+      width: 1423
+      height: 1320
     m_MinimalGUI: 1
-  m_defaultScale: 2
-  m_LastWindowPixelSize: {x: 2281, y: 1313}
+  m_defaultScale: 1
+  m_LastWindowPixelSize: {x: 2846, y: 2640}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
-  m_LowResolutionForAspectRatios: 01000000000000000000
+  m_LowResolutionForAspectRatios: 00000000000000000000
   m_XRRenderMode: 0
   m_RenderTexture: {fileID: 0}
 --- !u!114 &6
-MonoBehaviour:
-  m_ObjectHideFlags: 52
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 13401, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_TitleContent:
-    m_Text: Test Runner
-    m_Image: {fileID: 0}
-    m_Tooltip: 
-  m_Pos:
-    serializedVersion: 2
-    x: 50
-    y: 83
-    width: 1140.5
-    height: 656.5
-  m_ViewDataDictionary: {fileID: 0}
-  m_OverlayCanvas:
-    m_LastAppliedPresetName: Default
-    m_SaveData: []
-  m_Spl:
-    ID: 2556
-    splitterInitialOffset: 0
-    currentActiveSplitter: -1
-    realSizes:
-    - 439.5
-    - 146.5
-    relativeSizes:
-    - 0.75
-    - 0.25
-    minSizes:
-    - 32
-    - 32
-    maxSizes:
-    - 0
-    - 0
-    lastTotalSize: 586
-    splitSize: 6
-    xOffset: 0
-    m_Version: 1
-    oldRealSizes: 
-    oldMinSizes: 
-    oldMaxSizes: 
-    oldSplitSize: 0
-  m_TestTypeToolbarIndex: 0
-  m_PlayModeTestListGUI:
-    m_Window: {fileID: 6}
-    m_NewResultList:
-    - id: 1011
-      uniqueId: '[PubSub][suite]'
-      name: PubSub
-      fullName: PubSub
-      resultStatus: 1
-      duration: 13.675725
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 
-      parentUniqueId: 
-    - id: 1014
-      uniqueId: '[SuperMaxim.Core.Tests.dll][suite]'
-      name: SuperMaxim.Core.Tests.dll
-      fullName: /Users/maxim/Git/Maxim/pubsub/pubsub_unity/Library/ScriptAssemblies/SuperMaxim.Core.Tests.dll
-      resultStatus: 1
-      duration: 5.0823293
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1011
-      parentUniqueId: '[PubSub][suite]'
-    - id: 1015
-      uniqueId: SuperMaxim.Core.Tests.dll/[SuperMaxim][suite]
-      name: SuperMaxim
-      fullName: SuperMaxim
-      resultStatus: 1
-      duration: 5.077446
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1014
-      parentUniqueId: '[SuperMaxim.Core.Tests.dll][suite]'
-    - id: 1016
-      uniqueId: SuperMaxim.Core.Tests.dll/SuperMaxim/[Tests][suite]
-      name: Tests
-      fullName: SuperMaxim.Tests
-      resultStatus: 1
-      duration: 5.0757403
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1015
-      parentUniqueId: SuperMaxim.Core.Tests.dll/[SuperMaxim][suite]
-    - id: 1017
-      uniqueId: SuperMaxim.Core.Tests.dll/SuperMaxim/Tests/[Core][suite]
-      name: Core
-      fullName: SuperMaxim.Tests.Core
-      resultStatus: 1
-      duration: 5.0742745
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1016
-      parentUniqueId: SuperMaxim.Core.Tests.dll/SuperMaxim/[Tests][suite]
-    - id: 1018
-      uniqueId: SuperMaxim.Core.Tests.dll/SuperMaxim/Tests/Core/[SuperMaxim.Core.Tests][SuperMaxim.Tests.Core.WeakRef][suite]
-      name: WeakRef
-      fullName: SuperMaxim.Tests.Core.WeakRef
-      resultStatus: 1
-      duration: 5.072823
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1017
-      parentUniqueId: SuperMaxim.Core.Tests.dll/SuperMaxim/Tests/[Core][suite]
-    - id: 1012
-      uniqueId: SuperMaxim.Core.Tests.dll/SuperMaxim/Tests/Core/WeakRef/[SuperMaxim.Core.Tests][SuperMaxim.Tests.Core.WeakRef.WeakRefDelegateTest][suite]
-      name: WeakRefDelegateTest
-      fullName: SuperMaxim.Tests.Core.WeakRef.WeakRefDelegateTest
-      resultStatus: 1
-      duration: 5.062279
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1018
-      parentUniqueId: SuperMaxim.Core.Tests.dll/SuperMaxim/Tests/Core/[SuperMaxim.Core.Tests][SuperMaxim.Tests.Core.WeakRef][suite]
-    - id: 1013
-      uniqueId: SuperMaxim.Core.Tests.dll/SuperMaxim/Tests/Core/WeakRef/WeakRefDelegateTest/[SuperMaxim.Core.Tests][SuperMaxim.Tests.Core.WeakRef.WeakRefDelegateTest.TestVoidCallbackWithEnumerator]
-      name: TestVoidCallbackWithEnumerator
-      fullName: SuperMaxim.Tests.Core.WeakRef.WeakRefDelegateTest.TestVoidCallbackWithEnumerator
-      resultStatus: 1
-      duration: 5.0449643
-      messages: 
-      output: 'TestVoidCallback invoked
-
-        [151181638] TestVoidCallback: result:
-        , isAlive: True
-
-        [151181638] isAlive: False, time (s): 5.02
-
-'
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1012
-      parentUniqueId: SuperMaxim.Core.Tests.dll/SuperMaxim/Tests/Core/WeakRef/[SuperMaxim.Core.Tests][SuperMaxim.Tests.Core.WeakRef.WeakRefDelegateTest][suite]
-    - id: 1029
-      uniqueId: '[SuperMaxim.PubSub.Tests.dll][suite]'
-      name: SuperMaxim.PubSub.Tests.dll
-      fullName: /Users/maxim/Git/Maxim/pubsub/pubsub_unity/Library/ScriptAssemblies/SuperMaxim.PubSub.Tests.dll
-      resultStatus: 1
-      duration: 8.571114
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1011
-      parentUniqueId: '[PubSub][suite]'
-    - id: 1030
-      uniqueId: SuperMaxim.PubSub.Tests.dll/[SuperMaxim][suite]
-      name: SuperMaxim
-      fullName: SuperMaxim
-      resultStatus: 1
-      duration: 8.569632
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1029
-      parentUniqueId: '[SuperMaxim.PubSub.Tests.dll][suite]'
-    - id: 1031
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/[Tests][suite]
-      name: Tests
-      fullName: SuperMaxim.Tests
-      resultStatus: 1
-      duration: 8.568421
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1030
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/[SuperMaxim][suite]
-    - id: 1032
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging][suite]
-      name: Messaging
-      fullName: SuperMaxim.Tests.Messaging
-      resultStatus: 1
-      duration: 8.567254
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1031
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/[Tests][suite]
-    - id: 1019
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerLoadMultithreadingTest][suite]
-      name: MessengerLoadMultithreadingTest
-      fullName: SuperMaxim.Tests.Messaging.MessengerLoadMultithreadingTest
-      resultStatus: 1
-      duration: 1.0135185
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1032
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging][suite]
-    - id: 1020
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/MessengerLoadMultithreadingTest/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerLoadMultithreadingTest.TestLoadAsync]
-      name: TestLoadAsync
-      fullName: SuperMaxim.Tests.Messaging.MessengerLoadMultithreadingTest.TestLoadAsync
-      resultStatus: 1
-      duration: 1.0116184
-      messages: 
-      output: 'Main Thread ID: 1
-
-        Messenger Monitor [MessengerMonitor] (SuperMaxim.Messaging.Monitor.MessengerMonitor)
-
-        (Queue.Count:
-        99) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 98) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        97) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 96) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        95) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 94) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        93) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 92) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        91) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 90) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        Multithreading
-        Load Test: sent 10 messages, received 10 messages, took 0 seconds
-
-        (Queue.Count:
-        89) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 88) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        87) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 86) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        85) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 84) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        83) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 82) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        81) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 80) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        79) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 78) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        77) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 76) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        75) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 74) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        73) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 72) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        71) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 70) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        69) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 68) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        67) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 66) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        65) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 64) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        63) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 62) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        61) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 60) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        59) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 58) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        57) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 56) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        55) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 54) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        53) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 52) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        51) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 50) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        49) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 48) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        47) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 46) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        45) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 44) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        43) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 42) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        41) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 40) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        39) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 38) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        37) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 36) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        35) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 34) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        33) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 32) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        31) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 30) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        29) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 28) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        27) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 26) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        25) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 24) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        23) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 22) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        21) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 20) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        19) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 18) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        17) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 16) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        15) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 14) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        13) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 12) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        11) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 10) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        9) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 8) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        7) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 6) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        5) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 4) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        3) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 2) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-        (Queue.Count:
-        1) Dispatching task WeakRefDelegate: 437691112, Void PublishInternal[LoadTestPayload](LoadTestPayload),
-        True
-
-        (Queue.Count: 0) Dispatching task WeakRefDelegate: 437691112,
-        Void PublishInternal[LoadTestPayload](LoadTestPayload), True
-
-'
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1019
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerLoadMultithreadingTest][suite]
-    - id: 1021
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerLoadTest][suite]
-      name: MessengerLoadTest
-      fullName: SuperMaxim.Tests.Messaging.MessengerLoadTest
-      resultStatus: 1
-      duration: 2.5232255
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1032
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging][suite]
-    - id: 1022
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/MessengerLoadTest/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerLoadTest.TestLoad]
-      name: TestLoad
-      fullName: SuperMaxim.Tests.Messaging.MessengerLoadTest.TestLoad
-      resultStatus: 1
-      duration: 2.5211253
-      messages: 
-      output: 'Load Test: sent 100000 messages, received 100000 messages, took 0.252
-        seconds
-
-        Load Test: sent 100000 messages, received 100000 messages,
-        took 0.243 seconds
-
-        Load Test: sent 100000 messages, received 100000
-        messages, took 0.255 seconds
-
-        Load Test: sent 100000 messages, received
-        100000 messages, took 0.246 seconds
-
-        Load Test: sent 100000 messages,
-        received 100000 messages, took 0.244 seconds
-
-        Load Test: sent 100000
-        messages, received 100000 messages, took 0.247 seconds
-
-        Load Test:
-        sent 100000 messages, received 100000 messages, took 0.245 seconds
-
-        Load
-        Test: sent 100000 messages, received 100000 messages, took 0.253 seconds
-
-        Load
-        Test: sent 100000 messages, received 100000 messages, took 0.243 seconds
-
-        Load
-        Test: sent 100000 messages, received 100000 messages, took 0.279 seconds
-
-        Load
-        Test: average time 0.251
-
-'
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1021
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerLoadTest][suite]
-    - id: 1023
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest][suite]
-      name: MessengerTest
-      fullName: SuperMaxim.Tests.Messaging.MessengerTest
-      resultStatus: 1
-      duration: 5.0290685
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1032
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging][suite]
-    - id: 1025
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/MessengerTest/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest.PublishAsync]
-      name: PublishAsync
-      fullName: SuperMaxim.Tests.Messaging.MessengerTest.PublishAsync
-      resultStatus: 1
-      duration: 0.0121258
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1023
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest][suite]
-    - id: 1027
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/MessengerTest/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest.PublishFromNewThread]
-      name: PublishFromNewThread
-      fullName: SuperMaxim.Tests.Messaging.MessengerTest.PublishFromNewThread
-      resultStatus: 1
-      duration: 0.0016686
-      messages: 
-      output: '[MessengerTestPublishFromNewThread] Thread ID: 1
-
-'
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1023
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest][suite]
-    - id: 1026
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/MessengerTest/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest.SubscribeAndPublishToObjectWithPredicate]
-      name: SubscribeAndPublishToObjectWithPredicate
-      fullName: SuperMaxim.Tests.Messaging.MessengerTest.SubscribeAndPublishToObjectWithPredicate
-      resultStatus: 1
-      duration: 0.0025697
-      messages: 
-      output: '[PublishFromNewThread] Thread ID: 8174
-
-        [ObjectPredicate]
-        Object Payload Id: 0, Accepted: True
-
-        [OnSubscribeToObjectWithPredicate]
-        Object Payload Id: 0
-
-'
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1023
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest][suite]
-    - id: 1024
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/MessengerTest/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest.SubscribeToStringPayload]
-      name: SubscribeToStringPayload
-      fullName: SuperMaxim.Tests.Messaging.MessengerTest.SubscribeToStringPayload
-      resultStatus: 1
-      duration: 0.0003662
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1023
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest][suite]
-    - id: 1028
-      uniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/MessengerTest/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest.TestWeakReference]
-      name: TestWeakReference
-      fullName: SuperMaxim.Tests.Messaging.MessengerTest.TestWeakReference
-      resultStatus: 1
-      duration: 5.008844
-      messages: 
-      output: '(Queue.Count: 0) Dispatching task WeakRefDelegate: 1588081110, Void
-        PublishInternal[Int32](Int32), True
-
-        [OnPublishFromNewThreadCallback]
-        Int Payload: 8174 (Thread ID: 1)
-
-        [TestWeakReference] #1 Publish
-        Payload Id: 12345
-
-        [ObjectPredicate] Object Payload Id: 12345, Accepted:
-        False
-
-        [MessengerWekRefTest.Callback] Object Payload Id: 12345
-
-        [TestWeakReference]
-        #2 Publish Payload Id: 12345
-
-        [ObjectPredicate] Object Payload Id:
-        12345, Accepted: False
-
-        _callbackMethod is not alive.
-
-'
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1023
-      parentUniqueId: SuperMaxim.PubSub.Tests.dll/SuperMaxim/Tests/Messaging/[SuperMaxim.PubSub.Tests][SuperMaxim.Tests.Messaging.MessengerTest][suite]
-    m_ResultText: 
-    m_ResultStacktrace: 
-    m_TestListState:
-      scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 6f121d8abd9c0d8b186103975977a0a265f1d6eee52a420141d297026765c00587cab725fba9d629777fa541870afa48ed0e2f7233a3a17fffffff7f
-      m_RenameOverlay:
-        m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
-        m_EditFieldRect:
-          serializedVersion: 2
-          x: 0
-          y: 0
-          width: 0
-          height: 0
-        m_UserData: 0
-        m_IsWaitingForDelay: 0
-        m_IsRenaming: 0
-        m_OriginalEventType: 11
-        m_IsRenamingFilename: 0
-        m_ClientGUIView: {fileID: 0}
-      m_SearchString: 
-    m_TestRunnerUIFilter:
-      PassedHidden: 0
-      FailedHidden: 0
-      NotRunHidden: 0
-      m_SearchString: 
-      selectedCategoryMask: 0
-      availableCategories:
-      - Uncategorized
-    m_SelectedOption: 0
-  m_EditModeTestListGUI:
-    m_Window: {fileID: 6}
-    m_NewResultList:
-    - id: 1000
-      uniqueId: '[PubSub][suite]'
-      name: PubSub
-      fullName: PubSub
-      resultStatus: 1
-      duration: 0.2576059
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 
-      parentUniqueId: 
-    - id: 1007
-      uniqueId: '[SuperMaxim.PubSub.Editor.Tests][/Users/maxim/Git/Maxim/pubsub/pubsub_unity/Library/ScriptAssemblies/SuperMaxim.PubSub.Editor.Tests.dll][suite]'
-      name: SuperMaxim.PubSub.Editor.Tests.dll
-      fullName: /Users/maxim/Git/Maxim/pubsub/pubsub_unity/Library/ScriptAssemblies/SuperMaxim.PubSub.Editor.Tests.dll
-      resultStatus: 1
-      duration: 0.1377329
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1000
-      parentUniqueId: '[PubSub][suite]'
-    - id: 1001
-      uniqueId: SuperMaxim.PubSub.Editor.Tests.dll/[SuperMaxim.PubSub.Editor.Tests][MainThreadDispatcherEditorTest][suite]
-      name: MainThreadDispatcherEditorTest
-      fullName: MainThreadDispatcherEditorTest
-      resultStatus: 1
-      duration: 0.110515
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1007
-      parentUniqueId: '[SuperMaxim.PubSub.Editor.Tests][/Users/maxim/Git/Maxim/pubsub/pubsub_unity/Library/ScriptAssemblies/SuperMaxim.PubSub.Editor.Tests.dll][suite]'
-    - id: 1002
-      uniqueId: SuperMaxim.PubSub.Editor.Tests.dll/MainThreadDispatcherEditorTest/[SuperMaxim.PubSub.Editor.Tests][MainThreadDispatcherEditorTest.MainThreadDispatcherEditorTestSimplePasses]
-      name: MainThreadDispatcherEditorTestSimplePasses
-      fullName: MainThreadDispatcherEditorTest.MainThreadDispatcherEditorTestSimplePasses
-      resultStatus: 1
-      duration: 0.0102186
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: SuperMaxim.PubSub.Editor.Tests.dll/[SuperMaxim.PubSub.Editor.Tests][MainThreadDispatcherEditorTest][suite]
-    - id: 1003
-      uniqueId: SuperMaxim.PubSub.Editor.Tests.dll/MainThreadDispatcherEditorTest/[SuperMaxim.PubSub.Editor.Tests][MainThreadDispatcherEditorTest.MainThreadDispatcherEditorTestWithEnumeratorPasses]
-      name: MainThreadDispatcherEditorTestWithEnumeratorPasses
-      fullName: MainThreadDispatcherEditorTest.MainThreadDispatcherEditorTestWithEnumeratorPasses
-      resultStatus: 1
-      duration: 0.0522228
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: SuperMaxim.PubSub.Editor.Tests.dll/[SuperMaxim.PubSub.Editor.Tests][MainThreadDispatcherEditorTest][suite]
-    - id: 1004
-      uniqueId: SuperMaxim.PubSub.Editor.Tests.dll/[SuperMaxim.PubSub.Editor.Tests][MessengerMonitorEditorTest][suite]
-      name: MessengerMonitorEditorTest
-      fullName: MessengerMonitorEditorTest
-      resultStatus: 1
-      duration: 0.0198181
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1007
-      parentUniqueId: '[SuperMaxim.PubSub.Editor.Tests][/Users/maxim/Git/Maxim/pubsub/pubsub_unity/Library/ScriptAssemblies/SuperMaxim.PubSub.Editor.Tests.dll][suite]'
-    - id: 1005
-      uniqueId: SuperMaxim.PubSub.Editor.Tests.dll/MessengerMonitorEditorTest/[SuperMaxim.PubSub.Editor.Tests][MessengerMonitorEditorTest.MessengerMonitorEditorTestSimplePasses]
-      name: MessengerMonitorEditorTestSimplePasses
-      fullName: MessengerMonitorEditorTest.MessengerMonitorEditorTestSimplePasses
-      resultStatus: 1
-      duration: 0.0001801
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1004
-      parentUniqueId: SuperMaxim.PubSub.Editor.Tests.dll/[SuperMaxim.PubSub.Editor.Tests][MessengerMonitorEditorTest][suite]
-    - id: 1006
-      uniqueId: SuperMaxim.PubSub.Editor.Tests.dll/MessengerMonitorEditorTest/[SuperMaxim.PubSub.Editor.Tests][MessengerMonitorEditorTest.MessengerMonitorEditorTestWithEnumeratorPasses]
-      name: MessengerMonitorEditorTestWithEnumeratorPasses
-      fullName: MessengerMonitorEditorTest.MessengerMonitorEditorTestWithEnumeratorPasses
-      resultStatus: 1
-      duration: 0.0167755
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1004
-      parentUniqueId: SuperMaxim.PubSub.Editor.Tests.dll/[SuperMaxim.PubSub.Editor.Tests][MessengerMonitorEditorTest][suite]
-    m_ResultText: 
-    m_ResultStacktrace: 
-    m_TestListState:
-      scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: bd9c0d8b08d55c9c4d5c75add94e734cffffff7f
-      m_RenameOverlay:
-        m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
-        m_EditFieldRect:
-          serializedVersion: 2
-          x: 0
-          y: 0
-          width: 0
-          height: 0
-        m_UserData: 0
-        m_IsWaitingForDelay: 0
-        m_IsRenaming: 0
-        m_OriginalEventType: 11
-        m_IsRenamingFilename: 0
-        m_ClientGUIView: {fileID: 0}
-      m_SearchString: 
-    m_TestRunnerUIFilter:
-      PassedHidden: 0
-      FailedHidden: 0
-      NotRunHidden: 0
-      m_SearchString: 
-      selectedCategoryMask: 0
-      availableCategories:
-      - Uncategorized
---- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1539,17 +493,17 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 677.5
-    width: 1141.5
-    height: 339.5
+    y: 678
+    width: 1174
+    height: 339
   m_MinSize: {x: 101, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 8}
+  m_ActualView: {fileID: 7}
   m_Panes:
-  - {fileID: 8}
+  - {fileID: 7}
   m_Selected: 0
   m_LastSelected: 0
---- !u!114 &8
+--- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1570,15 +524,15 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 50
-    y: 760.5
-    width: 1140.5
-    height: 318.5
+    x: 0
+    y: 761
+    width: 1173
+    height: 318
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
---- !u!114 &9
+--- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1591,19 +545,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Children:
-  - {fileID: 10}
-  - {fileID: 12}
+  - {fileID: 9}
+  - {fileID: 11}
   m_Position:
     serializedVersion: 2
-    x: 1141.5
+    x: 1174
     y: 0
-    width: 295.5
+    width: 305
     height: 1017
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 587
---- !u!114 &10
+  controlID: 249
+--- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1620,16 +574,16 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 295.5
-    height: 447.5
+    width: 305
+    height: 447
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 11}
+  m_ActualView: {fileID: 10}
   m_Panes:
-  - {fileID: 11}
+  - {fileID: 10}
   m_Selected: 0
   m_LastSelected: 0
---- !u!114 &11
+--- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1650,10 +604,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1191.5
+    x: 1174
     y: 83
-    width: 293.5
-    height: 426.5
+    width: 303
+    height: 426
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -1663,7 +617,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 8ae5ffffc0e5ffff2ce7ffff00e9ffff30fbffff
+      m_ExpandedIDs: 
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1687,7 +641,7 @@ MonoBehaviour:
       m_IsLocked: 0
     m_CurrentSortingName: TransformSorting
   m_WindowGUID: c70bda25bbca848659d4808011fbe697
---- !u!114 &12
+--- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1703,17 +657,17 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 447.5
-    width: 295.5
-    height: 569.5
+    y: 447
+    width: 305
+    height: 570
   m_MinSize: {x: 232, y: 271}
   m_MaxSize: {x: 10002, y: 10021}
-  m_ActualView: {fileID: 13}
+  m_ActualView: {fileID: 12}
   m_Panes:
-  - {fileID: 13}
+  - {fileID: 12}
   m_Selected: 0
   m_LastSelected: 0
---- !u!114 &13
+--- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1734,10 +688,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1191.5
-    y: 530.5
-    width: 293.5
-    height: 548.5
+    x: 1174
+    y: 530
+    width: 303
+    height: 549
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -1768,7 +722,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 8e370100
     m_LastClickedID: 79758
-    m_ExpandedIDs: ffffffff000000000845000000ca9a3bffffff7f
+    m_ExpandedIDs: ffffffff00000000e0440000e2440000e4440000e6440000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1796,7 +750,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: ffffffff00000000084500000e450000bc450000c045000000ca9a3b
+    m_ExpandedIDs: ffffffff00000000e0440000e2440000e4440000e6440000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1852,7 +806,7 @@ MonoBehaviour:
     m_GridSize: 64
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 115
---- !u!114 &14
+--- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1867,18 +821,18 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1437
+    x: 1479
     y: 0
-    width: 305
+    width: 313
     height: 1017
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_ActualView: {fileID: 15}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 14}
   m_Panes:
-  - {fileID: 15}
+  - {fileID: 14}
   m_Selected: 0
   m_LastSelected: 0
---- !u!114 &15
+--- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1899,9 +853,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1487
+    x: 1479
     y: 83
-    width: 304
+    width: 312
     height: 996
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
