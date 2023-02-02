@@ -1,66 +1,70 @@
 ﻿using System;
+using System.Diagnostics;
 using NUnit.Framework;
-using SuperMaxim.Core.Logging;
-using SuperMaxim.Messaging;
+using SuperMaxim.Tests.Messaging.Fixtures;
 
 namespace SuperMaxim.Tests.Messaging
 {
     [TestFixture]
-    public class MessengerLoadTest
+    public class MessengerLoadTest : BaseMessengerTest
     {
-        private const int SendMessageChunksCount = 10;
-
-        private const int SendMessagesCount = 100000;
-
-        private int _receivedCount;
-
-        private readonly LoadTestPayload _payload = new LoadTestPayload();
-
-        private class LoadTestPayload
-        {
-            
-        }
+        private readonly LoadTestPayload _payload = new();
 
         [Test]
-        public void Test_Load()
+        [TestCase(10, 100000
+            , Category = "Load Test"
+            , Description = "Publishing thousands of payloads in loop")]
+        public void TestLoad(int sendMessageChunksCount, int sendMessagesCount)
         {
-            Messenger.Default.Subscribe<LoadTestPayload>(OnTestCallback);
-            
+            Assert.That(sendMessageChunksCount, Is.GreaterThanOrEqualTo(1));
+            Assert.That(sendMessagesCount, Is.GreaterThanOrEqualTo(1));
+            Assert.That(Messenger, Is.Not.Null);
+
+            Messenger.Subscribe<LoadTestPayload>(OnTestCallback);
+
             var time = 0.0;
-            for (var i = 0; i < SendMessageChunksCount; i++)
+            for (var chunk = 0; chunk < sendMessageChunksCount; chunk++)
             {
-                time += LoadLoop();
+                time += LoadLoop(sendMessagesCount);
             }
-            
-            Loggers.Console.LogInfo("Load Test: average time {0}", Math.Round(time / SendMessageChunksCount, 3));
+
+            Debug.WriteLine("{0}: average time {1}"
+                , nameof(MessengerLoadTest)
+                , Math.Round(time / sendMessageChunksCount, 3));
+            Assert.That(time, Is.GreaterThan(0.0));
+            Assert.That(time, Is.LessThan(5.0));
         }
 
-        private double LoadLoop()
+        private double LoadLoop(int sendMessagesCount)
         {
-            Loggers.Console.Config.IsEnabled = false;
-            
-            _receivedCount = 0;
+            Logger.Config.IsEnabled = false;
+
+            _payload.ReceivedCount = 0;
             var time = DateTime.Now.TimeOfDay;
 
-            for (var i = 0; i < SendMessagesCount; i++)
+            for (var msgNum = 0; msgNum < sendMessagesCount; msgNum++)
             {
-                Messenger.Default.Publish(_payload);
+                Messenger.Publish(_payload);
             }
-            
-            time = DateTime.Now.TimeOfDay - time;
-            
-            Loggers.Console.Config.IsEnabled = true;
-            Loggers.Console.LogInfo("Load Test: sent {0} messages, received {1} messages, took {2} seconds",
-                                SendMessagesCount, _receivedCount, Math.Round(time.TotalSeconds, 3));
 
-            Assert.AreEqual(SendMessagesCount, _receivedCount);
+            time = DateTime.Now.TimeOfDay - time;
+
+            Logger.Config.IsEnabled = true;
+
+            Debug.WriteLine("{0}: sent {1} messages, received {2} messages, took {3} seconds"
+                , nameof(MessengerLoadTest)
+                , sendMessagesCount
+                , _payload.ReceivedCount
+                , Math.Round(time.TotalSeconds, 3));
+
+            Assert.That(_payload.ReceivedCount, Is.EqualTo(sendMessagesCount));
 
             return time.TotalSeconds;
         }
 
-        private void OnTestCallback(LoadTestPayload payload)
+        private static void OnTestCallback(LoadTestPayload payload)
         {
-            _receivedCount++;
+            payload.ReceivedCount++;
         }
     }
 }

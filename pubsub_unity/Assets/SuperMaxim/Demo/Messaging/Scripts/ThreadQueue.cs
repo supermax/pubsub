@@ -12,8 +12,8 @@ namespace SuperMaxim.Demo
 {
     public class ThreadQueue<T> : IDisposable
     {
-        private readonly ConcurrentQueue<Tuple<WeakRefDelegate, T>> _queue =
-            new ConcurrentQueue<Tuple<WeakRefDelegate, T>>();
+        private readonly ConcurrentQueue<Tuple<WeakReferenceDelegate, T>> _queue =
+            new ConcurrentQueue<Tuple<WeakReferenceDelegate, T>>();
 
         private Timer _timer;
 
@@ -62,7 +62,7 @@ namespace SuperMaxim.Demo
 
         public void Enqueue(Action<T> method, T parameter)
         {
-            _queue.Enqueue(new Tuple<WeakRefDelegate, T>(new WeakRefDelegate(method), parameter));
+            _queue.Enqueue(new Tuple<WeakReferenceDelegate, T>(new WeakReferenceDelegate(method), parameter));
         }
     }
 }

@@ -5,7 +5,7 @@ namespace SuperMaxim.Core.Threading
 {
     public class DispatcherTask : IDisposable
     {
-        public WeakRefDelegate Action 
+        public WeakReferenceDelegate Action 
         {
             get; private set;
         }
@@ -18,7 +18,7 @@ namespace SuperMaxim.Core.Threading
 
         public DispatcherTask(Delegate action, object[] payload)
         {
-            Action = new WeakRefDelegate(action);
+            Action = new WeakReferenceDelegate(action);
             Payload = payload;
         }
 

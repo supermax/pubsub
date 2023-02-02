@@ -1,187 +1,394 @@
-﻿using System.Collections;
-using System.Threading;
+﻿using System;
+using System.Diagnostics;
 using NUnit.Framework;
-using SuperMaxim.Core.Logging;
-using SuperMaxim.Core.Threading;
-using SuperMaxim.Messaging;
-using UnityEngine;
-using UnityEngine.TestTools;
+using SuperMaxim.Messaging.API;
+using SuperMaxim.Tests.Messaging.Fixtures;
 
 namespace SuperMaxim.Tests.Messaging
 {
     [TestFixture]
-    public class MessengerTest
+    public class MessengerTest : BaseMessengerTest
     {
-        private class FilteredPayload
-        {
-            public bool IsFilterOn { get; set; }
-        }
-        
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetup()
         {
-            var instance1 = Messenger.Default.Subscribe<FilteredPayload>(FilterPayloadCondition);
-            Assert.NotNull(instance1);
-            
-            var instance2 = Messenger.Default.Subscribe<FilteredPayload>(OnFilteredPayloadCallback);
-            Assert.NotNull(instance2);
-            Assert.AreSame(instance1, instance2);
+            var instance1 = Messenger.Subscribe<FilteredPayload>(FilterPayloadCondition);
+            Assert.That(instance1, Is.Not.Null);
+            Assert.That(Messenger, Is.SameAs(instance1));
+
+            var instance2 = Messenger.Subscribe<FilteredPayload>(OnFilteredPayloadCallback);
+            Assert.That(instance2, Is.Not.Null);
+            Assert.That(instance2, Is.SameAs(instance1));
         }
 
         private static bool FilterPayloadCondition(FilteredPayload payload)
         {
-            Loggers.Console.LogInfo($"{nameof(payload.IsFilterOn)}: {{0}}", payload.IsFilterOn);
+            Assert.That(payload, Is.Not.Null);
+
+            Debug.WriteLine($"{nameof(payload.IsFilterOn)}: {payload.IsFilterOn}");
             return !payload.IsFilterOn;
         }
 
         [Test]
-        public void Test_PublishFilteredPayload()
+        public void TestPublishFilteredPayload()
         {
-            var instance1 = Messenger.Default.Publish(new FilteredPayload {IsFilterOn = true});
-            Assert.NotNull(instance1);
-            
-            var instance2 = Messenger.Default.Publish(new FilteredPayload {IsFilterOn = false});
-            Assert.NotNull(instance2);
-            Assert.AreSame(instance1, instance2);
+            Assert.That(Messenger, Is.Not.Null);
+
+            var payload = new FilteredPayload {IsFilterOn = true};
+            var instance1 = Messenger.Publish(payload);
+            Assert.That(instance1, Is.Not.Null);
+            Assert.That(Messenger, Is.SameAs(instance1));
+            Assert.That(payload.CallbackCount, Is.Zero);
+
+            payload.IsFilterOn = false;
+            var instance2 = Messenger.Publish(payload);
+            Assert.That(instance2, Is.Not.Null);
+            Assert.That(instance2, Is.SameAs(instance1));
+            Assert.That(payload.CallbackCount, Is.EqualTo(1));
         }
 
+        // ReSharper disable once MemberCanBeMadeStatic.Local (SHOULD NOT BE STATIC!)
         private void OnFilteredPayloadCallback(FilteredPayload payload)
         {
-            Loggers.Console.LogInfo($"{nameof(payload)}.{nameof(payload.IsFilterOn)}:{{0}}", payload?.IsFilterOn);
-            
-            Assert.NotNull(payload);
-            Assert.True(!payload.IsFilterOn);
+            payload.CallbackCount++;
+            Assert.That(payload, Is.Not.Null);
+            Debug.WriteLine($"{nameof(payload)}.{nameof(payload.IsFilterOn)}:{payload.IsFilterOn}");
+
+            Assert.That(payload, Is.Not.Null);
+            Assert.That(!payload.IsFilterOn, Is.True);
         }
 
         [Test]
-        public void Test_SubscribeToStringPayload()
+        public void TestSubscribeAndPublish()
         {
-            var instance = Messenger.Default.Subscribe<string>(OnStringCallback);
-            Assert.NotNull(instance);
-        }
+            Assert.That(Messenger, Is.Not.Null);
 
-        [UnityTest]
-        public IEnumerator Test_PublishAsync()
-        {
-            for (var i = 1; i <= 4; i++)
-            {
-                var instance = Messenger.Default.Publish($"Hello World! [{i}]");
-                Assert.NotNull(instance);
+            var instance = Messenger.Subscribe<MessengerTestPayload<IMessenger>>(OnCallback);
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(Messenger, Is.SameAs(instance));
 
-                yield return null;    
-            }
+            var payload = new MessengerTestPayload<IMessenger>
+                {
+                    Id = UnityEngine.Random.Range(-1, 1)
+                    , Data = Messenger
+                };
+            var instance1 = Messenger.Publish(payload);
+            Assert.That(instance1, Is.Not.Null);
+            Assert.That(instance1, Is.SameAs(instance));
+            Assert.That(payload.CallbackCount, Is.EqualTo(1));
         }
 
         [Test]
-        public void Test_SubscribeAndPublishToObjectWithPredicate()
+        public void TestSubscribeAndPublishStatic()
         {
-            var instance1 = Messenger.Default.Subscribe<MessengerTestPayload>(OnSubscribeToObjectWithPredicate, ObjectPredicate);
-            Assert.NotNull(instance1);
+            Assert.That(Messenger, Is.Not.Null);
 
-            var instance2 = Messenger.Default.Publish(new MessengerTestPayload{ Id = Random.Range(-1, 1)});
-            Assert.NotNull(instance2);
-            Assert.AreSame(instance1, instance2);
+            var instance = Messenger.Subscribe<MessengerTestPayload<IMessenger>>(OnStaticCallback);
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(Messenger, Is.SameAs(instance));
+
+            var payload = new MessengerTestPayload<IMessenger>
+                {
+                    Id = UnityEngine.Random.Range(-1, 1)
+                    , Data = Messenger
+                };
+            var instance1 = Messenger.Publish(payload);
+            Assert.That(instance1, Is.Not.Null);
+            Assert.That(instance1, Is.SameAs(instance));
+            Assert.That(payload.CallbackCount, Is.EqualTo(1));
         }
 
-        private static bool ObjectPredicate(MessengerTestPayload payload)
+        [Test]
+        public void TestSubscribeAndPublishToObjectWithPredicate()
         {
+            Assert.That(Messenger, Is.Not.Null);
+
+            var instance1 = Messenger.Subscribe<MessengerTestPayload<int>>(OnSubscribeToObjectWithPredicate, ObjectPredicate);
+            Assert.That(instance1, Is.Not.Null);
+            Assert.That(Messenger, Is.SameAs(instance1));
+
+            var instance2 = Messenger.Publish(
+                new MessengerTestPayload<int>
+                    {
+                        Id = UnityEngine.Random.Range(-1, 1)
+                    });
+            Assert.That(instance2, Is.Not.Null);
+            Assert.That(instance2, Is.SameAs(instance1));
+        }
+
+        private static bool ObjectPredicate(MessengerTestPayload<int> payload)
+        {
+            Assert.That(payload, Is.Not.Null);
+
             var accepted = payload.Id % 2 == 0;
-            Loggers.Console.LogInfo("[ObjectPredicate] Object Payload Id: {0}, Accepted: {1}", payload.Id, accepted);
+            Debug.WriteLine("[{0}] Object Payload Id: {1}, Accepted: {2}", nameof(ObjectPredicate), payload.Id, accepted);
             return accepted;
         }
 
-        private static void OnSubscribeToObjectWithPredicate(MessengerTestPayload payload)
+        private static void OnSubscribeToObjectWithPredicate(MessengerTestPayload<int> payload)
         {
-            Loggers.Console.LogInfo("[OnSubscribeToObjectWithPredicate] Object Payload Id: {0}", payload.Id);
+            payload.CallbackCount++;
+            Assert.That(payload, Is.Not.Null);
+            Debug.WriteLine("[{0}] Object Payload Id: {1}", nameof(OnSubscribeToObjectWithPredicate), payload.Id);
         }
 
-        private class MessengerTestPayload
+        private static void OnStaticCallback(MessengerTestPayload<IMessenger> payload)
         {
-            public int Id { get; set; }
+            payload.CallbackCount++;
+            Assert.That(payload, Is.Not.Null);
+            Debug.WriteLine("[{0}] Payload: {1}", nameof(OnStaticCallback), payload);
+
+            payload.Data?.Unsubscribe<MessengerTestPayload<IMessenger>>(OnStaticCallback);
         }
 
-        private static void OnStringCallbackStatic(string str)
+        // ReSharper disable once MemberCanBeMadeStatic.Local (MUST NOT BE STATIC!)
+        private void OnCallback(MessengerTestPayload<IMessenger> payload)
         {
-            Loggers.Console.LogInfo("[OnStringCallbackStatic] String Payload: {0}", str);
+            payload.CallbackCount++;
+            Assert.That(payload, Is.Not.Null);
+            Debug.WriteLine("[{0}] String Payload: {1}", nameof(OnCallback), payload);
 
-            Messenger.Default.Unsubscribe<string>(OnStringCallbackStatic);
-        }
-
-        private void OnStringCallback(string str)
-        {
-            Loggers.Console.LogInfo("[OnStringCallback] String Payload: {0}", str);
-
-            Messenger.Default.Unsubscribe<string>(OnStringCallback);
-            Messenger.Default.Subscribe<string>(OnStringCallbackStatic);
+            payload.Data?.Unsubscribe<MessengerTestPayload<IMessenger>>(OnCallback);
+            payload.Data?.Subscribe<MessengerTestPayload<IMessenger>>(OnStaticCallback);
         }
 
         [Test]
-        public void Test_PublishFromNewThread()
+        public void TestEmptySubscribersCase()
         {
-            var instance = Messenger.Default.Subscribe<int>(OnPublishFromNewThreadCallback);
-            Assert.NotNull(instance);
+            var payload = new MessengerTestPayload<bool>();
+            var messenger = Messenger.Publish(payload);
+            Assert.That(messenger, Is.Not.Null);
+            Assert.That(payload.CallbackCount, Is.EqualTo(0));
 
-            Loggers.Console.LogInfo($"{nameof(UnityMainThreadDispatcher.Default.ThreadId)}: {{0}}, " +
-                                    $"{nameof(Thread.CurrentThread.ManagedThreadId)}: {{1}}"
-                , UnityMainThreadDispatcher.Default.ThreadId
-                , Thread.CurrentThread.ManagedThreadId);
-            Assert.AreEqual(UnityMainThreadDispatcher.Default.ThreadId, Thread.CurrentThread.ManagedThreadId);
+            var messenger1 = Messenger.Subscribe<MessengerTestPayload<bool>>(OnMessengerCallback);
+            Assert.That(messenger1, Is.Not.Null);
 
-            var th = new Thread(PublishFromNewThreadMethod);
-            th.Start();
+            var messenger2 = Messenger.Publish(payload);
+            Assert.That(messenger2, Is.Not.Null);
+            Assert.That(messenger1, Is.SameAs(messenger2));
+            Assert.That(payload.CallbackCount, Is.EqualTo(1));
+
+            var messenger3 = Messenger.Unsubscribe<MessengerTestPayload<bool>>(OnMessengerCallback);
+            Assert.That(messenger3, Is.Not.Null);
+            Assert.That(messenger2, Is.SameAs(messenger3));
+
+            var messenger4 = Messenger.Publish(payload);
+            Assert.That(messenger4, Is.Not.Null);
+            Assert.That(messenger3, Is.SameAs(messenger4));
+            Assert.That(payload.CallbackCount, Is.EqualTo(1));
         }
 
-        private void PublishFromNewThreadMethod()
+        [Test]
+        public void TestSameSubscriber()
         {
-            Loggers.Console.LogInfo($"{nameof(UnityMainThreadDispatcher.Default.ThreadId)}: {{0}}, " +
-                                    $"{nameof(Thread.CurrentThread.ManagedThreadId)}: {{1}}"
-                , UnityMainThreadDispatcher.Default.ThreadId
-                , Thread.CurrentThread.ManagedThreadId);
-            Assert.AreNotEqual(UnityMainThreadDispatcher.Default.ThreadId, Thread.CurrentThread.ManagedThreadId);
-            
-            Messenger.Default.Publish(Thread.CurrentThread.ManagedThreadId);
+            var messenger1 = Messenger.Subscribe<MessengerTestPayload<bool>>(OnMessengerCallback);
+            Assert.That(messenger1, Is.Not.Null);
+
+            var messenger2 = Messenger.Subscribe<MessengerTestPayload<bool>>(OnMessengerCallback);
+            Assert.That(messenger2, Is.Not.Null);
+            Assert.That(messenger1, Is.SameAs(messenger2));
+
+            var payload = new MessengerTestPayload<bool>();
+            var messenger3 = Messenger.Publish(payload);
+            Assert.That(messenger3, Is.Not.Null);
+            Assert.That(messenger2, Is.SameAs(messenger3));
+            Assert.That(payload.CallbackCount, Is.EqualTo(1));
         }
 
-        private void OnPublishFromNewThreadCallback(int number)
+        [Test]
+        public void TestUnsubscribeAction()
         {
-            Loggers.Console.LogInfo("[OnPublishFromNewThreadCallback] Int Payload: {0} (Thread ID: {1})", 
-                                number, Thread.CurrentThread.ManagedThreadId);
+            var messenger1 = Messenger.Unsubscribe<MessengerTestPayload<bool>>(OnMessengerCallback);
+            Assert.That(messenger1, Is.Not.Null);
 
-            Assert.AreNotEqual(number, Thread.CurrentThread.ManagedThreadId);
+            var messenger2 = messenger1.Unsubscribe<FilteredPayload>(OnFilteredPayloadCallback);
+            Assert.That(messenger2, Is.Not.Null);
         }
 
-        private MessengerWekRefTest _weakRefTest;
-
-        [UnityTest]
-        public IEnumerator Test_TestWeakReference()
+        private static void OnMessengerCallback(MessengerTestPayload<bool> payload)
         {
-            _weakRefTest = new MessengerWekRefTest();
-            var instance1 = Messenger.Default.Subscribe<MessengerTestPayload>(_weakRefTest.Callback);
-            Assert.NotNull(instance1);
-
-            var payload = new MessengerTestPayload{ Id = 12345 };
-            Loggers.Console.LogInfo("[TestWeakReference] #1 Publish Payload Id: {0}", payload.Id);
-
-            var instance2 = Messenger.Default.Publish(new MessengerTestPayload{ Id = 12345 });
-            Assert.NotNull(instance2);
-            Assert.AreSame(instance1, instance2);
-
-            _weakRefTest = null;
-
-            yield return new WaitForSeconds(5);
-
-            Loggers.Console.LogInfo("[TestWeakReference] #2 Publish Payload Id: {0}", payload.Id);
-            var instance3 = Messenger.Default.Publish(payload);
-            Assert.NotNull(instance3);
-            Assert.AreSame(instance3, instance2);
+            payload.CallbackCount++;
+            Assert.That(payload, Is.Not.Null);
         }
 
-        private class MessengerWekRefTest
+        private static Action<MessengerTestPayload<int>> GetCallback()
         {
-            public void Callback(MessengerTestPayload payload)
+            return null!;
+        }
+
+        private static Predicate<MessengerTestPayload<int>> GetPredicate()
+        {
+            return null!;
+        }
+
+        private static MessengerTestPayload<int> GetPayload()
+        {
+            return null!;
+        }
+
+        [Test]
+        public void TestPublishSubScribeUnsubscribeWithNullPayload()
+        {
+            Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe(GetPredicate()));
+            Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe(GetPredicate()));
+
+            Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe(GetCallback()));
+            Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe(GetCallback()));
+
+            Assert.Throws<ArgumentNullException>(() => Messenger.Publish(GetPayload()));
+        }
+
+        [Test]
+        public void TestPubSubWithStateObject()
+        {
+            var state = new Reference<string>{ Ref = nameof(Reference<string>) };
+            var instance1 = Messenger
+                .Subscribe<MessengerTestPayload<int>
+                    , Reference<string>>(OnCallbackWithStateObject, OnPredicateWithStateObject, state);
+            Assert.That(instance1, Is.Not.Null);
+            Assert.That(Messenger, Is.SameAs(instance1));
+            Assert.That(state.Ref, Is.Not.Null);
+            Assert.That(state.Ref, Is.SameAs(nameof(Reference<string>)));
+
+            var instance2 = Messenger
+                .Subscribe<MessengerTestPayload<int>
+                    , Reference<string>>(OnTypePredicateWithStateObject, state);
+            Assert.That(instance2, Is.Not.Null);
+            Assert.That(instance2, Is.SameAs(instance1));
+
+            var payload = new MessengerTestPayload<int>();
+            Messenger.Publish(payload);
+            Assert.That(payload.CallbackCount, Is.GreaterThan(0));
+            Assert.That(state.Ref, Is.Not.Null);
+            Assert.That(state.Ref, Is.SameAs(nameof(OnCallbackWithStateObject)));
+        }
+
+        private static bool OnTypePredicateWithStateObject(MessengerTestPayload<int> payload, Reference<string> stateObj)
+        {
+            Assert.That(payload, Is.Not.Null);
+            Assert.That(stateObj, Is.Not.Null);
+            stateObj.Ref = nameof(OnTypePredicateWithStateObject);
+            return true;
+        }
+
+        private static bool OnPredicateWithStateObject(MessengerTestPayload<int> payload, Reference<string> stateObj)
+        {
+            Assert.That(payload, Is.Not.Null);
+            Assert.That(stateObj, Is.Not.Null);
+            Assert.That(stateObj.Ref, Is.SameAs(nameof(OnTypePredicateWithStateObject)));
+
+            var accepted = stateObj.Ref == nameof(OnTypePredicateWithStateObject);
+            return accepted;
+        }
+
+        private void OnCallbackWithStateObject(MessengerTestPayload<int> payload, Reference<string> stateObj)
+        {
+            payload.CallbackCount++;
+            stateObj.Ref = nameof(OnCallbackWithStateObject);
+        }
+
+        [Test]
+        public void TestSubscribeValidations()
+        {
+            Assert.That(Messenger, Is.Not.Null);
+
+            Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe<MessengerTestPayload<int>>(null!));
+            Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe<MessengerTestPayload<int>>(null!, null));
+
+            Action<MessengerTestPayload<int>> callback1 = null;
+            Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe(callback1));
+
+            Action<MessengerTestPayload<int>, object> callback2 = null;
+            Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe(callback2));
+
+            Func<MessengerTestPayload<int>, object, bool> predicate = null;
+            Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe(predicate));
+        }
+
+        [Test]
+        public void TestUnsubscribeValidations()
+        {
+            Assert.That(Messenger, Is.Not.Null);
+
+            Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe<MessengerTestPayload<int>>(null!));
+
+            Action<MessengerTestPayload<int>> callback1 = null;
+            Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe(callback1));
+
+            Action<MessengerTestPayload<int>, object> callback2 = null;
+            Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe(callback2));
+
+            Func<MessengerTestPayload<int>, object, bool> predicate = null;
+            Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe(predicate));
+        }
+
+        [Test]
+        public void TestPublishValidations()
+        {
+            Assert.That(Messenger, Is.Not.Null);
+
+            Assert.Throws<ArgumentNullException>(() => Messenger.Publish<MessengerTestPayload<int>>(null!));
+            Assert.Throws<ArgumentNullException>(() => Messenger.Publish(null!, null!));
+            Assert.Throws<ArgumentNullException>(() => Messenger.Publish(typeof(MessengerTestPayload<int>), null!));
+            Assert.Throws<ArgumentNullException>(() => Messenger.Publish(null!, new MessengerTestPayload<int>()));
+            Assert.Throws<InvalidCastException>(() => Messenger.Publish(typeof(MessengerTestPayload<double>), new MessengerTestPayload<int>()));
+        }
+
+        [Test]
+        public void TestMethodsDuringPublishing()
+        {
+            Assert.That(Messenger, Is.Not.Null);
+
+            void Callback2(MessengerTestPayload<double> payload)
             {
-                Loggers.Console.LogInfo("[MessengerWekRefTest.Callback] Object Payload Id: {0}", payload.Id);
+                payload.CallbackCount++;
+
+                Messenger.Unsubscribe((Action<MessengerTestPayload<double>>)Callback2);
             }
+
+            void Callback1(MessengerTestPayload<int> payload)
+            {
+                payload.CallbackCount++;
+
+                Messenger.Subscribe((Action<MessengerTestPayload<double>>)Callback2);
+                Messenger.Publish(new MessengerTestPayload<double>());
+                Messenger.Unsubscribe((Action<MessengerTestPayload<int>>)Callback1);
+            }
+
+            Messenger.Subscribe((Action<MessengerTestPayload<int>>)Callback1);
+            Messenger.Publish(new MessengerTestPayload<int>());
+        }
+
+        [Test]
+        public void TestMethodsWithStateDuringPublishing()
+        {
+            Assert.That(Messenger, Is.Not.Null);
+
+            bool Predicate(MessengerTestPayload<int> payload, object state)
+            {
+                payload.CallbackCount++;
+
+                return true;
+            }
+
+            void Callback2(MessengerTestPayload<double> payload, object state)
+            {
+                payload.CallbackCount++;
+
+                Messenger.Unsubscribe((Action<MessengerTestPayload<double>, object>)Callback2);
+            }
+
+            void Callback1(MessengerTestPayload<int> payload, object state)
+            {
+                payload.CallbackCount++;
+
+                Messenger.Subscribe((Action<MessengerTestPayload<double>, object>)Callback2);
+                Messenger.Publish(new MessengerTestPayload<double>());
+                Messenger.Unsubscribe((Action<MessengerTestPayload<int>, object>)Callback1);
+            }
+
+            Messenger.Subscribe(Callback1, (Func<MessengerTestPayload<int>, object, bool>)Predicate, this);
+            Messenger.Publish(new MessengerTestPayload<int>());
         }
     }
 }

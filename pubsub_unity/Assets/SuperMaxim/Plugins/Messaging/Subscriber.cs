@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using SuperMaxim.Core.Logging;
+using SuperMaxim.Core.WeakRef;
 
 namespace SuperMaxim.Messaging
 {
@@ -11,34 +11,32 @@ namespace SuperMaxim.Messaging
     /// A holder of weak delegate reference.
     /// Used in <see cref="Messenger"/> class.
     /// </remarks>
-    internal class Subscriber : IDisposable
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global -> required for IDispose pattern
+    public class Subscriber : IDisposable
     {
-        // reference to the owner of callback method
-        private WeakReference _callbackTarget;
-        // callback method info
-        private MethodInfo _callbackMethod;
+        // reference to callback
+        private WeakReferenceDelegate _callback;
 
-        // reference to the owner of predicate method
-        private WeakReference _predicateTarget;
-        // predicate method info
-        private MethodInfo _predicateMethod;
+        // reference to predicate
+        private WeakReferenceDelegate _predicate;
+
+        private object _stateObj;
+
+        // logger instance from Messenger
+        private ILogger _logger;
 
         /// <summary>
-        /// Indicates if callback owner is alive 
+        /// Indicates if callback owner is alive
         /// </summary>
         public bool IsAlive
         {
             get
             {
-                if(_callbackMethod == null)
+                if(_callback == null)
                 {
                     return false;
                 }
-                if(_callbackMethod.IsStatic)
-                {
-                    return true;
-                }
-                var isAlive = _callbackTarget is {IsAlive: true, Target: { }};
+                var isAlive = _callback.IsAlive;
                 return isAlive;
             }
         }
@@ -49,7 +47,6 @@ namespace SuperMaxim.Messaging
         public Type PayloadType
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -58,15 +55,11 @@ namespace SuperMaxim.Messaging
         public int Id
         {
             get;
-            private set;
         }
-
-        private ILogger _logger;
 
         public bool IsPredicate
         {
             get;
-            private set;
         }
 
         public override int GetHashCode()
@@ -80,24 +73,13 @@ namespace SuperMaxim.Messaging
         /// <param name="payloadType">The type of the payload</param>
         /// <param name="predicate">The predicate delegate</param>
         /// <param name="logger">The logger to log info or errors</param>
+        /// <param name="stateObj">The state object</param>
         /// <exception cref="ArgumentNullException">
         /// The exception is thrown in case 'payloadType' or 'predicate' null
         /// </exception>
-        internal Subscriber(Type payloadType, Delegate predicate, ILogger logger)
-        {
-            // validate params
-            if(payloadType == null)
-            {
-                throw new ArgumentNullException(nameof(payloadType));
-            }
-            if(predicate == null)
-            {
-                throw new ArgumentNullException(nameof(predicate));
-            }
-            
-            IsPredicate = true;
-            Init(payloadType, predicate, null, logger);
-        }
+        public Subscriber(Type payloadType, Delegate predicate, ILogger logger, object stateObj)
+            : this(payloadType, predicate, null, logger, true, stateObj)
+        { }
 
         /// <summary>
         /// Subscriber's Constructor
@@ -105,54 +87,48 @@ namespace SuperMaxim.Messaging
         /// <param name="payloadType">The type of the payload</param>
         /// <param name="callback">The callback delegate</param>
         /// <param name="predicate">The predicate delegate</param>
-        /// /// <param name="logger">The logger to log info or errors</param>
+        /// <param name="logger">The logger to log info or errors</param>
+        /// <param name="stateObj">The state object</param>
         /// <exception cref="ArgumentNullException">
         /// The exception is thrown in case 'payloadType' or 'callback' null
         /// </exception>
-        internal Subscriber(Type payloadType, Delegate callback, Delegate predicate, ILogger logger)
+        public Subscriber(Type payloadType, Delegate callback, Delegate predicate, ILogger logger, object stateObj)
+            : this(payloadType, callback, predicate, logger, false, stateObj)
+        { }
+
+        /// <summary>
+        /// Subscriber's Constructor
+        /// </summary>
+        /// <param name="payloadType">The type of the payload</param>
+        /// <param name="callback">The callback delegate</param>
+        /// <param name="predicate">The predicate delegate</param>
+        /// <param name="logger">The logger to log info or errors</param>
+        /// <param name="isPredicate">Indicator is passed callback is predicate</param>
+        /// <param name="stateObj">The state object</param>
+        /// <exception cref="ArgumentNullException">
+        /// The exception is thrown in case 'payloadType' or 'callback' null
+        /// </exception>
+        private Subscriber(Type payloadType, Delegate callback, Delegate predicate, ILogger logger, bool isPredicate, object stateObj)
         {
-            // validate params
-            if(payloadType == null)
-            {
-                throw new ArgumentNullException(nameof(payloadType));
-            }
             if(callback == null)
             {
                 throw new ArgumentNullException(nameof(callback));
             }
-            
-            Init(payloadType, callback, predicate, logger);
-        }
 
-        private void Init(Type payloadType, Delegate callback, Delegate predicate, ILogger logger)
-        {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            
             // assign values to vars
-            PayloadType = payloadType;
+            PayloadType = payloadType ?? throw new ArgumentNullException(nameof(payloadType));
             Id = callback.GetHashCode();
-            _callbackMethod = callback.Method;
-
-            // check if callback method is not a static method
-            if (!_callbackMethod.IsStatic &&
-                callback.Target != null)
-            {
-                // init weak reference to callback owner
-                _callbackTarget = new WeakReference(callback.Target);
-            }
+            _callback = new WeakReferenceDelegate(callback);
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            IsPredicate = isPredicate;
+            _stateObj = stateObj;
 
             // --- init predicate ---
             if (predicate == null)
             {
                 return;
             }
-            _predicateMethod = predicate.Method;
-
-            if (!_predicateMethod.IsStatic &&
-                !Equals(predicate.Target, callback.Target))
-            {
-                _predicateTarget = new WeakReference(predicate.Target);
-            }
+            _predicate = new WeakReferenceDelegate(predicate);
         }
 
         /// <summary>
@@ -162,16 +138,24 @@ namespace SuperMaxim.Messaging
         /// <typeparam name="T"></typeparam>
         public object Invoke<T>(T payload)
         {
-            // validate callback method info
-            if(_callbackMethod == null)
+            if (payload == null)
             {
-                _logger.LogError($"{nameof(_callbackMethod)} is null.");
+                throw new ArgumentNullException(nameof(payload));
+            }
+            if (_isDisposed)
+            {
+                _logger?.LogError($"This instance of {nameof(Subscriber)} is disposed.");
                 return null;
             }
-            if(!_callbackMethod.IsStatic && 
-                _callbackTarget is not {IsAlive: true})
+            // validate callback method info
+            if(_callback == null)
             {
-                _logger.LogWarning($"{nameof(_callbackMethod)} is not alive.");
+                _logger?.LogError($"{nameof(_callback)} is null.");
+                return null;
+            }
+            if(!_callback.IsAlive)
+            {
+                _logger?.LogWarning($"{nameof(_callback)} is not alive.");
                 return null;
             }
 
@@ -182,63 +166,78 @@ namespace SuperMaxim.Messaging
             }
 
             // invoke callback method
-            object callbackTarget = null;
-            if(!_callbackMethod.IsStatic && 
-               _callbackTarget is {IsAlive: true})
-            {
-                callbackTarget = _callbackTarget.Target;
-            }
-            var res = _callbackMethod.Invoke(callbackTarget, new object[] {payload});
+            var args = _stateObj != null ?
+                new [] {payload, _stateObj}: new object[] {payload};
+            var res = _callback.Invoke(args);
             return res;
         }
 
         private bool InvokePredicate<T>(T payload)
         {
-            if (_predicateMethod == null)
+            if (payload == null)
+            {
+                throw new ArgumentNullException(nameof(payload));
+            }
+            if (_predicate == null)
             {
                 return true;
             }
-            
-            // get reference to the predicate function owner
-            object predicateTarget = null;
-            if (!_predicateMethod.IsStatic)
-            {
-                if (_predicateTarget is {IsAlive: true})
-                {
-                    predicateTarget = _predicateTarget.Target;
-                }
-                else if (_callbackTarget is {IsAlive: true})
-                {
-                    predicateTarget = _callbackTarget.Target;
-                }
-            }
 
+            // get reference to the predicate function owner
             // check if predicate returned 'true'
-            var isAccepted = (bool)_predicateMethod.Invoke(predicateTarget, new object[] {payload});
+            var args = _stateObj != null ?
+                new [] {payload, _stateObj}: new object[] {payload};
+            var isAccepted = (bool)_predicate.Invoke(args);
             return isAccepted;
         }
+
+       #region IDisposable Support
+       private bool _isDisposed;
 
         /// <summary>
         /// Dispose this instance
         /// </summary>
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            _logger = null;
-            _callbackMethod = null;
-            
-            if(_callbackTarget != null)
-            {             
-                _callbackTarget.Target = null;
-                _callbackTarget = null;
-            }
-            
-            _predicateMethod = null;
-            if (_predicateTarget == null)
+            if (_isDisposed || !disposing)
             {
                 return;
             }
-            _predicateTarget.Target = null;
-            _predicateTarget = null;
+
+            _stateObj = null;
+            _logger = null;
+
+            if(_callback != null)
+            {
+                _callback.Dispose();
+                _callback = null;
+            }
+
+            if (_predicate != null)
+            {
+                _predicate.Dispose();
+                _predicate = null;
+            }
+            _isDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~Subscriber()
+        {
+            Dispose(false);
+        }
+        #endregion
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Subscriber;
+            var isSame = other != null && Id == other.Id && PayloadType == other.PayloadType;
+            return isSame;
         }
     }
 }
