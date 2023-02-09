@@ -66,3 +66,5 @@ pubsub_unity/.idea
 docs/exports
 *.DotSettings
 packages-lock.json
+
+pubsub_unity/UserSettings/

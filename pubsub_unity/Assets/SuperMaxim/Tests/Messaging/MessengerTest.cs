@@ -261,12 +261,19 @@ namespace SuperMaxim.Tests.Messaging
             Assert.That(payload.CallbackCount, Is.GreaterThan(0));
             Assert.That(state.Ref, Is.Not.Null);
             Assert.That(state.Ref, Is.SameAs(nameof(OnCallbackWithStateObject)));
+
+            UnityEngine.Debug.LogFormat("{0}: {1}, {2}: {3}"
+                , nameof(payload.CallbackCount)
+                , payload.CallbackCount
+                , nameof(state.Ref)
+                , state.Ref);
         }
 
         private static bool OnTypePredicateWithStateObject(MessengerTestPayload<int> payload, Reference<string> stateObj)
         {
             Assert.That(payload, Is.Not.Null);
             Assert.That(stateObj, Is.Not.Null);
+
             stateObj.Ref = nameof(OnTypePredicateWithStateObject);
             return true;
         }
@@ -382,7 +389,7 @@ namespace SuperMaxim.Tests.Messaging
             {
                 payload.CallbackCount++;
 
-                Messenger.Subscribe((Action<MessengerTestPayload<double>, object>)Callback2);
+                Messenger.Subscribe((Action<MessengerTestPayload<double>, object>)Callback2, stateObj: this);
                 Messenger.Publish(new MessengerTestPayload<double>());
                 Messenger.Unsubscribe((Action<MessengerTestPayload<int>, object>)Callback1);
             }

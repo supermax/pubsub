@@ -128,6 +128,7 @@ namespace SuperMaxim.Tests.Messaging
 
             Debug.Assert(_ref != null, $"{nameof(_ref)} != null");
             Debug.Assert(_ref.Ref != null, $"{nameof(_ref.Ref)} != null");
+            Debug.WriteLine("Tested {0}->{1}", _ref, _ref.Ref);
 
             var subscriber = GetSubscriber(typeof(MessengerTestPayload<int>), (Action<MessengerTestPayload<int>>)_ref.Ref.Callback, Logger, null);
             Assert.That(subscriber, Is.Not.Null);

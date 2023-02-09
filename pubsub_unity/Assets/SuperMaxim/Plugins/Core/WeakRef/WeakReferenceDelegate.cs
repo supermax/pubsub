@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using SuperMaxim.Core.Extensions;
+using UnityEngine;
 
 namespace SuperMaxim.Core.WeakRef
 {
@@ -60,7 +61,41 @@ namespace SuperMaxim.Core.WeakRef
                 return null;
             }
 
-            var result = _method.Invoke(Target, args);
+            _method.ThrowIfNull(nameof(_method));
+
+            var parameters = _method.GetParameters();
+            switch (parameters.Length)
+            {
+                case > 0 when args.IsNullOrEmpty():
+                    throw new OperationCanceledException($"The target method has {parameters.Length} params, " +
+                                                         $"but passed arguments are null/empty.");
+                case > 0 when parameters.Length != args.Length:
+                    throw new OperationCanceledException($"The target method has {parameters.Length} param(s), " +
+                                                         $"but passed arguments have {args.Length} param(s).");
+            }
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                var param = parameters[i];
+                var arg = args[i];
+                var argType = arg.GetType();
+                if (param.ParameterType != argType && param.ParameterType != typeof(object))
+                {
+                    throw new OperationCanceledException(
+                        $"The target method parameter in place #{param.Position} is type of '{param.ParameterType}', " +
+                        $"but passed argument is type of '{argType}'.");
+                }
+            }
+
+            object result;
+            if (_method.ReturnType == typeof (void))
+            {
+                result = null;
+                _method.Invoke(Target, args);
+            }
+            else
+            {
+                result = _method.Invoke(Target, args);
+            }
             return result;
         }
 

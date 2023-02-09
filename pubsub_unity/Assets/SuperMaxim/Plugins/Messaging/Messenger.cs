@@ -17,7 +17,7 @@ namespace SuperMaxim.Messaging
     public sealed class Messenger : Singleton<IMessenger, Messenger>, IMessenger
     {
         // Mapping [PAYLOAD_TYPE]->[MAP(INT, SUBSCRIBER)]
-        private readonly Dictionary<Type, Dictionary<int, Subscriber>> _subscribersSet = new();
+        private readonly Dictionary<Type, SubscriberSet> _subscribersSet = new();
 
         // List of subscribers to optimize iteration during subscribers processing
         private readonly List<Subscriber> _subscribers = new();
@@ -26,9 +26,6 @@ namespace SuperMaxim.Messaging
         private readonly List<Subscriber> _add = new();
 
         private readonly ILogger _logger = Loggers.Console;
-
-        // flag, if "true" then do not do changes in "_subscribersSet" dic.
-        private bool _isPublishing;
 
         /// <summary>
         /// Static CTOR to initialize other monitoring tools (singletons)
@@ -67,18 +64,14 @@ namespace SuperMaxim.Messaging
             {
                 throw new InvalidCastException($"{nameof(payload)} type `{payload}` doesn't match to {payloadType}");
             }
+            // exit method, if subscribers' dic. does not contain the given payload type
+            if (!_subscribersSet.ContainsKey(payloadType))
+            {
+                return;
+            }
 
             try
             {
-                // turn on the flag
-                _isPublishing = true;
-
-                // exit method, if subscribers' dic. does not contain the given payload type
-                if (!_subscribersSet.ContainsKey(payloadType))
-                {
-                    return;
-                }
-
                 // get subscriber's dic. for the payload type
                 _subscribersSet.TryGetValue(payloadType, out var callbacks);
                 // check if "callbacks" dic. is null or empty
@@ -89,35 +82,10 @@ namespace SuperMaxim.Messaging
                     return;
                 }
 
-                // iterate thru list of subscribers and invoke type's predicate
-                foreach (var callback in callbacks!.Values)
-                {
-                    if (callback is not {IsPredicate: true})
-                    {
-                        continue;
-                    }
-                    // if type's predicate returns 'false' abort publish method
-                    var res = callback.Invoke(payload);
-                    if (res != null && !(bool)res)
-                    {
-                        return;
-                    }
-                }
-
-                // iterate thru list of subscribers and invoke callbacks
-                foreach (var callback in callbacks.Values)
-                {
-                    if (callback.IsPredicate)
-                    {
-                        continue;
-                    }
-                    callback.Invoke(payload);
-                }
+                callbacks?.Publish(payload);
             }
             finally
             {
-                // turn off the flag
-                _isPublishing = false;
                 // process pending tasks
                 Process();
             }
@@ -221,12 +189,13 @@ namespace SuperMaxim.Messaging
             var sub = new Subscriber(key, callback, predicate, _logger, stateObj);
 
             // check if messenger is busy with publishing payloads
-            if(_isPublishing)
+            if (_subscribersSet.ContainsKey(key) && _subscribersSet[key].IsPublishing)
             {
                 // add subscriber into "Add" queue if messenger is busy with publishing
                 _add.Add(sub);
                 return this;
             }
+
             // if messenger is not busy with publishing, add into subscribers list
             SubscribeInternal(sub);
             return this;
@@ -252,7 +221,7 @@ namespace SuperMaxim.Messaging
             var sub = new Subscriber(key, predicate, _logger, null);
 
             // check if messenger is busy with publishing payloads
-            if(_isPublishing)
+            if (_subscribersSet.ContainsKey(key) && _subscribersSet[key].IsPublishing)
             {
                 // add subscriber into "Add" queue if messenger is busy with publishing
                 _add.Add(sub);
@@ -284,7 +253,7 @@ namespace SuperMaxim.Messaging
             var sub = new Subscriber(key, predicate, _logger, stateObj);
 
             // check if messenger is busy with publishing payloads
-            if(_isPublishing)
+            if (_subscribersSet.ContainsKey(key) && _subscribersSet[key].IsPublishing)
             {
                 // add subscriber into "Add" queue if messenger is busy with publishing
                 _add.Add(sub);
@@ -312,7 +281,7 @@ namespace SuperMaxim.Messaging
             var sub = new Subscriber(key, callback, predicate, _logger, null);
 
             // check if messenger is busy with publishing payloads
-            if(_isPublishing)
+            if (_subscribersSet.ContainsKey(key) && _subscribersSet[key].IsPublishing)
             {
                 // add subscriber into "Add" queue if messenger is busy with publishing
                 _add.Add(sub);
@@ -338,7 +307,7 @@ namespace SuperMaxim.Messaging
             // capture payload type into local var 'key'
             var key = subscriber.PayloadType;
             // capture subscribers dic into local var 'dic'
-            Dictionary<int, Subscriber> callbacks;
+            SubscriberSet callbacks;
             if (_subscribersSet.ContainsKey(key))
             {
                 // fetch list of callbacks for this payload type
@@ -347,7 +316,7 @@ namespace SuperMaxim.Messaging
             else
             {
                 // init list of callbacks/subscribers
-                callbacks = new Dictionary<int, Subscriber>();
+                callbacks = new SubscriberSet();
                 _subscribersSet.Add(key, callbacks);
             }
 
@@ -467,7 +436,7 @@ namespace SuperMaxim.Messaging
             // get list of callbacks for the payload
             _subscribersSet.TryGetValue(payloadType, out var callbacks);
             // check if callbacks list is null or empty and if messenger is publishing payloads
-            if(!_isPublishing && callbacks.IsNullOrEmpty())
+            if(callbacks.IsNullOrEmpty())
             {
                 // remove payload from subscribers dic
                 _subscribersSet.Remove(payloadType);
@@ -484,7 +453,7 @@ namespace SuperMaxim.Messaging
                 subscriber.Dispose();
 
                 // check if messenger is busy with publishing
-                if(!_isPublishing)
+                if(!callbacks.IsPublishing)
                 {
                     // remove the subscriber from the callbacks dic
                     callbacks.Remove(id);
@@ -497,7 +466,7 @@ namespace SuperMaxim.Messaging
             }
 
             // check is messenger is busy with publishing or if callbacks are NOT empty
-            if(_isPublishing || !callbacks.IsNullOrEmpty())
+            if(callbacks!.IsPublishing || !callbacks.IsNullOrEmpty())
             {
                 return;
             }
