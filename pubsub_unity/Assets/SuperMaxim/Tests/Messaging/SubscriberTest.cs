@@ -1,10 +1,13 @@
 using System;
-using System.Diagnostics;
+using System.Collections;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SuperMaxim.Core.Logging;
 using SuperMaxim.Messaging;
 using SuperMaxim.Tests.Messaging.Fixtures;
+using UnityEngine;
+using UnityEngine.TestTools;
+using Debug = System.Diagnostics.Debug;
+using ILogger = SuperMaxim.Core.Logging.ILogger;
 
 namespace SuperMaxim.Tests.Messaging
 {
@@ -120,8 +123,8 @@ namespace SuperMaxim.Tests.Messaging
             Assert.DoesNotThrow(() => subscriber.Invoke(new FilteredPayload()));
         }
 
-        [Test]
-        public async Task TestWeakRef()
+        [UnityTest]
+        public IEnumerator TestWeakRef()
         {
             Assert.That(_ref, Is.Not.Null);
             Assert.That(_ref?.Ref, Is.Not.Null);
@@ -139,12 +142,10 @@ namespace SuperMaxim.Tests.Messaging
             _ref.Dispose();
             _ref.Ref = null;
 
-            await Task.Delay(10);
-            await Task.Run(() =>
-            {
-                Assert.That(subscriber.IsAlive, Is.True);
-                Assert.DoesNotThrow(() => subscriber.Invoke(payload));
-            });
+            yield return new WaitForSeconds(3);
+
+            Assert.That(subscriber.IsAlive, Is.False);
+            Assert.DoesNotThrow(() => subscriber.Invoke(payload));
         }
     }
 }

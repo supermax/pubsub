@@ -1,8 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SuperMaxim.Tests.Messaging.Fixtures;
+using UnityEngine;
+using UnityEngine.TestTools;
+using Debug = System.Diagnostics.Debug;
 
 namespace SuperMaxim.Tests.Messaging
 {
@@ -23,9 +26,8 @@ namespace SuperMaxim.Tests.Messaging
 
         private readonly LoadTestPayload _payload = new();
 
-        [Test]
-        [TestCase(1000, Category = "Load Test", Description = "Mass load to publish hundreds of payloads")]
-        public async Task TestLoadAsync(int timeSpan)
+        [UnityTest]
+        public IEnumerator TestLoadAsync()
         {
             Assert.That(Messenger, Is.Not.Null);
             var instance = Messenger.Subscribe<LoadTestPayload>(OnTestCallback);
@@ -34,9 +36,10 @@ namespace SuperMaxim.Tests.Messaging
             _testThread = new Task(RunLoadLoop);
             _testThread.Start();
 
+            var wait = new WaitForSeconds(1);
             while (_testThread.Status == TaskStatus.Running)
             {
-                await Task.Delay(timeSpan);
+                yield return wait;
             }
         }
 

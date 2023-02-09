@@ -303,12 +303,15 @@ namespace SuperMaxim.Tests.Messaging
             Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe<MessengerTestPayload<int>>(null!, null));
 
             Action<MessengerTestPayload<int>> callback1 = null;
+            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe(callback1));
 
             Action<MessengerTestPayload<int>, object> callback2 = null;
+            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe(callback2));
 
             Func<MessengerTestPayload<int>, object, bool> predicate = null;
+            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.Throws<ArgumentNullException>(() => Messenger.Subscribe(predicate));
         }
 
@@ -320,12 +323,15 @@ namespace SuperMaxim.Tests.Messaging
             Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe<MessengerTestPayload<int>>(null!));
 
             Action<MessengerTestPayload<int>> callback1 = null;
+            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe(callback1));
 
             Action<MessengerTestPayload<int>, object> callback2 = null;
+            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe(callback2));
 
             Func<MessengerTestPayload<int>, object, bool> predicate = null;
+            // ReSharper disable once ExpressionIsAlwaysNull
             Assert.Throws<ArgumentNullException>(() => Messenger.Unsubscribe(predicate));
         }
 

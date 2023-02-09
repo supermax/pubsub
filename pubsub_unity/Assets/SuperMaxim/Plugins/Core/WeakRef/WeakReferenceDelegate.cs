@@ -56,14 +56,24 @@ namespace SuperMaxim.Core.WeakRef
 
         public object Invoke(object[] args)
         {
+            // check if current instance is not alive or disposed
             if (_isDisposed || !IsAlive)
             {
                 return null;
             }
 
+            // check if method info is null
             _method.ThrowIfNull(nameof(_method));
 
+            // check is method is without params and args has items
             var parameters = _method.GetParameters();
+            if (parameters.IsNullOrEmpty() && !args.IsNullOrEmpty())
+            {
+                throw new OperationCanceledException($"The target method has no params, " +
+                                                     $"but passed arguments are not empty.");
+            }
+
+            // check is method has params, but passed args don't match the size
             switch (parameters.Length)
             {
                 case > 0 when args.IsNullOrEmpty():
@@ -71,8 +81,10 @@ namespace SuperMaxim.Core.WeakRef
                                                          $"but passed arguments are null/empty.");
                 case > 0 when parameters.Length != args.Length:
                     throw new OperationCanceledException($"The target method has {parameters.Length} param(s), " +
-                                                         $"but passed arguments have {args.Length} param(s).");
+                                                         $"but passed arguments have {args.Length} item(s).");
             }
+
+            // check if passed args items have same type as params items
             for (var i = 0; i < parameters.Length; i++)
             {
                 var param = parameters[i];
@@ -87,12 +99,13 @@ namespace SuperMaxim.Core.WeakRef
             }
 
             object result;
+            // if method is void, don't expect return value
             if (_method.ReturnType == typeof (void))
             {
                 result = null;
                 _method.Invoke(Target, args);
             }
-            else
+            else // if method has return value, get it's result
             {
                 result = _method.Invoke(Target, args);
             }

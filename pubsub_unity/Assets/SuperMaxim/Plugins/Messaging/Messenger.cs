@@ -112,10 +112,8 @@ namespace SuperMaxim.Messaging
                 return this;
             }
 
-            // capture "PublishInternal" in local action var.
-            void PublishFunc() => PublishInternal(typeof (T), payload);
             // add "act" into "MainThreadDispatcher" queue
-            UnityMainThreadDispatcher.Default.Dispatch((Action)PublishFunc, new object[] { payload });
+            UnityMainThreadDispatcher.Default.Dispatch((Action<Type, object>)PublishInternal, new object[] { typeof(T), payload });
             return this;
         }
 
@@ -142,10 +140,8 @@ namespace SuperMaxim.Messaging
                 return this;
             }
 
-            // capture "PublishInternal" in local action var.
-            void PublishFunc() => PublishInternal(payloadType, payload);
             // add "act" into "MainThreadDispatcher" queue
-            UnityMainThreadDispatcher.Default.Dispatch((Action)PublishFunc, new [] { payload });
+            UnityMainThreadDispatcher.Default.Dispatch((Action<Type, object>)PublishInternal, new [] { payloadType, payload });
             return this;
         }
 
