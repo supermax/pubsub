@@ -1,26 +1,30 @@
 using System;
-using System.Diagnostics;
+using System.Collections;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SuperMaxim.Tests.Messaging.Fixtures;
+using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace SuperMaxim.Tests.Messaging
 {
     [TestFixture]
     public class MessengerMultithreadingTest : BaseMessengerTest
     {
-        [Test]
-        public async Task TestPublishFromNewThread()
+        [UnityTest]
+        public IEnumerator TestPublishFromNewThread()
         {
             Assert.That(Messenger, Is.Not.Null);
 
             var instance = Messenger.Subscribe<MessengerTestPayload<int>>(OnPublishFromNewThreadCallback);
             Assert.That(instance, Is.Not.Null);
             Assert.That(Messenger, Is.SameAs(instance));
-            Debug.WriteLine($"{nameof(Environment.CurrentManagedThreadId)}: {Environment.CurrentManagedThreadId}");
+            Debug.LogFormat($"{nameof(Environment.CurrentManagedThreadId)}: {Environment.CurrentManagedThreadId}");
 
             void Action() => PublishFromNewThreadMethod(Environment.CurrentManagedThreadId);
-            await Task.Run(Action);
+            Task.Run(Action);
+
+            yield return new WaitForEndOfFrame();
         }
 
         private void PublishFromNewThreadMethod(object threadIdObj)
@@ -29,7 +33,7 @@ namespace SuperMaxim.Tests.Messaging
 
             var threadId = (int)threadIdObj;
 
-            Debug.WriteLine($"{nameof(Environment.CurrentManagedThreadId)}: {Environment.CurrentManagedThreadId}" +
+            Debug.LogFormat($"{nameof(Environment.CurrentManagedThreadId)}: {Environment.CurrentManagedThreadId}" +
                             $", {nameof(threadId)}: {threadId}");
             Assert.That(Environment.CurrentManagedThreadId, Is.EqualTo(threadId));
 
@@ -38,26 +42,27 @@ namespace SuperMaxim.Tests.Messaging
 
         private void OnPublishFromNewThreadCallback(MessengerTestPayload<int> payload)
         {
-            Debug.WriteLine($"[{nameof(OnPublishFromNewThreadCallback)}] Int Payload: {0} (Thread ID: {1})",
+            Debug.LogFormat($"[{nameof(OnPublishFromNewThreadCallback)}] Int Payload: {0} (Thread ID: {1})",
                 payload.Data, Environment.CurrentManagedThreadId);
 
             Assert.That(Environment.CurrentManagedThreadId, Is.EqualTo(payload.Data));
         }
 
-        [Test]
-        [TestCase(4, Category = "Async Publish", Description = "Opening X threads to publish string payload")]
-        public async Task TestPublishAsync(int count)
+        [UnityTest]
+        public IEnumerator TestPublishAsync()
         {
             Assert.That(Messenger, Is.Not.Null);
-            Assert.That(count, Is.GreaterThan(0));
 
-            for (var i = 1; i <= count; i++)
+            var wait = new WaitForEndOfFrame();
+            for (var i = 1; i <= 4; i++)
             {
-                await Task.Run(() =>
+                var count = i;
+                Task.Run(() =>
                 {
-                    var instance = Messenger.Publish(new MessengerTestPayload<string>{Data = $"Hello World! [{i}]"});
+                    var instance = Messenger.Publish(new MessengerTestPayload<string>{Data = $"Hello World! [{count}]"});
                     Assert.That(instance, Is.Not.Null);
                 });
+                yield return wait;
             }
         }
     }

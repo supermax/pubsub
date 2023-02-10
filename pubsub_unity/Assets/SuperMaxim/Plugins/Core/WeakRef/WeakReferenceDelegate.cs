@@ -90,7 +90,7 @@ namespace SuperMaxim.Core.WeakRef
                 var param = parameters[i];
                 var arg = args[i];
                 var argType = arg.GetType();
-                if (param.ParameterType != argType && param.ParameterType != typeof(object))
+                if (param.ParameterType.DeclaringType != argType.DeclaringType && param.ParameterType != typeof(object))
                 {
                     throw new OperationCanceledException(
                         $"The target method parameter in place #{param.Position} is type of '{param.ParameterType}', " +

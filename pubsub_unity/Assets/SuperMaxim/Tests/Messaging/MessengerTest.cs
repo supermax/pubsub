@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using NUnit.Framework;
 using SuperMaxim.Messaging.API;
 using SuperMaxim.Tests.Messaging.Fixtures;
+using Debug = UnityEngine.Debug;
 
 namespace SuperMaxim.Tests.Messaging
 {
@@ -25,7 +25,7 @@ namespace SuperMaxim.Tests.Messaging
         {
             Assert.That(payload, Is.Not.Null);
 
-            Debug.WriteLine($"{nameof(payload.IsFilterOn)}: {payload.IsFilterOn}");
+            Debug.LogFormat($"{nameof(payload.IsFilterOn)}: {payload.IsFilterOn}");
             return !payload.IsFilterOn;
         }
 
@@ -52,7 +52,7 @@ namespace SuperMaxim.Tests.Messaging
         {
             payload.CallbackCount++;
             Assert.That(payload, Is.Not.Null);
-            Debug.WriteLine($"{nameof(payload)}.{nameof(payload.IsFilterOn)}:{payload.IsFilterOn}");
+            Debug.LogFormat($"{nameof(payload)}.{nameof(payload.IsFilterOn)}:{payload.IsFilterOn}");
 
             Assert.That(payload, Is.Not.Null);
             Assert.That(!payload.IsFilterOn, Is.True);
@@ -121,7 +121,7 @@ namespace SuperMaxim.Tests.Messaging
             Assert.That(payload, Is.Not.Null);
 
             var accepted = payload.Id % 2 == 0;
-            Debug.WriteLine("[{0}] Object Payload Id: {1}, Accepted: {2}", nameof(ObjectPredicate), payload.Id, accepted);
+            Debug.LogFormat("[{0}] Object Payload Id: {1}, Accepted: {2}", nameof(ObjectPredicate), payload.Id, accepted);
             return accepted;
         }
 
@@ -129,14 +129,14 @@ namespace SuperMaxim.Tests.Messaging
         {
             payload.CallbackCount++;
             Assert.That(payload, Is.Not.Null);
-            Debug.WriteLine("[{0}] Object Payload Id: {1}", nameof(OnSubscribeToObjectWithPredicate), payload.Id);
+            Debug.LogFormat("[{0}] Object Payload Id: {1}", nameof(OnSubscribeToObjectWithPredicate), payload.Id);
         }
 
         private static void OnStaticCallback(MessengerTestPayload<IMessenger> payload)
         {
             payload.CallbackCount++;
             Assert.That(payload, Is.Not.Null);
-            Debug.WriteLine("[{0}] Payload: {1}", nameof(OnStaticCallback), payload);
+            Debug.LogFormat("[{0}] Payload: {1}", nameof(OnStaticCallback), payload);
 
             payload.Data?.Unsubscribe<MessengerTestPayload<IMessenger>>(OnStaticCallback);
         }
@@ -146,7 +146,7 @@ namespace SuperMaxim.Tests.Messaging
         {
             payload.CallbackCount++;
             Assert.That(payload, Is.Not.Null);
-            Debug.WriteLine("[{0}] String Payload: {1}", nameof(OnCallback), payload);
+            Debug.LogFormat("[{0}] String Payload: {1}", nameof(OnCallback), payload);
 
             payload.Data?.Unsubscribe<MessengerTestPayload<IMessenger>>(OnCallback);
             payload.Data?.Subscribe<MessengerTestPayload<IMessenger>>(OnStaticCallback);
@@ -262,7 +262,7 @@ namespace SuperMaxim.Tests.Messaging
             Assert.That(state.Ref, Is.Not.Null);
             Assert.That(state.Ref, Is.SameAs(nameof(OnCallbackWithStateObject)));
 
-            UnityEngine.Debug.LogFormat("{0}: {1}, {2}: {3}"
+            Debug.LogFormat("{0}: {1}, {2}: {3}"
                 , nameof(payload.CallbackCount)
                 , payload.CallbackCount
                 , nameof(state.Ref)

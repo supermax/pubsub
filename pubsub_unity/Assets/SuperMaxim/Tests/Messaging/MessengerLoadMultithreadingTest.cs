@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SuperMaxim.Tests.Messaging.Fixtures;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Debug = System.Diagnostics.Debug;
 
 namespace SuperMaxim.Tests.Messaging
 {
@@ -76,7 +75,7 @@ namespace SuperMaxim.Tests.Messaging
                 return;
             }
 
-            Debug.WriteLine("{0}: sent {1} messages, received {2} messages, took {3} seconds"
+            Debug.LogFormat("{0}: sent {1} messages, received {2} messages, took {3} seconds"
                 , nameof(MessengerLoadMultithreadingTest)
                 , SendMessagesCount
                 , _receivedCount
@@ -89,7 +88,7 @@ namespace SuperMaxim.Tests.Messaging
                 return;
             }
             var avgTime = Math.Round(_totalTime/SendMessageChunksCount, 3);
-            Debug.WriteLine("{0}: average time {1}"
+            Debug.LogFormat("{0}: average time {1}"
                 , nameof(MessengerLoadMultithreadingTest)
                 , avgTime);
         }

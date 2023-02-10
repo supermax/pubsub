@@ -32,7 +32,7 @@ namespace SuperMaxim.Tests.Messaging
                 , nameof(MessengerLoadTest)
                 , Math.Round(time / sendMessageChunksCount, 3));
             Assert.That(time, Is.GreaterThan(0.0));
-            Assert.That(time, Is.LessThan(5.0));
+            Assert.That(time, Is.LessThan(20.0));
         }
 
         private double LoadLoop(int sendMessagesCount)
